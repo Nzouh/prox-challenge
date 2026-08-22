@@ -1,0 +1,44 @@
+aiming for an agent that can :
+
+
+
+1- explicitely determine whether or not to go towards explanation or something else: like pointing
+to another source (like an article or video, then skim through the video), or making a graph or
+blueprint of what is going on, etc. the agent should not shy away from using images, etc. 
+
+
+2- in the same sense as claude, can determine whether to ask for precision with additional questions or to
+trust its guts and answer directly. 
+
+
+3- the agent should be able to track situations, such as a person that wants repairs, so you track which places
+own which parts. 
+
+4- the agent should not specifically refer itself only on memory or confidence. We either fine tune a model that we train on 
+the 48 page manual, or we can make a vector database of the whole document using open router to test it out, etc.
+
+5- the agent should understand the user's needs. If the person wants a quick answer,you can do one answer possibly, but it has to be 
+as complete and as precise as possible. Always refer back to the manuals and pdf's however it can always be full of jargon in those, 
+so you must track the level of expertise in the question asked.If the person asks a question 
+
+
+
+
+The front end: 
+
+once you load up the website, it immediately shows an image of the Vulcan as the background, and then you have multiple 
+
+choices: Either its a conversation where you can verbally speak, send images of your vulcan, or send normal text.
+OR you also have the choice to send them towards another place (a 3D complete map of the vulcan, where they can click on each part, and even chat
+with AI about a specific part.) I want it to be an interactive experience, so its a 3D rendered object where you spin around, and whenever you hover 
+your mouse on a certain part it lights up the section in a gray area, and then once you click on it, it will zoom in, and you can either check out
+its design OR you can chat about this specific part. by the way, there should be an "inside button" that once you click, it should show you the 
+design on the inside, where you can do the same stuff as on the outside. Obviously if you are on the inside section, an outside section should appear 
+should they want to go back. 
+
+
+I think that going for the front end at first is the best choice, and then we can work on the actual computations and the workings of the model later on.
+
+the most poignant thing at first is without a doubt the interface
+
+
