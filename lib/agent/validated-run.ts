@@ -32,7 +32,7 @@ import {
 } from "./tools";
 import { specQuerySchema } from "./tools/lookup-spec";
 
-const MODEL = "claude-haiku-4-5";
+const MODEL = "claude-opus-5";
 const FALLBACK_MODEL = "claude-sonnet-5";
 const MAX_RESEARCH_ATTEMPTS = 2;
 const MAX_WRITER_ATTEMPTS = 2;
