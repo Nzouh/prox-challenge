@@ -1,0 +1,14 @@
+node_modules/
+.venv/
+.next/
+out/
+build/
+tmp/
+.env
+.env.local
+*.tsbuildinfo
+.test-dist/
+__pycache__/
+*.py[cod]
+next-env.d.ts
+.DS_Store

@@ -20,8 +20,9 @@ The key is server-side only — never `NEXT_PUBLIC_*`, never shipped to the brow
 ## Invariants
 
 - System prompt is frozen and byte-identical across requests — no timestamps, IDs, or
-  conditional sections. Session state goes in a `role:"system"` message inside `messages[]`,
-  after the cached prefix.
+  conditional sections, and never the `claude_code` preset. Session state is carried after the
+  cached prefix, never inside it; the Agent SDK has no `role:"system"` message, so the carrier
+  itself is an open call (`PLAN.md` §3).
 - Specs and numbers are looked up from `knowledge/`, never generated.
 - Every claim carries a provenance tier (1 manual / 2 web / 3 inference); the UI renders the
   tiers visually distinctly. Never blur them.

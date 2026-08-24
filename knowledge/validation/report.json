@@ -1,0 +1,10 @@
+{
+  "counts": {
+    "complex": 52,
+    "text_only": 1,
+    "visual_reviewed": 53
+  },
+  "status": "pass",
+  "structured_fact_count": 15,
+  "unresolved_visual_reviews": []
+}

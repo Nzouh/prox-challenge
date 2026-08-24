@@ -1,0 +1,55 @@
+[
+  {
+    "possible_causes": [
+      "Insufficient wire-feed pressure",
+      "Incorrect feed-roller size",
+      "Damaged MIG gun, cable, or liner",
+      "Feed tensioner too tight"
+    ],
+    "problem": "Wire-feed motor runs but wire does not feed properly",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 42
+    }
+  },
+  {
+    "possible_causes": [
+      "Excess wire-feed pressure",
+      "Incorrect contact-tip size",
+      "MIG gun cable connector not fully inserted",
+      "Damaged liner"
+    ],
+    "problem": "Wire creates a bird's nest",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 42
+    }
+  },
+  {
+    "possible_causes": [
+      "Thermal protection tripped",
+      "Insufficient circuit input",
+      "Faulty or improperly connected trigger",
+      "Low/over-voltage protection",
+      "Incorrect mode"
+    ],
+    "problem": "Welder does not function when switched on (MIG/Flux)",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 43
+    }
+  },
+  {
+    "possible_causes": [
+      "Thermal protection tripped",
+      "Faulty or improperly connected trigger",
+      "Ground clamp not attached",
+      "Shielding gas not connected"
+    ],
+    "problem": "Welder does not function when switched on (TIG/Stick)",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 44
+    }
+  }
+]

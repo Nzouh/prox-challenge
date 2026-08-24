@@ -1,0 +1,240 @@
+[
+  {
+    "field": "welding_current_range",
+    "id": "mig-120-current-range",
+    "input_vac": 120,
+    "process": "MIG",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 7
+    },
+    "unit": "A",
+    "value": [
+      30,
+      140
+    ]
+  },
+  {
+    "field": "welding_current_range",
+    "id": "mig-240-current-range",
+    "input_vac": 240,
+    "process": "MIG",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 7
+    },
+    "unit": "A",
+    "value": [
+      30,
+      220
+    ]
+  },
+  {
+    "field": "rated_duty_cycles",
+    "id": "mig-120-duty",
+    "input_vac": 120,
+    "process": "MIG",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 7
+    },
+    "value": [
+      {
+        "current_a": 100,
+        "percent": 40
+      },
+      {
+        "current_a": 75,
+        "percent": 100
+      }
+    ]
+  },
+  {
+    "field": "rated_duty_cycles",
+    "id": "mig-240-duty",
+    "input_vac": 240,
+    "process": "MIG",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 7
+    },
+    "value": [
+      {
+        "current_a": 200,
+        "percent": 25
+      },
+      {
+        "current_a": 115,
+        "percent": 100
+      }
+    ]
+  },
+  {
+    "field": "rated_duty_cycles",
+    "id": "tig-120-duty",
+    "input_vac": 120,
+    "process": "TIG",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 7
+    },
+    "value": [
+      {
+        "current_a": 125,
+        "percent": 40
+      },
+      {
+        "current_a": 90,
+        "percent": 100
+      }
+    ]
+  },
+  {
+    "field": "rated_duty_cycles",
+    "id": "tig-240-duty",
+    "input_vac": 240,
+    "process": "TIG",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 7
+    },
+    "value": [
+      {
+        "current_a": 175,
+        "percent": 30
+      },
+      {
+        "current_a": 105,
+        "percent": 100
+      }
+    ]
+  },
+  {
+    "field": "rated_duty_cycles",
+    "id": "stick-120-duty",
+    "input_vac": 120,
+    "process": "Stick",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 7
+    },
+    "value": [
+      {
+        "current_a": 80,
+        "percent": 40
+      },
+      {
+        "current_a": 60,
+        "percent": 100
+      }
+    ]
+  },
+  {
+    "field": "rated_duty_cycles",
+    "id": "stick-240-duty",
+    "input_vac": 240,
+    "process": "Stick",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 7
+    },
+    "value": [
+      {
+        "current_a": 175,
+        "percent": 25
+      },
+      {
+        "current_a": 100,
+        "percent": 100
+      }
+    ]
+  },
+  {
+    "field": "maximum_ocv",
+    "id": "maximum-ocv",
+    "process": "all",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 7
+    },
+    "unit": "VDC",
+    "value": 86
+  },
+  {
+    "field": "wire_speed_range",
+    "id": "mig-wire-speed",
+    "process": "MIG",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 7
+    },
+    "unit": "IPM",
+    "value": [
+      50,
+      500
+    ]
+  },
+  {
+    "field": "wire_spool_capacity_max",
+    "id": "mig-spool-capacity",
+    "process": "MIG",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 7
+    },
+    "unit": "lb",
+    "value": 12
+  },
+  {
+    "field": "polarity",
+    "id": "mig-polarity",
+    "process": "MIG solid wire",
+    "source": {
+      "file": "files/quick-start-guide.pdf",
+      "page": 2
+    },
+    "value": {
+      "ground": "negative",
+      "wire_feed_power": "positive"
+    }
+  },
+  {
+    "field": "polarity",
+    "id": "flux-polarity",
+    "process": "Flux-cored",
+    "source": {
+      "file": "files/quick-start-guide.pdf",
+      "page": 2
+    },
+    "value": {
+      "ground": "positive",
+      "wire_feed_power": "negative"
+    }
+  },
+  {
+    "field": "polarity",
+    "id": "tig-polarity",
+    "process": "TIG",
+    "source": {
+      "file": "files/quick-start-guide.pdf",
+      "page": 2
+    },
+    "value": {
+      "ground": "positive",
+      "torch": "negative"
+    }
+  },
+  {
+    "field": "polarity",
+    "id": "stick-polarity",
+    "process": "Stick",
+    "source": {
+      "file": "files/quick-start-guide.pdf",
+      "page": 2
+    },
+    "value": {
+      "electrode_holder": "positive",
+      "ground": "negative"
+    }
+  }
+]

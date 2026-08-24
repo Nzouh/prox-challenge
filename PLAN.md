@@ -40,7 +40,7 @@ Fork the repo, run in under two minutes with a single `ANTHROPIC_API_KEY`. Grade
 |---|---|---|
 | No vector DB / RAG | 24k-token corpus; the two highest-value sources have no text to embed; chunking shreds the troubleshooting matrix; top-k defeats the cross-referencing the brief tests | Embeddings + retrieval |
 | No fine-tuning | Not offered for Claude; teaches style not facts; makes numeric hallucination *worse* | Training on the 48 pages |
-| Anthropic API direct | Brief mandates the Agent SDK and a single Anthropic key | OpenRouter |
+| Claude Agent SDK (`query()`) | Brief mandates the Agent SDK and a single Anthropic key. Consequence: the SDK owns the request envelope, so the caching design is shaped by what it exposes — see §3 | OpenRouter; raw Messages API |
 | Whole corpus in the cached system prompt | Fits trivially; caches from 512 tokens on Opus 5, reads ~0.1×; no retrieval step means no retrieval errors | Per-query fetching |
 | Build-time extraction, committed to `knowledge/` | Tables need vision to rebuild correctly; committing makes the base auditable and reviewable in a PR | Runtime PDF parsing |
 | Product photos are **primary sources** | `product-inside.webp` holds the duty-cycle table | Treating them as decoration |
@@ -50,7 +50,8 @@ Fork the repo, run in under two minutes with a single `ANTHROPIC_API_KEY`. Grade
 
 | Decision | Why | Rejected |
 |---|---|---|
-| Frozen system prompt; state in a `role:"system"` message | Editing the top-level prompt invalidates the whole cached prefix; a system message sits after it and costs nothing | Interpolating state into the system prompt |
+| Frozen `systemPrompt` string; session state carried after it, never inside it | Any byte change invalidates the cached prefix. The Agent SDK takes `systemPrompt` as a plain string and places `cache_control` itself; it exposes no `role:"system"` slot in `messages[]` to hold state, so the carrier is an open call — see §3 | Interpolating state into the system prompt |
+| No built-in tools, no filesystem settings | `tools: []` and `settingSources: []` on `query()`. Otherwise the agent can answer by reading the repo instead of calling a tool — breaking "looked up, never generated" — and inherits whatever `CLAUDE.md` and settings happen to sit on the grader's machine | Letting Claude Code's default toolset through |
 | Numbers looked up, never generated | Deletes the entire class of numeric hallucination structurally, rather than by training | Trusting recall |
 | Three provenance tiers, never blurred | Wrong duty cycle kills the machine; wrong polarity is a fire risk. Calibrated hedging *is* accuracy | One confident voice for everything |
 | Structured artifact JSON against a strict schema | Agent picks a component and fills params; we own rendering, so malformed output is impossible | Agent writes raw HTML/JS as the primary path |
@@ -86,16 +87,30 @@ The image path matters more than it looks: the manual has a full weld-diagnosis 
 
 ### The request envelope — frozen vs. volatile
 
-The split is the whole caching strategy:
+The split is the whole caching strategy. The Agent SDK constrains how we express it:
 
-- **Frozen prefix** — instructions, full extracted corpus, table JSON, graph. Byte-identical
-  forever, cached. Nothing dynamic ever enters it.
-- **Volatile suffix** — a `role:"system"` message carrying the session state snapshot
-  (expertise, machine config, symptoms reported, fixes already tried, selected part),
-  then the user turn.
+- **Frozen prefix** — the `systemPrompt` string: instructions, full extracted corpus, table
+  JSON, graph. Byte-identical forever, cached. Always our own string, never the
+  `claude_code` preset — the preset injects per-session dynamic sections that would break
+  byte-identity on every request.
+- **Volatile suffix** — the session state snapshot (expertise, machine config, symptoms
+  reported, fixes already tried, selected part), then the user turn.
 
-Verify with `cache_read_input_tokens` on every response. Zero across turns means something is
-invalidating the prefix and we're silently paying ~10×.
+The SDK exposes no `role:"system"` slot in `messages[]`, so the snapshot needs another
+carrier. Three candidates, decided on day 3 when there is real state to carry:
+
+1. A synthetic `SDKUserMessage` with `shouldQuery: false` — appended to the transcript
+   without triggering an assistant turn. Closest analogue to a mid-conversation system
+   message, and keeps state out of the user's own words.
+2. A state preamble prepended to each user turn's text. Simplest; muddies the transcript.
+3. A `get_session_state` tool the agent pulls when it needs it. Costs a round trip, but
+   makes every use of state auditable.
+
+Leaning (1). Whichever wins, state goes *after* the frozen prefix, never into it — that part
+is not negotiable, only the mechanism is.
+
+Verify with `cache_read_input_tokens` on `SDKResultMessage.usage` every turn. Zero across
+turns means something is invalidating the prefix and we're silently paying ~10×.
 
 > TODO: envelope assembly will live in `lib/agent/request.ts`.
 
@@ -121,7 +136,8 @@ allowlisted web search for Tier 2; and artifact emission against the component s
 Figures are fetched on demand, never preloaded — 51 page images would swamp the context that
 the whole design exists to keep small.
 
-> TODO: contracts will live in `docs/tools.md` once the tool set stops moving.
+Tool contracts, safety guardrails, staged validation, and incremental batches live in
+`docs/tools.md`.
 
 ### Rendering
 
@@ -174,7 +190,7 @@ takes and won't surprise us. Artifact rendering can.
 
 | Day | Work |
 |---|---|
-| 1 | **Vertical slice.** Scaffold Next.js. Hand-crop the duty-cycle table, hand-write its JSON, wire one lookup tool. Drive "MIG at 200A on 240V" end to end: typed question → streamed answer → rendered artifact. Hardcoded is fine. Proves streaming, the agent loop, tool calls, artifact rendering, and an image-sourced fact in one day. |
+| 1 | **Vertical slice.** Scaffold Next.js. Hand-crop the duty-cycle table and hand-write the value as a fixture under `lib/agent/fixtures/` — *not* `knowledge/`, which stays empty until day 2's extractor generates it. Wire two tools, `lookup_spec` and `emit_artifact`. Drive "MIG at 200A on 240V" end to end: typed question → streamed answer → rendered artifact. Hardcoded is fine. Proves streaming, the agent loop, tool calls, artifact rendering, and an image-sourced fact in one day. |
 | 2 | **Extraction.** All 48 pages + selection chart + both product photos → page PNGs, figure crops, page markdown, table JSON, troubleshooting graph, validation report. Write eval questions while reading — that's when you notice what's hard. |
 | 3 | **The real agent.** Cached corpus, full tool set, citations, provenance tiers, session state, expertise tracking. Eval set to ~40 questions, first run. |
 | 4 | **Hotspot map.** Both photos: hover highlight, click-to-zoom, part-scoped chat, inside↔outside toggle. |
@@ -190,6 +206,9 @@ crop to the content region first, then render that crop large. Rendering a full 
 
 ## 6. Open questions
 
+- **Session-state carrier** — the Agent SDK has no `role:"system"` message, so the volatile
+  half of the envelope needs one of the three carriers in §3. Decide on day 3, against real
+  state and a real `cache_read_input_tokens` reading.
 - **Portfolio stack** — determines whether `zouhari.dev/arc` attaches via Next.js rewrites /
   multi-zones or a subdomain. Build standalone regardless; the brief requires local run.
 - **Voice** — deferred, not abandoned. If days 6–7 go unexpectedly well, browser speech input

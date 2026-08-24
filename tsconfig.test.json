@@ -1,0 +1,28 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "outDir": ".test-dist",
+    "rootDir": ".",
+    "noEmit": false,
+    "incremental": false,
+    "isolatedModules": false,
+    "plugins": []
+  },
+  "include": [
+    "tests/**/*.ts",
+    "lib/agent/artifacts.ts",
+    "lib/agent/domain.ts",
+    "lib/agent/events.ts",
+    "lib/agent/grounding.ts",
+    "lib/agent/input.ts",
+    "lib/agent/knowledge.ts",
+    "lib/agent/manual-search.ts",
+    "lib/agent/orchestration.ts",
+    "lib/agent/provenance.ts",
+    "lib/agent/result.ts",
+    "lib/agent/safety.ts",
+    "lib/agent/specs.ts"
+  ]
+}

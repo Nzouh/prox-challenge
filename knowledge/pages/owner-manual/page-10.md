@@ -1,0 +1,87 @@
+# owner-manual - PDF page 10
+
+- Source: `files/owner-manual.pdf`
+- Classification: `complex`
+- Extraction paths: `deterministic_text, rendered_visual_review`
+- Render: `knowledge/renders/owner-manual/page-10.png`
+- Detail render: `knowledge/renders/owner-manual/page-10-detail.png`
+
+## Deterministic text extraction
+
+### MIG / Flux-Cored Wire Welding
+
+### Read the ENTIRE IMPORTANT SAFETY INFORMATION section at the beginning of this manual
+### including all text under subheadings therein before set up or use of this product.
+
+### TO PREVENT SERIOUS INJURY FROM ACCIDENTAL OPERATION:
+### Turn the Power Switch off and unplug the Welder before setup.
+
+### Note: Remove the protective foam and cardboard from the Welder before setup.
+
+## Wire Spool Installation / Wire Setup
+
+### Power
+### Switch
+
+### 1. Turn the Power Switch OFF and unplug
+### the Welder before proceeding.
+
+### Door
+
+2. Pull up on the Door Latch,
+then open the Door.
+
+### Door
+### Latch
+
+### Wingnut
+
+### 3. 1-2 Pound Wire Spool Installation:
+Remove the Wingnut and Spacer. If
+replacing a Spool, remove the old Spool
+and all remaining wire from the liners.
+
+### Spacer
+
+### 1-2 lb
+### Wire Spool
+
+### Spool
+### Spindle
+
+### Spool
+### Brake Pad
+
+4. Place the new Wire Spool over the Spool Spindle
+and against the Spool Brake Pad as illustrated.
+### To prevent wire feed problems, set the
+### Spool so that it will unwind clockwise.
+
+### Welder
+
+### Wall
+
+5. Replace the Spacer over the
+Spool Spindle and secure Spool
+in place with the Wingnut.
+
+### 1-2 lb Spool Loading
+
+### Safety
+### Welding Tips
+### TIG / Stick
+### CONTROLS
+### Wire
+### MAINTENANCE
+
+### Notice: If Wire Spool can spin freely, Wingnut is too
+loose. This will cause the welding wire to unravel and
+unspool which can cause tangling and feeding problems.
+
+Page 10
+### For technical questions, please call 1-800-444-3353.
+Item 57812
+
+## Visual review
+
+- MIG/flux setup overview and component-location diagram were checked against the numbered instructions.

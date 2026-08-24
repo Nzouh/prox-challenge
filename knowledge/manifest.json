@@ -1,0 +1,1431 @@
+{
+  "documents": [
+    {
+      "contact_sheet": "knowledge/validation/contact-sheets/owner-manual.png",
+      "page_count": 48,
+      "pages": [
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "substantial_raster_content"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-01-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-01.md",
+          "metrics": {
+            "drawing_count": 33,
+            "image_count": 1,
+            "image_coverage": 0.1768,
+            "table_count": 0,
+            "text_block_count": 14,
+            "word_count": 193
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 1,
+          "render": "knowledge/renders/owner-manual/page-01.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-02-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-02.md",
+          "metrics": {
+            "drawing_count": 54,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 28,
+            "word_count": 367
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 2,
+          "render": "knowledge/renders/owner-manual/page-02.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-03-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-03.md",
+          "metrics": {
+            "drawing_count": 20,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 18,
+            "word_count": 400
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 3,
+          "render": "knowledge/renders/owner-manual/page-03.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-04-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-04.md",
+          "metrics": {
+            "drawing_count": 14,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 26,
+            "word_count": 557
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 4,
+          "render": "knowledge/renders/owner-manual/page-04.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-05-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-05.md",
+          "metrics": {
+            "drawing_count": 12,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 24,
+            "word_count": 417
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 5,
+          "render": "knowledge/renders/owner-manual/page-05.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-06-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-06.md",
+          "metrics": {
+            "drawing_count": 147,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 32,
+            "word_count": 377
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 6,
+          "render": "knowledge/renders/owner-manual/page-06.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-07-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-07.md",
+          "metrics": {
+            "drawing_count": 172,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 25,
+            "word_count": 192
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 7,
+          "render": "knowledge/renders/owner-manual/page-07.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-08-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review",
+            "local_ocr"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-08.md",
+          "metrics": {
+            "drawing_count": 463,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 23,
+            "word_count": 79
+          },
+          "ocr_record_count": 49,
+          "ocr_records": "knowledge/ocr/owner-manual/page-08.json",
+          "ocr_text": "knowledge/ocr/owner-manual/page-08.txt",
+          "page": 8,
+          "render": "knowledge/renders/owner-manual/page-08.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-09-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review",
+            "local_ocr"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-09.md",
+          "metrics": {
+            "drawing_count": 3823,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 16,
+            "word_count": 49
+          },
+          "ocr_record_count": 30,
+          "ocr_records": "knowledge/ocr/owner-manual/page-09.json",
+          "ocr_text": "knowledge/ocr/owner-manual/page-09.txt",
+          "page": 9,
+          "render": "knowledge/renders/owner-manual/page-09.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-10-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-10.md",
+          "metrics": {
+            "drawing_count": 1855,
+            "image_count": 6,
+            "image_coverage": 0.0032,
+            "table_count": 0,
+            "text_block_count": 25,
+            "word_count": 230
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 10,
+          "render": "knowledge/renders/owner-manual/page-10.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-11-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-11.md",
+          "metrics": {
+            "drawing_count": 5622,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 23,
+            "word_count": 208
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 11,
+          "render": "knowledge/renders/owner-manual/page-11.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-12-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-12.md",
+          "metrics": {
+            "drawing_count": 173,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 26,
+            "word_count": 152
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 12,
+          "render": "knowledge/renders/owner-manual/page-12.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-13-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-13.md",
+          "metrics": {
+            "drawing_count": 10756,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 19,
+            "word_count": 235
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 13,
+          "render": "knowledge/renders/owner-manual/page-13.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-14-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-14.md",
+          "metrics": {
+            "drawing_count": 2363,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 74,
+            "word_count": 400
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 14,
+          "render": "knowledge/renders/owner-manual/page-14.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-15-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-15.md",
+          "metrics": {
+            "drawing_count": 3168,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 27,
+            "word_count": 286
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 15,
+          "render": "knowledge/renders/owner-manual/page-15.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-16-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-16.md",
+          "metrics": {
+            "drawing_count": 4153,
+            "image_count": 6,
+            "image_coverage": 0.0031,
+            "table_count": 0,
+            "text_block_count": 68,
+            "word_count": 366
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 16,
+          "render": "knowledge/renders/owner-manual/page-16.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-17-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-17.md",
+          "metrics": {
+            "drawing_count": 5850,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 31,
+            "word_count": 436
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 17,
+          "render": "knowledge/renders/owner-manual/page-17.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-18-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-18.md",
+          "metrics": {
+            "drawing_count": 688,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 17,
+            "word_count": 274
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 18,
+          "render": "knowledge/renders/owner-manual/page-18.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-19-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-19.md",
+          "metrics": {
+            "drawing_count": 488,
+            "image_count": 2,
+            "image_coverage": 0.0114,
+            "table_count": 0,
+            "text_block_count": 38,
+            "word_count": 482
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 19,
+          "render": "knowledge/renders/owner-manual/page-19.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "substantial_raster_content",
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-20-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-20.md",
+          "metrics": {
+            "drawing_count": 224,
+            "image_count": 10,
+            "image_coverage": 0.1207,
+            "table_count": 0,
+            "text_block_count": 38,
+            "word_count": 266
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 20,
+          "render": "knowledge/renders/owner-manual/page-20.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "substantial_raster_content",
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-21-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-21.md",
+          "metrics": {
+            "drawing_count": 62,
+            "image_count": 5,
+            "image_coverage": 0.1393,
+            "table_count": 0,
+            "text_block_count": 18,
+            "word_count": 251
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 21,
+          "render": "knowledge/renders/owner-manual/page-21.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-22-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-22.md",
+          "metrics": {
+            "drawing_count": 156,
+            "image_count": 2,
+            "image_coverage": 0.0045,
+            "table_count": 0,
+            "text_block_count": 26,
+            "word_count": 285
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 22,
+          "render": "knowledge/renders/owner-manual/page-22.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-23-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-23.md",
+          "metrics": {
+            "drawing_count": 1126,
+            "image_count": 10,
+            "image_coverage": 0.0408,
+            "table_count": 0,
+            "text_block_count": 31,
+            "word_count": 394
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 23,
+          "render": "knowledge/renders/owner-manual/page-23.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-24-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-24.md",
+          "metrics": {
+            "drawing_count": 5805,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 27,
+            "word_count": 231
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 24,
+          "render": "knowledge/renders/owner-manual/page-24.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-25-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-25.md",
+          "metrics": {
+            "drawing_count": 582,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 65,
+            "word_count": 324
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 25,
+          "render": "knowledge/renders/owner-manual/page-25.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-26-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-26.md",
+          "metrics": {
+            "drawing_count": 37,
+            "image_count": 1,
+            "image_coverage": 0.0451,
+            "table_count": 0,
+            "text_block_count": 30,
+            "word_count": 327
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 26,
+          "render": "knowledge/renders/owner-manual/page-26.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-27-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-27.md",
+          "metrics": {
+            "drawing_count": 2332,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 65,
+            "word_count": 262
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 27,
+          "render": "knowledge/renders/owner-manual/page-27.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-28-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-28.md",
+          "metrics": {
+            "drawing_count": 163,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 23,
+            "word_count": 270
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 28,
+          "render": "knowledge/renders/owner-manual/page-28.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "substantial_raster_content",
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-29-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-29.md",
+          "metrics": {
+            "drawing_count": 494,
+            "image_count": 148,
+            "image_coverage": 0.0779,
+            "table_count": 0,
+            "text_block_count": 43,
+            "word_count": 545
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 29,
+          "render": "knowledge/renders/owner-manual/page-29.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "substantial_raster_content",
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-30-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-30.md",
+          "metrics": {
+            "drawing_count": 73,
+            "image_count": 4,
+            "image_coverage": 0.1178,
+            "table_count": 0,
+            "text_block_count": 37,
+            "word_count": 376
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 30,
+          "render": "knowledge/renders/owner-manual/page-30.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "substantial_raster_content",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-31-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-31.md",
+          "metrics": {
+            "drawing_count": 12,
+            "image_count": 2,
+            "image_coverage": 0.0708,
+            "table_count": 0,
+            "text_block_count": 37,
+            "word_count": 516
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 31,
+          "render": "knowledge/renders/owner-manual/page-31.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "substantial_raster_content",
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-32-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-32.md",
+          "metrics": {
+            "drawing_count": 81,
+            "image_count": 5,
+            "image_coverage": 0.1537,
+            "table_count": 0,
+            "text_block_count": 36,
+            "word_count": 267
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 32,
+          "render": "knowledge/renders/owner-manual/page-32.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "substantial_raster_content",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-33-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-33.md",
+          "metrics": {
+            "drawing_count": 9,
+            "image_count": 4,
+            "image_coverage": 0.1415,
+            "table_count": 0,
+            "text_block_count": 37,
+            "word_count": 389
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 33,
+          "render": "knowledge/renders/owner-manual/page-33.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-34-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-34.md",
+          "metrics": {
+            "drawing_count": 63,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 31,
+            "word_count": 332
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 34,
+          "render": "knowledge/renders/owner-manual/page-34.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-35-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-35.md",
+          "metrics": {
+            "drawing_count": 178,
+            "image_count": 13,
+            "image_coverage": 0.0339,
+            "table_count": 0,
+            "text_block_count": 52,
+            "word_count": 180
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 35,
+          "render": "knowledge/renders/owner-manual/page-35.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-36-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-36.md",
+          "metrics": {
+            "drawing_count": 63,
+            "image_count": 1,
+            "image_coverage": 0.0017,
+            "table_count": 0,
+            "text_block_count": 29,
+            "word_count": 376
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 36,
+          "render": "knowledge/renders/owner-manual/page-36.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-37-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-37.md",
+          "metrics": {
+            "drawing_count": 111,
+            "image_count": 4,
+            "image_coverage": 0.0097,
+            "table_count": 0,
+            "text_block_count": 17,
+            "word_count": 293
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 37,
+          "render": "knowledge/renders/owner-manual/page-37.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "substantial_raster_content",
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-38-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-38.md",
+          "metrics": {
+            "drawing_count": 200,
+            "image_count": 29,
+            "image_coverage": 0.1405,
+            "table_count": 0,
+            "text_block_count": 42,
+            "word_count": 151
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 38,
+          "render": "knowledge/renders/owner-manual/page-38.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-39-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-39.md",
+          "metrics": {
+            "drawing_count": 38,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 36,
+            "word_count": 306
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 39,
+          "render": "knowledge/renders/owner-manual/page-39.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-40-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-40.md",
+          "metrics": {
+            "drawing_count": 141,
+            "image_count": 5,
+            "image_coverage": 0.0118,
+            "table_count": 0,
+            "text_block_count": 28,
+            "word_count": 243
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 40,
+          "render": "knowledge/renders/owner-manual/page-40.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-41-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-41.md",
+          "metrics": {
+            "drawing_count": 676,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 35,
+            "word_count": 425
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 41,
+          "render": "knowledge/renders/owner-manual/page-41.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-42-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-42.md",
+          "metrics": {
+            "drawing_count": 58,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 35,
+            "word_count": 595
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 42,
+          "render": "knowledge/renders/owner-manual/page-42.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-43-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-43.md",
+          "metrics": {
+            "drawing_count": 50,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 48,
+            "word_count": 557
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 43,
+          "render": "knowledge/renders/owner-manual/page-43.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-44-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-44.md",
+          "metrics": {
+            "drawing_count": 51,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 31,
+            "word_count": 323
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 44,
+          "render": "knowledge/renders/owner-manual/page-44.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-45-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-45.md",
+          "metrics": {
+            "drawing_count": 1241,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 98,
+            "word_count": 244
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 45,
+          "render": "knowledge/renders/owner-manual/page-45.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-46-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-46.md",
+          "metrics": {
+            "drawing_count": 459,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 12,
+            "word_count": 467
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 46,
+          "render": "knowledge/renders/owner-manual/page-46.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/owner-manual/page-47-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review",
+            "local_ocr"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-47.md",
+          "metrics": {
+            "drawing_count": 26144,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 35,
+            "word_count": 82
+          },
+          "ocr_record_count": 64,
+          "ocr_records": "knowledge/ocr/owner-manual/page-47.json",
+          "ocr_text": "knowledge/ocr/owner-manual/page-47.txt",
+          "page": 47,
+          "render": "knowledge/renders/owner-manual/page-47.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "text_only",
+          "classification_reasons": [],
+          "detail_render": null,
+          "extraction_paths": [
+            "deterministic_text"
+          ],
+          "markdown": "knowledge/pages/owner-manual/page-48.md",
+          "metrics": {
+            "drawing_count": 3,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 6,
+            "word_count": 300
+          },
+          "ocr_record_count": 0,
+          "ocr_records": null,
+          "ocr_text": null,
+          "page": 48,
+          "render": null,
+          "visual_reviewed": true
+        }
+      ],
+      "sha256": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789",
+      "source": "files/owner-manual.pdf"
+    },
+    {
+      "contact_sheet": "knowledge/validation/contact-sheets/quick-start-guide.png",
+      "page_count": 2,
+      "pages": [
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "dense_vector_diagram_or_rules",
+            "multi_block_layout"
+          ],
+          "detail_render": "knowledge/renders/quick-start-guide/page-01-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review",
+            "local_ocr"
+          ],
+          "markdown": "knowledge/pages/quick-start-guide/page-01.md",
+          "metrics": {
+            "drawing_count": 4032,
+            "image_count": 2,
+            "image_coverage": 0.029,
+            "table_count": 0,
+            "text_block_count": 28,
+            "word_count": 82
+          },
+          "ocr_record_count": 75,
+          "ocr_records": "knowledge/ocr/quick-start-guide/page-01.json",
+          "ocr_text": "knowledge/ocr/quick-start-guide/page-01.txt",
+          "page": 1,
+          "render": "knowledge/renders/quick-start-guide/page-01.png",
+          "visual_reviewed": true
+        },
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "little_or_no_embedded_text",
+            "dense_vector_diagram_or_rules"
+          ],
+          "detail_render": "knowledge/renders/quick-start-guide/page-02-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review",
+            "local_ocr"
+          ],
+          "markdown": "knowledge/pages/quick-start-guide/page-02.md",
+          "metrics": {
+            "drawing_count": 4471,
+            "image_count": 0,
+            "image_coverage": 0.0,
+            "table_count": 0,
+            "text_block_count": 2,
+            "word_count": 10
+          },
+          "ocr_record_count": 39,
+          "ocr_records": "knowledge/ocr/quick-start-guide/page-02.json",
+          "ocr_text": "knowledge/ocr/quick-start-guide/page-02.txt",
+          "page": 2,
+          "render": "knowledge/renders/quick-start-guide/page-02.png",
+          "visual_reviewed": true
+        }
+      ],
+      "sha256": "4a44c4b18988c05b9dabaa953392f9ecd598dcc689d4a75ec2f54f06a6fa400e",
+      "source": "files/quick-start-guide.pdf"
+    },
+    {
+      "contact_sheet": "knowledge/validation/contact-sheets/selection-chart.png",
+      "page_count": 1,
+      "pages": [
+        {
+          "classification": "complex",
+          "classification_reasons": [
+            "little_or_no_embedded_text",
+            "substantial_raster_content"
+          ],
+          "detail_render": "knowledge/renders/selection-chart/page-01-detail.png",
+          "extraction_paths": [
+            "deterministic_text",
+            "rendered_visual_review",
+            "local_ocr"
+          ],
+          "markdown": "knowledge/pages/selection-chart/page-01.md",
+          "metrics": {
+            "drawing_count": 0,
+            "image_count": 1,
+            "image_coverage": 1.0,
+            "table_count": 0,
+            "text_block_count": 0,
+            "word_count": 0
+          },
+          "ocr_record_count": 121,
+          "ocr_records": "knowledge/ocr/selection-chart/page-01.json",
+          "ocr_text": "knowledge/ocr/selection-chart/page-01.txt",
+          "page": 1,
+          "render": "knowledge/renders/selection-chart/page-01.png",
+          "visual_reviewed": true
+        }
+      ],
+      "sha256": "670497435b031e4b6c48e5cec5322979fe8ab80d4f8380406cc492fee5f710f4",
+      "source": "files/selection-chart.pdf"
+    }
+  ],
+  "source_images": [
+    {
+      "detail_render": "knowledge/source-images/product-detail.png",
+      "height": 1200,
+      "markdown": "knowledge/pages/source-images/product.md",
+      "ocr_record_count": 8,
+      "ocr_records": "knowledge/ocr/source-images/product.json",
+      "ocr_text": "knowledge/ocr/source-images/product.txt",
+      "render": "knowledge/source-images/product.png",
+      "sha256": "c80366105834175156dfbc5d425fba6e4f3cc448910f958a03c372f74485d752",
+      "source": "product.webp",
+      "visual_reviewed": true,
+      "width": 1200
+    },
+    {
+      "detail_render": "knowledge/source-images/product-inside-detail.png",
+      "height": 1200,
+      "markdown": "knowledge/pages/source-images/product-inside.md",
+      "ocr_record_count": 7,
+      "ocr_records": "knowledge/ocr/source-images/product-inside.json",
+      "ocr_text": "knowledge/ocr/source-images/product-inside.txt",
+      "render": "knowledge/source-images/product-inside.png",
+      "sha256": "1513e0ae01be1f565835c90633b6ec79225c3f89197785b1eeda5aa91b233325",
+      "source": "product-inside.webp",
+      "visual_reviewed": true,
+      "width": 1200
+    }
+  ]
+}

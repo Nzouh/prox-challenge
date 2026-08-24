@@ -1,0 +1,78 @@
+# owner-manual - PDF page 18
+
+- Source: `files/owner-manual.pdf`
+- Classification: `complex`
+- Extraction paths: `deterministic_text, rendered_visual_review`
+- Render: `knowledge/renders/owner-manual/page-18.png`
+- Detail render: `knowledge/renders/owner-manual/page-18-detail.png`
+
+## Deterministic text extraction
+
+## Basic Wire Welding
+
+### Read the ENTIRE IMPORTANT SAFETY INFORMATION section at the beginning of this manual
+### including all text under subheadings therein before welding.
+
+### TO PREVENT SERIOUS INJURY:
+### Protective gear must be worn when using the Welder; minimum shade number 10 full face shield
+### (or welding mask), ear protection, welding gloves, sleeves and apron, NIOSH-approved respirator, and fire
+### resistant work clothes without pockets should be worn when welding.
+### Light from the arc can cause permanent damage to the eyes and skin.
+### Do not breathe arc fumes.
+
+Flux-cored wire welding is used to weld mild steel
+and stainless steel without shielding gas.
+
+MIG welding uses solid wire and shielding gas,
+and is used to weld mild steel and stainless steel.
+MIG welding can also be used to weld thinner
+workpieces than flux-cored welding can.
+
+Aluminum welding can be performed with an
+optional Spool Gun (sold separately) using
+aluminum wire and shielding gas.
+
+Good welding takes a degree of skill and experience.
+Practice a few sample welds on scrap before
+welding your first project. Additional practice
+periods are recommended whenever you weld:
+
+- a different thickness of material
+- a different type of material
+- a different type of connection
+- using a different process
+
+### Make practice welds on pieces of scrap to practice
+### technique before welding anything of value.
+
+### TO PREVENT SERIOUS INJURY,
+### FIRE AND BURNS:
+### Keep welding tip clear of grounded
+### objects whenever unit is plugged
+### in and turned on.
+
+### Power
+### Switch
+## =
+
+### Practice your welding
+
+### technique on scrap
+### pieces before welding
+
+### anything of value.
+
+### Safety
+### Welding Tips
+### TIG / Stick
+### CONTROLS
+### Wire
+### MAINTENANCE
+
+Page 18
+### For technical questions, please call 1-800-444-3353.
+Item 57812
+
+## Visual review
+
+- Basic wire-welding setup screen sequence and work-clamp placement were checked against the numbered workflow.
