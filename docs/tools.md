@@ -11,14 +11,18 @@ the model roles and the validation loop:
 
 ```text
 User question
-  -> research/router agent selects read-only MCP tools
+  -> deterministic route selection
+       -> exact low-risk spec: Haiku routes the MCP call
+       -> other questions: Opus research/router selects read-only MCP tools
   -> tool input schema validation
   -> deterministic tool execution over validated knowledge
   -> evidence/provenance validator
        -> retry tool call with corrected arguments when recoverable
        -> stop safely when evidence is missing or contradictory
-  -> safety/grounding checker builds an approved response plan
-  -> writer agent writes only from the approved plan and evidence
+  -> after evidence validation, run in parallel:
+       -> safety/grounding checker builds an approved response plan when required
+       -> writer drafts only from evidence and deterministic safety constraints
+  -> join checker + writer results
   -> final deterministic checker verifies citations, safety status, and artifacts
   -> UI receives done only when every stage is error-free
 ```
@@ -26,8 +30,18 @@ User question
 The checker and writer are orchestration stages, not MCP tools. The writer never receives
 permission to browse, read files, or manufacture a specification. For low-risk factual
 questions the checker may be deterministic code; safety-critical or inference-heavy
-answers get a second model pass. A failed final check is retried within a fixed budget and
-never converted to a successful `done` event.
+answers get a second model pass. The first writer attempt runs concurrently with that pass,
+but its text stays buffered until the critic and deterministic final checker approve it. A
+failed final check is retried within a fixed budget and never converted to a successful
+`done` event. Anthropic research sessions are persisted and resumed for follow-up turns.
+For a complete exact specification intent, Haiku performs the MCP-routing turn and the host
+recomputes and matches the tool result before rendering it deterministically. That path
+skips Opus, the model checker, and the separate writer; any mismatch falls back to the full
+Opus attempt. Independent MCP calls are requested in one batch and execute concurrently;
+dependent calls remain sequential.
+Question-only response replay is disabled because it loses conversational state and can
+replay stale evidence; any future cache must include the exact conversation and evidence
+revision without sharing SDK sessions between users.
 
 ## Source policy
 
@@ -79,12 +93,8 @@ conditions, prohibited actions, technician-only actions, and source pages.
 
 Traverse the selection-chart data using skill level, material, thickness, gas availability,
 location, and desired cleanliness. `unsupported` or `insufficient_information` is preferable
-to guessing.
-
-#### `get_source_page`
-
-Return the exact reviewed detail PNG/full page and its provenance. The model must not redraw
-or paraphrase a wiring schematic when the source image is the authoritative representation.
+to guessing. The implemented result first rejects hard conflicts, then ranks only compatible
+processes and preserves charted spool-gun, DC TIG, and AC TIG requirements.
 
 ### Safety guardrails
 
@@ -110,18 +120,31 @@ the condition is unknown.
 
 Check voltage, frequency, waveform, continuous capacity, receptacle, grounding/bonding, and
 manufacturer approval. A voltage match alone is never sufficient. Distinguish published
-input current at rated output from a maximum branch-circuit requirement.
+input current at rated output from a maximum branch-circuit requirement. The implemented
+guardrail treats generators, inverters, battery banks, EVs, and other non-wall sources as
+unsupported unless separately approved, and returns `needs_verification` when required
+conditions are omitted.
 
 #### `check_repair_scope`
 
 Classify work as `operator_permitted`, `deenergized_inspection_only`,
 `qualified_technician_required`, `explicitly_prohibited`, or `not_documented`. Internal
 wiring, energized enclosure work, and bypassing protection cannot fall through to ordinary
-troubleshooting.
+troubleshooting. The implemented index is grounded in the manual's maintenance, grounding,
+and parts-repair warnings and is recomputed by the host before evidence is accepted.
+
+#### `get_source_page`
+
+Return the exact reviewed detail/full render for a PDF page or product image from
+`knowledge/manifest.json`, including the markdown path, selected asset path, and tier-1
+source hash. Unknown sources and pages fail closed.
 
 ## Artifact roadmap
 
 `emit_artifact` accepts only allowlisted schemas grounded in successful tool results:
+
+The artifact tool is exposed only when the user explicitly requests a visual, diagram,
+chart, or calculator. A direct single-value lookup renders as normal prose.
 
 - specification card;
 - cable-setup diagram;
@@ -149,15 +172,40 @@ safety-critical artifact.
 
 ### Batch 2 — guided operation
 
-- Add `get_setup` and a cable-setup artifact.
-- Add `diagnose_problem` with repair-scope fields.
-- Add `lookup_fault_indicator` without assuming undocumented error-code names.
+- Implemented `get_setup` for all four processes across cable, workpiece, consumables,
+  power/control, and shutdown stages. The optional cable-setup artifact remains separate.
+- Implemented `diagnose_problem` for all twelve unique troubleshooting symptoms on manual
+  pages 42–44, with shutdown prerequisites, operator checks, remedies, and technician-only
+  repair-scope fields.
+- Implemented `lookup_fault_indicator` for the two documented generic warning conditions.
+  Undocumented strings and codes return `unknown_indicator` without borrowing a remedy
+  from a similar condition.
+- Added host-side recomputation and adversarial tests before exposing all three tools to
+  the Anthropic SDK research agent.
+
+Current structured coverage: 15 exact machine facts, four cable setups, twenty operating
+setup sections, twelve diagnostic symptom nodes, two documented warning conditions, one
+power-source record, three repair-scope records, and four process-selection profiles.
+The durable next-tool order remains in this file and is mirrored in `todo.md`.
 
 ### Batch 3 — compatibility and selection
 
-- Add `assess_power_source` and `check_repair_scope`.
-- Add `recommend_process` from the selection chart.
-- Add `get_source_page` and source-page UI support.
+- Implemented `assess_power_source` with voltage-plus-circuit guardrails and explicit
+  unsupported-source outcomes for generators, inverters, battery banks, and EVs.
+- Implemented `check_repair_scope` with operator, deenergized-only, technician, prohibited,
+  and undocumented outcomes.
+- Implemented `recommend_process` from the visually reviewed selection chart with four
+  complete process profiles and natural-language routing through the Anthropic SDK.
+- Added process-selection evaluation questions for clean indoor sheet, rusty outdoor steel,
+  24-gauge stainless, 1/2-inch outdoor steel, aluminum automotive body work, and missing
+  decision context.
+- Live Anthropic evaluation passed 7/7 process-selection questions. Every question selected
+  `recommend_process` on the first research attempt with no forced tool choice and no retry.
+- Implemented `get_source_page` against the reviewed manifest; source-page UI rendering
+  remains a frontend task.
+- Live Anthropic evaluation passed 6/6 questions for the three remaining tools. The
+  battery/EV question used one bounded retry because its first attempt omitted the required
+  parallel `assess_job_risk` evidence; no answer was released before that safety check.
 
 ### Validation/checker/writer foundation (implemented with Batch 1)
 
@@ -165,7 +213,8 @@ safety-critical artifact.
 - Host recomputes and validates every evidence result before accepting the tool result.
 - Missing risk assessment or missing evidence triggers one bounded research retry.
 - Safety-signaled questions pass through a no-tools checker agent.
-- A no-tools writer agent runs only after approval.
+- The no-tools checker and first no-tools writer attempt run concurrently after evidence
+  validation; neither can block or weaken the deterministic risk disposition.
 - Artifacts and text remain buffered until a deterministic final checker passes.
 - `done` is emitted only after all stages complete without errors.
 

@@ -30,3 +30,11 @@ export type DutyCycleArtifact = z.infer<typeof dutyCycleArtifactSchema>;
 
 export const artifactSchema = z.discriminatedUnion("type", [dutyCycleArtifactSchema]);
 export type Artifact = z.infer<typeof artifactSchema>;
+
+const EXPLICIT_VISUAL_REQUEST =
+  /\b(artifact|calculator|chart|diagram|draw|graph|interactive|plot|timeline|visual(?:i[sz](?:e|ation))?)\b/i;
+
+/** Do not turn ordinary factual answers into unsolicited dashboard cards. */
+export function shouldOfferArtifacts(question: string): boolean {
+  return EXPLICIT_VISUAL_REQUEST.test(question);
+}

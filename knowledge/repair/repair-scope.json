@@ -1,0 +1,69 @@
+[
+  {
+    "classification": "qualified_technician_required",
+    "id": "all-repairs-technician",
+    "patterns": [
+      "repair",
+      "replace part",
+      "parts replacement",
+      "main pcb",
+      "control pcb",
+      "transformer",
+      "igbt",
+      "circuit board",
+      "internal wiring",
+      "open the case",
+      "open the enclosure",
+      "remove the housing",
+      "remove the cover"
+    ],
+    "rationale": "The parts list and assembly diagram are reference material only; repairs and parts replacements should be undertaken by certified and licensed technicians.",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 46
+    }
+  },
+  {
+    "classification": "qualified_technician_required",
+    "id": "power-cord-or-plug-service",
+    "patterns": [
+      "replace the plug",
+      "change the plug",
+      "modify the plug",
+      "repair the power cord",
+      "splice the cord",
+      "reconnect the circuit",
+      "change the wiring"
+    ],
+    "rationale": "Power-cord, plug, and circuit changes require a qualified service facility or qualified service personnel; adapters and modified plugs are not permitted.",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 6
+    }
+  },
+  {
+    "classification": "operator_permitted",
+    "id": "operator-consumables-and-external-checks",
+    "patterns": [
+      "clean",
+      "inspect visually",
+      "visual inspection",
+      "replace the contact tip",
+      "replace contact tip",
+      "replace the nozzle",
+      "replace nozzle",
+      "replace the liner",
+      "replace liner",
+      "change the wire spool",
+      "install the wire spool",
+      "adjust feed tension",
+      "secure the cable",
+      "press the reset button"
+    ],
+    "rationale": "The manual documents these as external operator checks or consumable adjustments; power must be off and unplugged before adjustment, cleaning, or service.",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 5
+    }
+  }
+]

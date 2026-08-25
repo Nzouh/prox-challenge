@@ -1,10 +1,18 @@
 {
   "counts": {
-    "complex": 52,
+    "complex": 53,
     "text_only": 1,
-    "visual_reviewed": 53
+    "visual_reviewed": 54
   },
+  "invalid_structured_sources": [],
   "status": "pass",
+  "structured_diagnostic_count": 12,
   "structured_fact_count": 15,
+  "structured_fault_indicator_count": 2,
+  "structured_operating_setup_count": 20,
+  "structured_power_source_count": 1,
+  "structured_process_profile_count": 4,
+  "structured_repair_scope_count": 3,
+  "structured_setup_count": 4,
   "unresolved_visual_reviews": []
 }

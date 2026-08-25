@@ -20,12 +20,22 @@ from typing import Any
 import pymupdf as fitz
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
+try:
+    from scripts import hotspots
+except ModuleNotFoundError:  # Direct `python scripts/extract_knowledge.py` execution.
+    import hotspots
+
 
 ROOT = Path(__file__).resolve().parents[1]
 FILES_DIR = ROOT / "files"
 OUTPUT_DIR = ROOT / "knowledge"
 OVERRIDES_PATH = ROOT / "scripts" / "extraction_overrides.json"
-SOURCE_IMAGES = (ROOT / "product.webp", ROOT / "product-inside.webp")
+STRUCTURED_KNOWLEDGE_DIR = ROOT / "scripts" / "structured_knowledge"
+SOURCE_IMAGES = (
+    ROOT / "product.webp",
+    ROOT / "product-front.webp",
+    ROOT / "product-inside.webp",
+)
 RENDER_DPI = 220
 OCR_WORD_THRESHOLD = 100
 _OCR_ENGINE: Any = None
@@ -59,6 +69,10 @@ def ensure_dirs() -> None:
         OUTPUT_DIR / "ocr",
         OUTPUT_DIR / "source-images",
         OUTPUT_DIR / "tables",
+        OUTPUT_DIR / "setups",
+        OUTPUT_DIR / "process-selection",
+        OUTPUT_DIR / "power",
+        OUTPUT_DIR / "repair",
         OUTPUT_DIR / "troubleshooting",
         OUTPUT_DIR / "validation" / "contact-sheets",
     ):
@@ -69,6 +83,12 @@ def load_overrides() -> dict[str, Any]:
     if not OVERRIDES_PATH.exists():
         return {"documents": {}, "source_images": {}, "structured_facts": []}
     return json.loads(OVERRIDES_PATH.read_text(encoding="utf-8"))
+
+
+def load_structured_knowledge(filename: str) -> Any:
+    """Load authored records that the extraction build validates and copies into knowledge/."""
+    path = STRUCTURED_KNOWLEDGE_DIR / filename
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def image_coverage(page: fitz.Page) -> float:
@@ -459,7 +479,50 @@ def process_source_image(path: Path, overrides: dict[str, Any]) -> tuple[dict[st
     )
 
 
-def write_reports(manifest: dict[str, Any], overrides: dict[str, Any]) -> None:
+def find_invalid_structured_sources(
+    manifest: dict[str, Any], structured_datasets: dict[str, Any]
+) -> list[dict[str, Any]]:
+    reviewed_pages = {
+        (document["source"], page["page"]): page["visual_reviewed"]
+        for document in manifest["documents"]
+        for page in document["pages"]
+    }
+    invalid: list[dict[str, Any]] = []
+
+    def visit(value: Any, dataset: str, path: str) -> None:
+        if isinstance(value, list):
+            for index, item in enumerate(value):
+                visit(item, dataset, f"{path}[{index}]")
+            return
+        if not isinstance(value, dict):
+            return
+        if isinstance(value.get("file"), str) and isinstance(value.get("page"), int):
+            source = value["file"]
+            page = value["page"]
+            reviewed = reviewed_pages.get((source, page))
+            if reviewed is not True:
+                invalid.append(
+                    {
+                        "dataset": dataset,
+                        "path": path,
+                        "source": source,
+                        "page": page,
+                        "reason": "unknown_or_unreviewed_source_page",
+                    }
+                )
+            return
+        for key, item in value.items():
+            item_path = f"{path}.{key}"
+            visit(item, dataset, item_path)
+
+    for dataset, value in structured_datasets.items():
+        visit(value, dataset, dataset)
+    return invalid
+
+
+def write_reports(
+    manifest: dict[str, Any], overrides: dict[str, Any], structured_datasets: dict[str, Any]
+) -> None:
     unresolved: list[dict[str, Any]] = []
     counts = {"text_only": 0, "complex": 0, "visual_reviewed": 0}
     for document in manifest["documents"]:
@@ -476,11 +539,26 @@ def write_reports(manifest: dict[str, Any], overrides: dict[str, Any]) -> None:
         else:
             unresolved.append({"source": image["source"], "page": None})
 
+    invalid_structured_sources = find_invalid_structured_sources(manifest, structured_datasets)
     report = {
         "counts": counts,
+        "invalid_structured_sources": invalid_structured_sources,
         "unresolved_visual_reviews": unresolved,
         "structured_fact_count": len(overrides.get("structured_facts", [])),
-        "status": "pass" if not unresolved else "needs_visual_review",
+        "structured_setup_count": len(structured_datasets["cable_setups"]),
+        "structured_operating_setup_count": len(structured_datasets["operating_setups"]),
+        "structured_diagnostic_count": len(structured_datasets["troubleshooting"]),
+        "structured_fault_indicator_count": len(structured_datasets["fault_indicators"]),
+        "structured_process_profile_count": len(structured_datasets["process_selection"]),
+        "structured_power_source_count": len(structured_datasets["power_sources"]),
+        "structured_repair_scope_count": len(structured_datasets["repair_scope"]),
+        "status": (
+            "pass"
+            if not unresolved and not invalid_structured_sources
+            else "needs_structured_source_review"
+            if invalid_structured_sources
+            else "needs_visual_review"
+        ),
     }
     (OUTPUT_DIR / "validation" / "report.json").write_text(
         stable_json(report), encoding="utf-8", newline="\n"
@@ -493,6 +571,13 @@ def write_reports(manifest: dict[str, Any], overrides: dict[str, Any]) -> None:
         f"- Complex sources/pages: {counts['complex']}",
         f"- Visually reviewed sources/pages: {counts['visual_reviewed']}",
         f"- Structured facts: {report['structured_fact_count']}",
+        f"- Structured cable setups: {report['structured_setup_count']}",
+        f"- Structured operating setup sections: {report['structured_operating_setup_count']}",
+        f"- Structured diagnostic nodes: {report['structured_diagnostic_count']}",
+        f"- Structured fault indicators: {report['structured_fault_indicator_count']}",
+        f"- Structured process-selection profiles: {report['structured_process_profile_count']}",
+        f"- Structured power-source records: {report['structured_power_source_count']}",
+        f"- Structured repair-scope records: {report['structured_repair_scope_count']}",
         "",
         "## Unresolved visual reviews",
         "",
@@ -501,6 +586,14 @@ def write_reports(manifest: dict[str, Any], overrides: dict[str, Any]) -> None:
         for item in unresolved:
             suffix = f" PDF page {item['page']}" if item["page"] else ""
             report_md.append(f"- `{item['source']}`{suffix}")
+    else:
+        report_md.append("None.")
+    report_md.extend(["", "## Invalid structured source references", ""])
+    if invalid_structured_sources:
+        for item in invalid_structured_sources:
+            report_md.append(
+                f"- `{item['dataset']}` `{item['path']}` -> `{item['source']}` page {item['page']}"
+            )
     else:
         report_md.append("None.")
     (OUTPUT_DIR / "validation" / "report.md").write_text(
@@ -530,6 +623,15 @@ python -m venv .venv
 - High-resolution complex-page renders under `renders/`.
 - Local OCR text and confidence-bearing records under `ocr/`.
 - Structured facts under `tables/facts.json`.
+- Process cable setups under `setups/cable-setups.json`.
+- Process operating setups under `setups/operating-setups.json`.
+- Documented display conditions under `fault-indicators.json`.
+- Process-selection profiles under `process-selection/chart.json`.
+- Power-source requirements under `power/power-sources.json`.
+- Repair-scope classifications under `repair/repair-scope.json`.
+- Symptom/cause/check/remedy relationships under `troubleshooting/graph.json`.
+- Interactive-view hotspot geometry in `hotspots.json`, with `hotspots-overlay.png` as
+  its visual check.
 - Classification and source hashes in `manifest.json`.
 - Visual-review status in `validation/report.md`.
 
@@ -550,6 +652,16 @@ def main() -> int:
     args = parser.parse_args()
     ensure_dirs()
     overrides = load_overrides()
+    structured_datasets = {
+        "cable_setups": load_structured_knowledge("cable-setups.json"),
+        "fault_indicators": load_structured_knowledge("fault-indicators.json"),
+        "operating_setups": load_structured_knowledge("operating-setups.json"),
+        "process_selection": load_structured_knowledge("process-selection.json"),
+        "power_sources": load_structured_knowledge("power-sources.json"),
+        "repair_scope": load_structured_knowledge("repair-scope.json"),
+        "troubleshooting": load_structured_knowledge("troubleshooting.json"),
+        "structured_facts": overrides.get("structured_facts", []),
+    }
     manifest: dict[str, Any] = {"documents": [], "source_images": []}
     corpus_sections: list[str] = []
 
@@ -563,6 +675,30 @@ def main() -> int:
         manifest["source_images"].append(image_manifest)
         corpus_sections.append(section)
 
+    # Hotspot geometry runs after the PDFs, because it fits a homography from the page
+    # renders those produce onto the product photographs. See scripts/hotspots.py.
+    hotspot_data = hotspots.build()
+    (OUTPUT_DIR / "hotspots.json").write_text(
+        stable_json(hotspot_data), encoding="utf-8", newline="\n"
+    )
+    hotspots.write_overlay(hotspot_data, OUTPUT_DIR / "hotspots-overlay.png")
+    manifest["hotspots"] = [
+        {
+            "view": name,
+            "image": view["image"],
+            "source": view["source"],
+            "part_count": len(view["parts"]),
+            "geometry_method": view["validation"]["method"],
+            # Present only where a homography was fitted and validated.
+            **(
+                {"held_out_error_px": view["validation"]["held_out_error_px"]}
+                if "held_out_error_px" in view["validation"]
+                else {}
+            ),
+        }
+        for name, view in sorted(hotspot_data["views"].items())
+    ]
+
     (OUTPUT_DIR / "manifest.json").write_text(
         stable_json(manifest), encoding="utf-8", newline="\n"
     )
@@ -575,9 +711,27 @@ def main() -> int:
         stable_json(overrides.get("structured_facts", [])), encoding="utf-8", newline="\n"
     )
     (OUTPUT_DIR / "troubleshooting" / "graph.json").write_text(
-        stable_json(overrides.get("troubleshooting", [])), encoding="utf-8", newline="\n"
+        stable_json(structured_datasets["troubleshooting"]), encoding="utf-8", newline="\n"
     )
-    write_reports(manifest, overrides)
+    (OUTPUT_DIR / "setups" / "cable-setups.json").write_text(
+        stable_json(structured_datasets["cable_setups"]), encoding="utf-8", newline="\n"
+    )
+    (OUTPUT_DIR / "setups" / "operating-setups.json").write_text(
+        stable_json(structured_datasets["operating_setups"]), encoding="utf-8", newline="\n"
+    )
+    (OUTPUT_DIR / "fault-indicators.json").write_text(
+        stable_json(structured_datasets["fault_indicators"]), encoding="utf-8", newline="\n"
+    )
+    (OUTPUT_DIR / "process-selection" / "chart.json").write_text(
+        stable_json(structured_datasets["process_selection"]), encoding="utf-8", newline="\n"
+    )
+    (OUTPUT_DIR / "power" / "power-sources.json").write_text(
+        stable_json(structured_datasets["power_sources"]), encoding="utf-8", newline="\n"
+    )
+    (OUTPUT_DIR / "repair" / "repair-scope.json").write_text(
+        stable_json(structured_datasets["repair_scope"]), encoding="utf-8", newline="\n"
+    )
+    write_reports(manifest, overrides, structured_datasets)
     write_readme(manifest)
 
     report = json.loads((OUTPUT_DIR / "validation" / "report.json").read_text(encoding="utf-8"))

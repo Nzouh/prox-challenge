@@ -25,24 +25,29 @@ export async function POST(request: Request) {
   request.signal.addEventListener("abort", abortAgent, { once: true });
 
   const stream = new ReadableStream<Uint8Array>({
-    async start(controller) {
-      try {
-        for await (const event of runAgent(input, sessionId, agentAbortController.signal)) {
-          controller.enqueue(encodeSSE(event));
+    start(controller) {
+      // Do not return the long-running agent promise from start(). Web Streams wait for
+      // an async start hook to settle before making queued chunks readable, which would
+      // buffer every status and SSE event until the complete answer finished.
+      void (async () => {
+        try {
+          for await (const event of runAgent(input, sessionId, agentAbortController.signal)) {
+            controller.enqueue(encodeSSE(event));
+          }
+        } catch (err) {
+          if (!agentAbortController.signal.aborted) {
+            controller.enqueue(
+              encodeSSE({
+                type: "error",
+                message: err instanceof Error ? err.message : String(err),
+              }),
+            );
+          }
+        } finally {
+          request.signal.removeEventListener("abort", abortAgent);
+          if (!agentAbortController.signal.aborted) controller.close();
         }
-      } catch (err) {
-        if (!agentAbortController.signal.aborted) {
-          controller.enqueue(
-            encodeSSE({
-              type: "error",
-              message: err instanceof Error ? err.message : String(err),
-            }),
-          );
-        }
-      } finally {
-        request.signal.removeEventListener("abort", abortAgent);
-        if (!agentAbortController.signal.aborted) controller.close();
-      }
+      })();
     },
     cancel() {
       agentAbortController.abort();

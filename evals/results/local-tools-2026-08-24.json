@@ -1,0 +1,199 @@
+{
+  "generatedAt": "2026-08-25T03:51:17.370Z",
+  "runtime": {
+    "node": "v22.13.1",
+    "platform": "win32",
+    "architecture": "x64"
+  },
+  "corpus": {
+    "reviewedSourcesAndPages": 54,
+    "structuredFacts": 15,
+    "processSelectionProfiles": 4,
+    "powerSourceRecords": 1,
+    "repairScopeRecords": 3
+  },
+  "coldInitialization": {
+    "samples": 15,
+    "p50Ms": 160.5372,
+    "p95Ms": 197.3139,
+    "minMs": 149.694,
+    "maxMs": 197.3139,
+    "parentModuleLoadMs": 317.528
+  },
+  "benchmarks": [
+    {
+      "name": "lookup_spec: published duty cycle",
+      "iterations": 50000,
+      "meanUs": 249.8581,
+      "p50Us": 174.6,
+      "p95Us": 433.4,
+      "p99Us": 1141.8,
+      "maxUs": 9521.3,
+      "operationsPerSecond": 4002
+    },
+    {
+      "name": "lookup_spec: explicit miss",
+      "iterations": 50000,
+      "meanUs": 262.7747,
+      "p50Us": 170.9,
+      "p95Us": 509,
+      "p99Us": 1242.6,
+      "maxUs": 11146.4,
+      "operationsPerSecond": 3806
+    },
+    {
+      "name": "lookup_spec: polarity",
+      "iterations": 50000,
+      "meanUs": 2.1404,
+      "p50Us": 1.1,
+      "p95Us": 4.6,
+      "p99Us": 8.1,
+      "maxUs": 2475,
+      "operationsPerSecond": 467212
+    },
+    {
+      "name": "search_manual: focused hit, limit 1",
+      "iterations": 300,
+      "meanUs": 14600.2557,
+      "p50Us": 14109.5,
+      "p95Us": 18775.6,
+      "p99Us": 20650.4,
+      "maxUs": 21483,
+      "operationsPerSecond": 68
+    },
+    {
+      "name": "search_manual: multi-term hit, limit 5",
+      "iterations": 300,
+      "meanUs": 29002.1817,
+      "p50Us": 28842.2,
+      "p95Us": 30385.9,
+      "p99Us": 31464.6,
+      "maxUs": 39783.4,
+      "operationsPerSecond": 34
+    },
+    {
+      "name": "search_manual: explicit miss",
+      "iterations": 300,
+      "meanUs": 414.641,
+      "p50Us": 407.4,
+      "p95Us": 451.7,
+      "p99Us": 522.1,
+      "maxUs": 564.9,
+      "operationsPerSecond": 2412
+    },
+    {
+      "name": "assess_job_risk: stop rule",
+      "iterations": 50000,
+      "meanUs": 0.7928,
+      "p50Us": 0.4,
+      "p95Us": 1.9,
+      "p99Us": 2.4,
+      "maxUs": 546.7,
+      "operationsPerSecond": 1261346
+    },
+    {
+      "name": "assess_job_risk: complete safe context",
+      "iterations": 50000,
+      "meanUs": 1.136,
+      "p50Us": 0.8,
+      "p95Us": 2.3,
+      "p99Us": 2.8,
+      "maxUs": 532.7,
+      "operationsPerSecond": 880320
+    },
+    {
+      "name": "recommend_process: constrained unique match",
+      "iterations": 50000,
+      "meanUs": 2.1285,
+      "p50Us": 1.5,
+      "p95Us": 3.9,
+      "p99Us": 4.9,
+      "maxUs": 1124.8,
+      "operationsPerSecond": 469812
+    },
+    {
+      "name": "assess_power_source: complete wall source",
+      "iterations": 50000,
+      "meanUs": 2.1497,
+      "p50Us": 1.5,
+      "p95Us": 5.4,
+      "p99Us": 5.9,
+      "maxUs": 1960.1,
+      "operationsPerSecond": 465186
+    },
+    {
+      "name": "assess_power_source: unsupported battery",
+      "iterations": 50000,
+      "meanUs": 1.7699,
+      "p50Us": 1.4,
+      "p95Us": 3.2,
+      "p99Us": 3.5,
+      "maxUs": 695.3,
+      "operationsPerSecond": 564997
+    },
+    {
+      "name": "check_repair_scope: internal PCB",
+      "iterations": 50000,
+      "meanUs": 3.5628,
+      "p50Us": 3.1,
+      "p95Us": 4.7,
+      "p99Us": 5.5,
+      "maxUs": 396.4,
+      "operationsPerSecond": 280678
+    },
+    {
+      "name": "check_repair_scope: deenergized consumable",
+      "iterations": 50000,
+      "meanUs": 12.0073,
+      "p50Us": 11,
+      "p95Us": 12.9,
+      "p99Us": 24,
+      "maxUs": 509.5,
+      "operationsPerSecond": 83282
+    },
+    {
+      "name": "get_source_page: reviewed detail render",
+      "iterations": 50000,
+      "meanUs": 0.7948,
+      "p50Us": 0.5,
+      "p95Us": 1.5,
+      "p99Us": 2,
+      "maxUs": 436.4,
+      "operationsPerSecond": 1258207
+    },
+    {
+      "name": "checker validation: deterministic stop",
+      "iterations": 50000,
+      "meanUs": 0.2992,
+      "p50Us": 0.1,
+      "p95Us": 0.5,
+      "p99Us": 0.6,
+      "maxUs": 1409.1,
+      "operationsPerSecond": 3342693
+    },
+    {
+      "name": "writer validation: grounded stop",
+      "iterations": 50000,
+      "meanUs": 2.9877,
+      "p50Us": 2.7,
+      "p95Us": 3.3,
+      "p99Us": 3.9,
+      "maxUs": 513,
+      "operationsPerSecond": 334711
+    },
+    {
+      "name": "MCP payload: search + JSON serialization",
+      "iterations": 300,
+      "meanUs": 10269.709,
+      "p50Us": 10225.9,
+      "p95Us": 10850.9,
+      "p99Us": 11308.4,
+      "maxUs": 12104.9,
+      "operationsPerSecond": 97
+    }
+  ],
+  "memoryMiB": {
+    "rss": 146.1,
+    "heapUsed": 46.47
+  }
+}

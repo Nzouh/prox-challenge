@@ -1,0 +1,575 @@
+[
+  {
+    "id": "wire-workpiece-preparation",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 19
+    },
+    "stage": "workpiece",
+    "steps": [
+      {
+        "instruction": "Practice first on scrap of the same thickness as the intended workpiece.",
+        "order": 1,
+        "state": "required"
+      },
+      {
+        "instruction": "Clean the weld surfaces to bare metal; remove rust, paint, oil, and other material.",
+        "order": 2,
+        "state": "required"
+      },
+      {
+        "instruction": "Clamp the workpieces securely; bevel thick edges when needed for penetration.",
+        "order": 3,
+        "state": "required"
+      },
+      {
+        "condition": "Welding on a vehicle",
+        "instruction": "Disconnect vehicle battery power at both the positive connection and ground.",
+        "order": 4,
+        "state": "conditional"
+      },
+      {
+        "instruction": "Attach the ground clamp to bare metal near the weld or to the metal bench holding the workpiece.",
+        "order": 5,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "tig-stick-workpiece-preparation",
+    "processes": [
+      "TIG",
+      "stick"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 29
+    },
+    "stage": "workpiece",
+    "steps": [
+      {
+        "instruction": "Practice first on scrap of the same thickness as the intended workpiece.",
+        "order": 1,
+        "state": "required"
+      },
+      {
+        "instruction": "Clean the weld surfaces to bare metal; remove rust, paint, oil, and other material.",
+        "order": 2,
+        "state": "required"
+      },
+      {
+        "instruction": "Clamp the workpieces securely; bevel thick edges when needed for penetration.",
+        "order": 3,
+        "state": "required"
+      },
+      {
+        "condition": "Welding on a vehicle",
+        "instruction": "Disconnect vehicle battery power at both the positive connection and ground.",
+        "order": 4,
+        "state": "conditional"
+      },
+      {
+        "instruction": "Attach the ground clamp to bare metal near the weld or to the metal bench holding the workpiece.",
+        "order": 5,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "wire-spool-installation",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 11
+    },
+    "stage": "consumables",
+    "steps": [
+      {
+        "instruction": "With power OFF and unplugged, install the wire spool so it unwinds clockwise.",
+        "order": 1,
+        "state": "required"
+      },
+      {
+        "instruction": "Secure the spool so it does not spin freely and unravel.",
+        "order": 2,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "wire-feed-roller-selection",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 12
+    },
+    "stage": "consumables",
+    "steps": [
+      {
+        "instruction": "Use the V-groove roller for solid wire or the knurled groove for flux-cored wire.",
+        "order": 3,
+        "state": "required"
+      },
+      {
+        "instruction": "Flip or replace the roller so the visible size marking matches the wire diameter on the spool.",
+        "order": 4,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "wire-gun-and-control-connection",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 13
+    },
+    "stage": "consumables",
+    "steps": [
+      {
+        "instruction": "Fully insert the gun cable connector into the wire-feed mechanism and tighten its knob without overtightening.",
+        "order": 5,
+        "state": "required"
+      },
+      {
+        "instruction": "Connect the wire-feed control cable inside the machine and tighten its lock ring in the keyed orientation.",
+        "order": 6,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "mig-shielding-gas-setup",
+    "processes": [
+      "MIG"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 14
+    },
+    "stage": "consumables",
+    "steps": [
+      {
+        "instruction": "Choose shielding gas from the inside-door Settings Chart.",
+        "order": 7,
+        "state": "required"
+      },
+      {
+        "instruction": "Secure the cylinder upright with two straps, fit the regulator, and wrench-tighten the regulator and gas-hose connections.",
+        "order": 8,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "wire-routing-and-tension",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 15
+    },
+    "stage": "consumables",
+    "steps": [
+      {
+        "instruction": "Hold tension on the wire, remove bent or burred wire, and guide at least 12 inches into the inlet liner and feed guide.",
+        "order": 9,
+        "state": "required"
+      },
+      {
+        "instruction": "Seat the wire in the feed-roller groove and latch the idler arm and tensioner.",
+        "order": 10,
+        "state": "required"
+      },
+      {
+        "instruction": "Set initial feed tension to 3–5 for solid wire or 2–3 for flux-cored wire.",
+        "order": 11,
+        "state": "required"
+      },
+      {
+        "instruction": "Remove the nozzle and contact tip, then lay the gun cable straight before feeding wire.",
+        "order": 12,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "wire-cold-feed",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 16
+    },
+    "stage": "consumables",
+    "steps": [
+      {
+        "instruction": "Keep hands away from the feed mechanism and do not touch the gun trigger while cold-feeding.",
+        "order": 13,
+        "state": "required"
+      },
+      {
+        "instruction": "Point the gun away from objects and hold Cold Wire Feed until two inches of wire emerges.",
+        "order": 14,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "wire-final-feed-setup",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 17
+    },
+    "stage": "consumables",
+    "steps": [
+      {
+        "instruction": "Test drive tension against wood from 2–3 inches away for less than three seconds; increase tension only until the wire bends.",
+        "order": 15,
+        "state": "required"
+      },
+      {
+        "instruction": "Turn power OFF and unplug, securely latch the door, install the matching contact tip and nozzle, and trim wire to 1/2-inch stickout.",
+        "order": 16,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "wire-power-and-controls",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 20
+    },
+    "stage": "power_controls",
+    "steps": [
+      {
+        "instruction": "With the Power Switch OFF, plug into a matching grounded, GFCI-protected 120 VAC 20-amp or 240 VAC receptacle with delayed-action protection.",
+        "order": 1,
+        "state": "required"
+      },
+      {
+        "instruction": "Place the gun on a nonconductive, nonflammable surface away from grounded objects, then turn power ON.",
+        "order": 2,
+        "state": "required"
+      },
+      {
+        "instruction": "Press Home, select the requested wire-welding process with the Main Control Knob, and confirm it.",
+        "order": 3,
+        "state": "required"
+      },
+      {
+        "instruction": "Set wire diameter and material thickness, then verify or adjust wire-feed speed and voltage.",
+        "order": 4,
+        "state": "required"
+      },
+      {
+        "instruction": "Follow the displayed polarity instructions; do not reuse the opposite process's polarity.",
+        "order": 5,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "mig-gas-startup",
+    "processes": [
+      "MIG"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 21
+    },
+    "stage": "power_controls",
+    "steps": [
+      {
+        "instruction": "With adequate ventilation and no gas leak, open the cylinder valve fully and set flow to the value on the Settings Chart.",
+        "order": 6,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "wire-shutdown",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 23
+    },
+    "stage": "shutdown",
+    "steps": [
+      {
+        "instruction": "Place the gun on a heat-proof, electrically nonconductive surface and turn the Power Switch OFF.",
+        "order": 1,
+        "state": "required"
+      },
+      {
+        "instruction": "Let the welder cool, then unplug the power cord.",
+        "order": 2,
+        "state": "required"
+      },
+      {
+        "instruction": "Remove the ground clamp and disconnect the MIG gun.",
+        "order": 3,
+        "state": "required"
+      },
+      {
+        "instruction": "Respool by clipping and securely holding the wire, removing the nozzle and tip, releasing the idler arm, and rotating the spool counterclockwise.",
+        "order": 4,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "mig-gas-shutdown",
+    "processes": [
+      "MIG"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 23
+    },
+    "stage": "shutdown",
+    "steps": [
+      {
+        "instruction": "Close the gas-cylinder valve, remove the regulator, replace the cap, disconnect the gas hose, and store the cylinder secured.",
+        "order": 5,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "tig-gas-setup",
+    "processes": [
+      "TIG"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 25
+    },
+    "stage": "consumables",
+    "steps": [
+      {
+        "instruction": "Secure a 100% argon cylinder upright with two straps, fit the regulator, and wrench-tighten the TIG torch gas hose to the regulator outlet.",
+        "order": 1,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "tig-torch-consumable-setup",
+    "processes": [
+      "TIG"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 26
+    },
+    "stage": "consumables",
+    "steps": [
+      {
+        "instruction": "Choose tungsten, collet, collet body, and ceramic nozzle sizes from the Settings Chart and match them to each other.",
+        "order": 2,
+        "state": "required"
+      },
+      {
+        "instruction": "Install tungsten so its tip protrudes 1/8–1/4 inch beyond the ceramic nozzle and lock it with the back cap.",
+        "order": 3,
+        "state": "required"
+      },
+      {
+        "condition": "Tungsten needs sharpening",
+        "instruction": "Use a dedicated fine-grit wheel, grind parallel to the electrode length, and use the documented respiratory and eye protection.",
+        "order": 4,
+        "state": "conditional"
+      }
+    ]
+  },
+  {
+    "id": "tig-power-and-controls",
+    "processes": [
+      "TIG"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 30
+    },
+    "stage": "power_controls",
+    "steps": [
+      {
+        "instruction": "Ensure adequate ventilation, open the argon-cylinder valve fully, and set gas flow from the inside-door Settings Chart.",
+        "order": 1,
+        "state": "required"
+      },
+      {
+        "instruction": "With power OFF, plug into a grounded, GFCI-protected 120 VAC 20-amp or 240 VAC outlet with delayed-action protection.",
+        "order": 2,
+        "state": "required"
+      },
+      {
+        "instruction": "Place the TIG torch on a nonconductive, nonflammable surface away from grounded objects, then turn power ON.",
+        "order": 3,
+        "state": "required"
+      },
+      {
+        "instruction": "Press Home, select TIG, then set rod diameter, material thickness, and output amperage.",
+        "order": 4,
+        "state": "required"
+      },
+      {
+        "instruction": "Turn the right control ON only when ready to energize the TIG torch; open-circuit voltage is then present.",
+        "order": 5,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "tig-shutdown",
+    "processes": [
+      "TIG"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 31
+    },
+    "stage": "shutdown",
+    "steps": [
+      {
+        "instruction": "Close the TIG-torch valve, turn the right control OFF, and place the torch on a nonconductive, nonflammable surface.",
+        "order": 1,
+        "state": "required"
+      },
+      {
+        "instruction": "Turn the Power Switch OFF, allow cooling, and unplug the power cord.",
+        "order": 2,
+        "state": "required"
+      },
+      {
+        "instruction": "Remove the ground clamp and disconnect the TIG torch, ground, and foot-pedal cables.",
+        "order": 3,
+        "state": "required"
+      },
+      {
+        "instruction": "Close and secure the gas cylinder, remove the regulator, replace the cap, disconnect the hose, and store the cylinder secured.",
+        "order": 4,
+        "state": "required"
+      },
+      {
+        "instruction": "Clean and store the welder and accessories indoors out of children's reach.",
+        "order": 5,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "stick-electrode-setup",
+    "processes": [
+      "stick"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 33
+    },
+    "stage": "consumables",
+    "steps": [
+      {
+        "instruction": "Place the bare metal end of the Stick electrode securely inside the electrode-holder jaws.",
+        "order": 1,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "stick-power-and-controls",
+    "processes": [
+      "stick"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 32
+    },
+    "stage": "power_controls",
+    "steps": [
+      {
+        "instruction": "With power OFF, plug into a grounded, GFCI-protected 120 VAC 20-amp or 240 VAC outlet with delayed-action protection.",
+        "order": 1,
+        "state": "required"
+      },
+      {
+        "instruction": "Place the electrode holder on a nonconductive, nonflammable surface away from grounded objects, then turn power ON.",
+        "order": 2,
+        "state": "required"
+      },
+      {
+        "instruction": "Press Home, select Stick, then set electrode type, electrode diameter, material thickness, and output amperage.",
+        "order": 3,
+        "state": "required"
+      },
+      {
+        "instruction": "Confirm the displayed polarity and turn the right control ON only when ready to energize the holder; open-circuit voltage is then present.",
+        "order": 4,
+        "state": "required"
+      }
+    ]
+  },
+  {
+    "id": "stick-shutdown",
+    "processes": [
+      "stick"
+    ],
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 33
+    },
+    "stage": "shutdown",
+    "steps": [
+      {
+        "instruction": "Set the electrode holder on a nonconductive, nonflammable surface away from grounded objects.",
+        "order": 1,
+        "state": "required"
+      },
+      {
+        "instruction": "Turn the Power Switch OFF, allow cooling, and unplug the power cord.",
+        "order": 2,
+        "state": "required"
+      },
+      {
+        "instruction": "Remove the ground clamp and disconnect the electrode-holder and ground cables.",
+        "order": 3,
+        "state": "required"
+      },
+      {
+        "instruction": "Clean and store the welder and accessories indoors out of children's reach.",
+        "order": 4,
+        "state": "required"
+      }
+    ]
+  }
+]

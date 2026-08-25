@@ -2,88 +2,577 @@
   "documents": {
     "owner-manual.pdf": {
       "pages": {
-        "1": {"notes": ["Cover identifies the Vulcan OmniPro 220, item 57812; no diagram semantics beyond the title and product image."]},
-        "2": {"notes": ["Table-of-contents hierarchy and safety-symbol legend were checked against the rendered page."]},
-        "3": {"notes": ["Two-column safety layout and fume/gas warning icons were checked; warnings are represented by the extracted text."]},
-        "4": {"notes": ["Electrical-safety warnings, icons, and two-column reading order were checked against the render."]},
-        "5": {"notes": ["Welder use/care and maintenance warnings use a two-column layout; extracted text covers the visual callouts."]},
-        "6": {"notes": ["Grounding illustration and safety-symbol table were checked; the plug/outlet relationship agrees with the text."]},
-        "7": {"notes": ["Three specification tables were visually reconciled: MIG, TIG, and Stick values are column-aligned by 120 VAC and 240 VAC input."]},
-        "8": {"notes": ["Front-panel callouts locate Home, Back, LCD, three knobs, power switch, MIG/spool-gun socket and gas outlet, negative/positive sockets, and wire-feed power cable."]},
-        "9": {"notes": ["Interior callouts locate the spool, spool knob, inlet liner, feed mechanism/tensioner/roller, cold-wire-feed switch, foot-pedal socket, and wire-feed-control socket."]},
-        "10": {"notes": ["MIG/flux setup overview and component-location diagram were checked against the numbered instructions."]},
-        "11": {"notes": ["Wire-spool and spool-knob assembly order/orientation were checked against the exploded setup drawings."]},
-        "12": {"notes": ["Feed-roller groove selection and roller orientation were checked visually against wire-size labels."]},
-        "13": {"notes": ["Wire-feed routing through inlet, guides, roller, and gun liner was checked against the diagram."]},
-        "14": {"notes": ["Polarity diagram shows DCEP for solid-wire MIG: wire-feed power positive and ground clamp negative."]},
-        "15": {"notes": ["Shielding-gas connection sequence and regulator/cylinder arrangement were checked against the illustrated callouts."]},
-        "16": {"notes": ["Danger callout and gas-cylinder securing/connection illustrations were checked; no conflicting visual instruction found."]},
-        "17": {"notes": ["Cold-wire-feed and incremental feed-tension procedure was checked; the diagram uses a wood block to test bending at roughly 2–3 inches."]},
-        "18": {"notes": ["Basic wire-welding setup screen sequence and work-clamp placement were checked against the numbered workflow."]},
-        "19": {"notes": ["MIG duty-cycle clocks confirm 120 VAC: 4 minutes welding/6 resting at 100 A; 240 VAC: 2.5 minutes welding/7.5 resting at 200 A; 100% ratings are 75 A and 115 A respectively."]},
-        "20": {"notes": ["MIG process-selection and input-power screen sequence was checked against display screenshots."]},
-        "21": {"notes": ["MIG material, wire, gas, thickness, voltage, and wire-speed setup screens were checked in their illustrated order."]},
-        "22": {"notes": ["MIG gun travel-angle, work-angle, CTWD, and direction illustrations were reconciled with the technique text."]},
-        "23": {"notes": ["Wire-welding bead and travel examples were checked; visual examples support the extracted technique guidance."]},
-        "24": {"notes": ["TIG cable diagram shows TIG torch in negative, ground clamp in positive, shielding-gas hose connected, and optional foot pedal connected inside."]},
-        "25": {"notes": ["TIG shielding-gas cylinder, regulator, and hose arrangement was checked against the connection steps."]},
-        "26": {"notes": ["Tungsten sharpening direction/profile and scratch-start sequence were checked against the diagrams."]},
-        "27": {"notes": ["Stick diagram shows ground clamp negative and electrode holder positive; power-label table was visually checked."]},
-        "28": {"notes": ["Basic TIG/Stick startup, mode selection, and control-screen sequence was checked against display illustrations."]},
-        "29": {"notes": ["Duty-cycle clocks confirm TIG 30% at 175 A/240 VAC and 40% at 125 A/120 VAC; Stick 25% at 175 A/240 VAC and 40% at 80 A/120 VAC, with their illustrated rest periods."]},
-        "30": {"notes": ["TIG torch/electrode positioning and scratch-start workflow were checked against the numbered illustrations."]},
-        "31": {"notes": ["TIG arc length, torch angle, filler angle, and travel sequence illustrations were checked against the technique text."]},
-        "32": {"notes": ["Stick electrode angle, arc length, travel direction, and bead sequence were visually reconciled."]},
-        "33": {"notes": ["Stick electrode handling and shutdown/safety illustrations were checked against the warning text."]},
-        "34": {"notes": ["Joint-preparation diagrams cover butt, lap, tee, edge, and corner-style preparations and visually reinforce cleaning/bevel guidance."]},
-        "35": {"notes": ["Wire-weld penetration profiles distinguish excess/burn-through, proper, and inadequate penetration; arrows relate heat changes to current, travel speed, wire feed, and CTWD."]},
-        "36": {"notes": ["Wire-weld cross-sections and bend-at-joint examples were checked against listed causes and solutions."]},
-        "37": {"notes": ["Top-view examples distinguish porosity from excessive spatter; visual defects agree with the diagnostic text."]},
-        "38": {"notes": ["Stick-weld penetration profiles distinguish excess, proper, and inadequate penetration; example beads map current, speed, and arc-length errors."]},
-        "39": {"notes": ["Stick-weld profile and adhesion illustrations were checked against causes and corrective actions."]},
-        "40": {"notes": ["Slag, porosity, crooked/wavy bead, and excessive-spatter examples were checked against their diagnostic sections."]},
-        "41": {"notes": ["Maintenance schedule/table and component-cleaning illustrations were checked against extracted intervals and procedures."]},
-        "42": {"notes": ["MIG/flux troubleshooting table preserves Problem → Possible Causes → Likely Solutions relationships for wire-feed and bird-nesting faults."]},
-        "43": {"notes": ["Continuation of the MIG/flux troubleshooting table was checked column-by-column, including thermal, power, trigger, voltage-protection, and mode faults."]},
-        "44": {"notes": ["TIG/Stick troubleshooting table was checked column-by-column, preserving each problem’s causes and likely solutions."]},
-        "45": {"notes": ["Full wiring schematic is retained as a high-resolution render; connector labels and topology should be consulted visually rather than inferred from text order."]},
-        "46": {"notes": ["Parts list columns (part, description, quantity) were checked against the render; repair warning requires certified/licensed technicians."]},
-        "47": {"notes": ["Exploded assembly diagram maps numbered components to the page-46 parts list; the render is authoritative for spatial relationships."]}
+        "1": {
+          "notes": [
+            "Cover identifies the Vulcan OmniPro 220, item 57812; no diagram semantics beyond the title and product image."
+          ]
+        },
+        "10": {
+          "notes": [
+            "MIG/flux setup overview and component-location diagram were checked against the numbered instructions."
+          ]
+        },
+        "11": {
+          "notes": [
+            "Wire-spool and spool-knob assembly order/orientation were checked against the exploded setup drawings."
+          ]
+        },
+        "12": {
+          "notes": [
+            "Feed-roller groove selection and roller orientation were checked visually against wire-size labels."
+          ]
+        },
+        "13": {
+          "notes": [
+            "Wire-feed routing through inlet, guides, roller, and gun liner was checked against the diagram."
+          ]
+        },
+        "14": {
+          "notes": [
+            "Polarity diagram shows DCEP for solid-wire MIG: wire-feed power positive and ground clamp negative."
+          ]
+        },
+        "15": {
+          "notes": [
+            "Shielding-gas connection sequence and regulator/cylinder arrangement were checked against the illustrated callouts."
+          ]
+        },
+        "16": {
+          "notes": [
+            "Danger callout and gas-cylinder securing/connection illustrations were checked; no conflicting visual instruction found."
+          ]
+        },
+        "17": {
+          "notes": [
+            "Cold-wire-feed and incremental feed-tension procedure was checked; the diagram uses a wood block to test bending at roughly 2–3 inches."
+          ]
+        },
+        "18": {
+          "notes": [
+            "Basic wire-welding setup screen sequence and work-clamp placement were checked against the numbered workflow."
+          ]
+        },
+        "19": {
+          "notes": [
+            "MIG duty-cycle clocks confirm 120 VAC: 4 minutes welding/6 resting at 100 A; 240 VAC: 2.5 minutes welding/7.5 resting at 200 A; 100% ratings are 75 A and 115 A respectively."
+          ]
+        },
+        "2": {
+          "notes": [
+            "Table-of-contents hierarchy and safety-symbol legend were checked against the rendered page."
+          ]
+        },
+        "20": {
+          "notes": [
+            "MIG process-selection and input-power screen sequence was checked against display screenshots."
+          ]
+        },
+        "21": {
+          "notes": [
+            "MIG material, wire, gas, thickness, voltage, and wire-speed setup screens were checked in their illustrated order."
+          ]
+        },
+        "22": {
+          "notes": [
+            "MIG gun travel-angle, work-angle, CTWD, and direction illustrations were reconciled with the technique text."
+          ]
+        },
+        "23": {
+          "notes": [
+            "Wire-welding bead and travel examples were checked; visual examples support the extracted technique guidance."
+          ]
+        },
+        "24": {
+          "notes": [
+            "TIG cable diagram shows TIG torch in negative, ground clamp in positive, shielding-gas hose connected, and optional foot pedal connected inside."
+          ]
+        },
+        "25": {
+          "notes": [
+            "TIG shielding-gas cylinder, regulator, and hose arrangement was checked against the connection steps."
+          ]
+        },
+        "26": {
+          "notes": [
+            "Tungsten sharpening direction/profile and scratch-start sequence were checked against the diagrams."
+          ]
+        },
+        "27": {
+          "notes": [
+            "Stick diagram shows ground clamp negative and electrode holder positive; power-label table was visually checked."
+          ]
+        },
+        "28": {
+          "notes": [
+            "Basic TIG/Stick startup, mode selection, and control-screen sequence was checked against display illustrations."
+          ]
+        },
+        "29": {
+          "notes": [
+            "Duty-cycle clocks confirm TIG 30% at 175 A/240 VAC and 40% at 125 A/120 VAC; Stick 25% at 175 A/240 VAC and 40% at 80 A/120 VAC, with their illustrated rest periods."
+          ]
+        },
+        "3": {
+          "notes": [
+            "Two-column safety layout and fume/gas warning icons were checked; warnings are represented by the extracted text."
+          ]
+        },
+        "30": {
+          "notes": [
+            "TIG torch/electrode positioning and scratch-start workflow were checked against the numbered illustrations."
+          ]
+        },
+        "31": {
+          "notes": [
+            "TIG arc length, torch angle, filler angle, and travel sequence illustrations were checked against the technique text."
+          ]
+        },
+        "32": {
+          "notes": [
+            "Stick electrode angle, arc length, travel direction, and bead sequence were visually reconciled."
+          ]
+        },
+        "33": {
+          "notes": [
+            "Stick electrode handling and shutdown/safety illustrations were checked against the warning text."
+          ]
+        },
+        "34": {
+          "notes": [
+            "Joint-preparation diagrams cover butt, lap, tee, edge, and corner-style preparations and visually reinforce cleaning/bevel guidance."
+          ]
+        },
+        "35": {
+          "notes": [
+            "Wire-weld penetration profiles distinguish excess/burn-through, proper, and inadequate penetration; arrows relate heat changes to current, travel speed, wire feed, and CTWD."
+          ]
+        },
+        "36": {
+          "notes": [
+            "Wire-weld cross-sections and bend-at-joint examples were checked against listed causes and solutions."
+          ]
+        },
+        "37": {
+          "notes": [
+            "Top-view examples distinguish porosity from excessive spatter; visual defects agree with the diagnostic text."
+          ]
+        },
+        "38": {
+          "notes": [
+            "Stick-weld penetration profiles distinguish excess, proper, and inadequate penetration; example beads map current, speed, and arc-length errors."
+          ]
+        },
+        "39": {
+          "notes": [
+            "Stick-weld profile and adhesion illustrations were checked against causes and corrective actions."
+          ]
+        },
+        "4": {
+          "notes": [
+            "Electrical-safety warnings, icons, and two-column reading order were checked against the render."
+          ]
+        },
+        "40": {
+          "notes": [
+            "Slag, porosity, crooked/wavy bead, and excessive-spatter examples were checked against their diagnostic sections."
+          ]
+        },
+        "41": {
+          "notes": [
+            "Maintenance schedule/table and component-cleaning illustrations were checked against extracted intervals and procedures."
+          ]
+        },
+        "42": {
+          "notes": [
+            "MIG/flux troubleshooting table preserves Problem → Possible Causes → Likely Solutions relationships for wire-feed and bird-nesting faults."
+          ]
+        },
+        "43": {
+          "notes": [
+            "Continuation of the MIG/flux troubleshooting table was checked column-by-column, including thermal, power, trigger, voltage-protection, and mode faults."
+          ]
+        },
+        "44": {
+          "notes": [
+            "TIG/Stick troubleshooting table was checked column-by-column, preserving each problem’s causes and likely solutions."
+          ]
+        },
+        "45": {
+          "notes": [
+            "Full wiring schematic is retained as a high-resolution render; connector labels and topology should be consulted visually rather than inferred from text order."
+          ]
+        },
+        "46": {
+          "notes": [
+            "Parts list columns (part, description, quantity) were checked against the render; repair warning requires certified/licensed technicians."
+          ]
+        },
+        "47": {
+          "notes": [
+            "Exploded assembly diagram maps numbered components to the page-46 parts list; the render is authoritative for spatial relationships."
+          ]
+        },
+        "5": {
+          "notes": [
+            "Welder use/care and maintenance warnings use a two-column layout; extracted text covers the visual callouts."
+          ]
+        },
+        "6": {
+          "notes": [
+            "Grounding illustration and safety-symbol table were checked; the plug/outlet relationship agrees with the text."
+          ]
+        },
+        "7": {
+          "notes": [
+            "Three specification tables were visually reconciled: MIG, TIG, and Stick values are column-aligned by 120 VAC and 240 VAC input."
+          ]
+        },
+        "8": {
+          "notes": [
+            "Front-panel callouts locate Home, Back, LCD, three knobs, power switch, MIG/spool-gun socket and gas outlet, negative/positive sockets, and wire-feed power cable."
+          ]
+        },
+        "9": {
+          "notes": [
+            "Interior callouts locate the spool, spool knob, inlet liner, feed mechanism/tensioner/roller, cold-wire-feed switch, foot-pedal socket, and wire-feed-control socket."
+          ]
+        }
       }
     },
-    "quick-start-guide.pdf": {"pages": {
-      "1": {"notes": ["Flux-wire quick start: install spool, route and clamp wire, remove nozzle/tip, cold-feed wire, tighten tension until wire bends against a wood block at 2–3 inches, reinstall nozzle/tip, then select settings and test."]},
-      "2": {"notes": ["Cable diagrams: Stick = ground negative/electrode positive; MIG = ground negative/wire-feed power positive; Flux reverses those MIG polarities; TIG = ground positive/torch negative with gas and optional foot pedal."]}
-    }},
-    "selection-chart.pdf": {"pages": {
-      "1": {"notes": ["Decision chart compares Flux-Cored, MIG, Stick, and TIG by skill, gas, materials, thickness, applications, cleanliness, and input voltage; the process columns and 165 A at 30% duty-cycle example were visually checked."]}
-    }}
+    "quick-start-guide.pdf": {
+      "pages": {
+        "1": {
+          "notes": [
+            "Flux-wire quick start: install spool, route and clamp wire, remove nozzle/tip, cold-feed wire, tighten tension until wire bends against a wood block at 2–3 inches, reinstall nozzle/tip, then select settings and test."
+          ]
+        },
+        "2": {
+          "notes": [
+            "Cable diagrams: Stick = ground negative/electrode positive; MIG = ground negative/wire-feed power positive; Flux reverses those MIG polarities; TIG = ground positive/torch negative with gas and optional foot pedal."
+          ]
+        }
+      }
+    },
+    "selection-chart.pdf": {
+      "pages": {
+        "1": {
+          "notes": [
+            "Decision chart compares Flux-Cored, MIG, Stick, and TIG by skill, gas, materials, thickness, applications, cleanliness, and input voltage; the process columns and 165 A at 30% duty-cycle example were visually checked."
+          ]
+        }
+      }
+    }
   },
   "source_images": {
-    "product.webp": {"notes": ["Exterior product view confirms the OmniPro 220 front LCD, Home/Back buttons, three control knobs, power switch, MIG/spool-gun socket, negative/positive output sockets, and wire-feed power lead."]},
-    "product-inside.webp": {"notes": ["Open-door product view confirms the interior spool/feed layout and placards for rated duty cycles, MIG/Flux, TIG, Stick, wire-spool setup, and wire-feed setup; small placard text is corroborative, not the primary numeric source."]}
+    "product-front.webp": {
+      "notes": [
+        "Head-on front product view. Confirms the same front controls page 8 labels: LCD, Home/Back buttons, three control knobs, power switch, MIG/spool-gun cable socket, spool-gun gas outlet, negative and positive output sockets, and the wire-feed power lead. Used as the hotspot canvas because its near-orthographic framing matches the page-8 line drawing; the photograph itself is never resampled."
+      ]
+    },
+    "product-inside.webp": {
+      "notes": [
+        "Open-door product view confirms the interior spool/feed layout and placards for rated duty cycles, MIG/Flux, TIG, Stick, wire-spool setup, and wire-feed setup; small placard text is corroborative, not the primary numeric source."
+      ]
+    },
+    "product.webp": {
+      "notes": [
+        "Exterior product view confirms the OmniPro 220 front LCD, Home/Back buttons, three control knobs, power switch, MIG/spool-gun socket, negative/positive output sockets, and wire-feed power lead."
+      ]
+    }
   },
   "structured_facts": [
-    {"id": "mig-120-current-range", "process": "MIG", "input_vac": 120, "field": "welding_current_range", "value": [30, 140], "unit": "A", "source": {"file": "files/owner-manual.pdf", "page": 7}},
-    {"id": "mig-240-current-range", "process": "MIG", "input_vac": 240, "field": "welding_current_range", "value": [30, 220], "unit": "A", "source": {"file": "files/owner-manual.pdf", "page": 7}},
-    {"id": "mig-120-duty", "process": "MIG", "input_vac": 120, "field": "rated_duty_cycles", "value": [{"percent": 40, "current_a": 100}, {"percent": 100, "current_a": 75}], "source": {"file": "files/owner-manual.pdf", "page": 7}},
-    {"id": "mig-240-duty", "process": "MIG", "input_vac": 240, "field": "rated_duty_cycles", "value": [{"percent": 25, "current_a": 200}, {"percent": 100, "current_a": 115}], "source": {"file": "files/owner-manual.pdf", "page": 7}},
-    {"id": "tig-120-duty", "process": "TIG", "input_vac": 120, "field": "rated_duty_cycles", "value": [{"percent": 40, "current_a": 125}, {"percent": 100, "current_a": 90}], "source": {"file": "files/owner-manual.pdf", "page": 7}},
-    {"id": "tig-240-duty", "process": "TIG", "input_vac": 240, "field": "rated_duty_cycles", "value": [{"percent": 30, "current_a": 175}, {"percent": 100, "current_a": 105}], "source": {"file": "files/owner-manual.pdf", "page": 7}},
-    {"id": "stick-120-duty", "process": "Stick", "input_vac": 120, "field": "rated_duty_cycles", "value": [{"percent": 40, "current_a": 80}, {"percent": 100, "current_a": 60}], "source": {"file": "files/owner-manual.pdf", "page": 7}},
-    {"id": "stick-240-duty", "process": "Stick", "input_vac": 240, "field": "rated_duty_cycles", "value": [{"percent": 25, "current_a": 175}, {"percent": 100, "current_a": 100}], "source": {"file": "files/owner-manual.pdf", "page": 7}},
-    {"id": "maximum-ocv", "process": "all", "field": "maximum_ocv", "value": 86, "unit": "VDC", "source": {"file": "files/owner-manual.pdf", "page": 7}},
-    {"id": "mig-wire-speed", "process": "MIG", "field": "wire_speed_range", "value": [50, 500], "unit": "IPM", "source": {"file": "files/owner-manual.pdf", "page": 7}},
-    {"id": "mig-spool-capacity", "process": "MIG", "field": "wire_spool_capacity_max", "value": 12, "unit": "lb", "source": {"file": "files/owner-manual.pdf", "page": 7}},
-    {"id": "mig-polarity", "process": "MIG solid wire", "field": "polarity", "value": {"ground": "negative", "wire_feed_power": "positive"}, "source": {"file": "files/quick-start-guide.pdf", "page": 2}},
-    {"id": "flux-polarity", "process": "Flux-cored", "field": "polarity", "value": {"ground": "positive", "wire_feed_power": "negative"}, "source": {"file": "files/quick-start-guide.pdf", "page": 2}},
-    {"id": "tig-polarity", "process": "TIG", "field": "polarity", "value": {"ground": "positive", "torch": "negative"}, "source": {"file": "files/quick-start-guide.pdf", "page": 2}},
-    {"id": "stick-polarity", "process": "Stick", "field": "polarity", "value": {"ground": "negative", "electrode_holder": "positive"}, "source": {"file": "files/quick-start-guide.pdf", "page": 2}}
+    {
+      "field": "welding_current_range",
+      "id": "mig-120-current-range",
+      "input_vac": 120,
+      "process": "MIG",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 7
+      },
+      "unit": "A",
+      "value": [
+        30,
+        140
+      ]
+    },
+    {
+      "field": "welding_current_range",
+      "id": "mig-240-current-range",
+      "input_vac": 240,
+      "process": "MIG",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 7
+      },
+      "unit": "A",
+      "value": [
+        30,
+        220
+      ]
+    },
+    {
+      "field": "rated_duty_cycles",
+      "id": "mig-120-duty",
+      "input_vac": 120,
+      "process": "MIG",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 7
+      },
+      "value": [
+        {
+          "current_a": 100,
+          "percent": 40
+        },
+        {
+          "current_a": 75,
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "field": "rated_duty_cycles",
+      "id": "mig-240-duty",
+      "input_vac": 240,
+      "process": "MIG",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 7
+      },
+      "value": [
+        {
+          "current_a": 200,
+          "percent": 25
+        },
+        {
+          "current_a": 115,
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "field": "rated_duty_cycles",
+      "id": "tig-120-duty",
+      "input_vac": 120,
+      "process": "TIG",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 7
+      },
+      "value": [
+        {
+          "current_a": 125,
+          "percent": 40
+        },
+        {
+          "current_a": 90,
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "field": "rated_duty_cycles",
+      "id": "tig-240-duty",
+      "input_vac": 240,
+      "process": "TIG",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 7
+      },
+      "value": [
+        {
+          "current_a": 175,
+          "percent": 30
+        },
+        {
+          "current_a": 105,
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "field": "rated_duty_cycles",
+      "id": "stick-120-duty",
+      "input_vac": 120,
+      "process": "Stick",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 7
+      },
+      "value": [
+        {
+          "current_a": 80,
+          "percent": 40
+        },
+        {
+          "current_a": 60,
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "field": "rated_duty_cycles",
+      "id": "stick-240-duty",
+      "input_vac": 240,
+      "process": "Stick",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 7
+      },
+      "value": [
+        {
+          "current_a": 175,
+          "percent": 25
+        },
+        {
+          "current_a": 100,
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "field": "maximum_ocv",
+      "id": "maximum-ocv",
+      "process": "all",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 7
+      },
+      "unit": "VDC",
+      "value": 86
+    },
+    {
+      "field": "wire_speed_range",
+      "id": "mig-wire-speed",
+      "process": "MIG",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 7
+      },
+      "unit": "IPM",
+      "value": [
+        50,
+        500
+      ]
+    },
+    {
+      "field": "wire_spool_capacity_max",
+      "id": "mig-spool-capacity",
+      "process": "MIG",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 7
+      },
+      "unit": "lb",
+      "value": 12
+    },
+    {
+      "field": "polarity",
+      "id": "mig-polarity",
+      "process": "MIG solid wire",
+      "source": {
+        "file": "files/quick-start-guide.pdf",
+        "page": 2
+      },
+      "value": {
+        "ground": "negative",
+        "wire_feed_power": "positive"
+      }
+    },
+    {
+      "field": "polarity",
+      "id": "flux-polarity",
+      "process": "Flux-cored",
+      "source": {
+        "file": "files/quick-start-guide.pdf",
+        "page": 2
+      },
+      "value": {
+        "ground": "positive",
+        "wire_feed_power": "negative"
+      }
+    },
+    {
+      "field": "polarity",
+      "id": "tig-polarity",
+      "process": "TIG",
+      "source": {
+        "file": "files/quick-start-guide.pdf",
+        "page": 2
+      },
+      "value": {
+        "ground": "positive",
+        "torch": "negative"
+      }
+    },
+    {
+      "field": "polarity",
+      "id": "stick-polarity",
+      "process": "Stick",
+      "source": {
+        "file": "files/quick-start-guide.pdf",
+        "page": 2
+      },
+      "value": {
+        "electrode_holder": "positive",
+        "ground": "negative"
+      }
+    }
   ],
   "troubleshooting": [
-    {"problem": "Wire-feed motor runs but wire does not feed properly", "possible_causes": ["Insufficient wire-feed pressure", "Incorrect feed-roller size", "Damaged MIG gun, cable, or liner", "Feed tensioner too tight"], "source": {"file": "files/owner-manual.pdf", "page": 42}},
-    {"problem": "Wire creates a bird's nest", "possible_causes": ["Excess wire-feed pressure", "Incorrect contact-tip size", "MIG gun cable connector not fully inserted", "Damaged liner"], "source": {"file": "files/owner-manual.pdf", "page": 42}},
-    {"problem": "Welder does not function when switched on (MIG/Flux)", "possible_causes": ["Thermal protection tripped", "Insufficient circuit input", "Faulty or improperly connected trigger", "Low/over-voltage protection", "Incorrect mode"], "source": {"file": "files/owner-manual.pdf", "page": 43}},
-    {"problem": "Welder does not function when switched on (TIG/Stick)", "possible_causes": ["Thermal protection tripped", "Faulty or improperly connected trigger", "Ground clamp not attached", "Shielding gas not connected"], "source": {"file": "files/owner-manual.pdf", "page": 44}}
+    {
+      "possible_causes": [
+        "Insufficient wire-feed pressure",
+        "Incorrect feed-roller size",
+        "Damaged MIG gun, cable, or liner",
+        "Feed tensioner too tight"
+      ],
+      "problem": "Wire-feed motor runs but wire does not feed properly",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 42
+      }
+    },
+    {
+      "possible_causes": [
+        "Excess wire-feed pressure",
+        "Incorrect contact-tip size",
+        "MIG gun cable connector not fully inserted",
+        "Damaged liner"
+      ],
+      "problem": "Wire creates a bird's nest",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 42
+      }
+    },
+    {
+      "possible_causes": [
+        "Thermal protection tripped",
+        "Insufficient circuit input",
+        "Faulty or improperly connected trigger",
+        "Low/over-voltage protection",
+        "Incorrect mode"
+      ],
+      "problem": "Welder does not function when switched on (MIG/Flux)",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 43
+      }
+    },
+    {
+      "possible_causes": [
+        "Thermal protection tripped",
+        "Faulty or improperly connected trigger",
+        "Ground clamp not attached",
+        "Shielding gas not connected"
+      ],
+      "problem": "Welder does not function when switched on (TIG/Stick)",
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 44
+      }
+    }
   ]
 }

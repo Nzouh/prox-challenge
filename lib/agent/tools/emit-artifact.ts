@@ -3,7 +3,7 @@ import { artifactSchema } from "../artifacts";
 
 export const emitArtifact = tool(
   "emit_artifact",
-  "Render an interactive artifact in the user's browser. Call this once you have the spec data and before writing your explanation. Copy the provenance object from the lookup result unchanged.",
+  "Render an interactive artifact only when the user explicitly asks for a visual, chart, diagram, or calculator. Never use it for an ordinary single-value specification answer. Copy provenance from the lookup result unchanged.",
   { artifact: artifactSchema.describe("The artifact to render.") },
   async (args) => {
     // The handler does not deliver the artifact. lib/agent/run.ts watches the assistant

@@ -9,12 +9,15 @@ import type { Artifact } from "./artifacts";
  */
 export type AgentEvent =
   | { type: "session"; sessionId: string }
+  | { type: "status"; stage: AgentStage; message: string }
   | { type: "text_delta"; text: string }
   | { type: "tool_start"; id: string; name: string; input: unknown }
   | { type: "tool_end"; id: string; ok: boolean }
   | { type: "artifact"; artifact: Artifact }
-  | { type: "done"; usage: AgentUsage; costUsd: number }
+  | { type: "done"; usage: AgentUsage; costUsd: number; cached?: boolean }
   | { type: "error"; message: string };
+
+export type AgentStage = "cache" | "research" | "verification" | "writing";
 
 export type AgentUsage = {
   inputTokens: number;

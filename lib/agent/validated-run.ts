@@ -1,6 +1,6 @@
 import { query, type SDKResultMessage } from "@anthropic-ai/claude-agent-sdk";
 import { z } from "zod";
-import { artifactSchema, type Artifact } from "./artifacts";
+import { artifactSchema, shouldOfferArtifacts, type Artifact } from "./artifacts";
 import type { AgentEvent, AgentUsage } from "./events";
 import { artifactMatchesLookup, type FoundSpecResult } from "./grounding";
 import type { AgentInput } from "./input";
@@ -10,6 +10,8 @@ import {
   defaultCheckerOutput,
   renderWriterOutput,
   requiresRiskAssessment,
+  routeQuestion,
+  structuredSpecIntent,
   validateCheckerOutput,
   validateResearchEvidence,
   validateWriterOutput,
@@ -19,21 +21,48 @@ import {
   type WriterOutput,
 } from "./orchestration";
 import { assessJobRisk, jobRiskQuerySchema } from "./safety";
-import { resolveSpecQuery, type SpecResult } from "./specs";
+import {
+  renderDeterministicSpecAnswer,
+  resolveSpecQuery,
+  type SpecQuery,
+  type SpecResult,
+} from "./specs";
+import { getSetup, setupQuerySchema } from "./setups";
+import { diagnoseProblem, diagnosisQuerySchema } from "./diagnosis";
+import { faultIndicatorQuerySchema, lookupFaultIndicator } from "./fault-indicators";
+import { assessPowerSource, powerSourceQuerySchema } from "./power-source";
+import { checkRepairScope, repairScopeQuerySchema } from "./repair-scope";
+import { getSourcePage, sourcePageQuerySchema } from "./source-page";
+import {
+  processRecommendationQuerySchema,
+  recommendProcess,
+} from "./process-recommendation";
+import { researchSessionOptions } from "./session";
 import { SYSTEM_PROMPT } from "./system-prompt";
 import {
   ALLOWED_TOOLS,
   ASSESS_JOB_RISK_TOOL,
+  ASSESS_POWER_SOURCE_TOOL,
+  CHECK_REPAIR_SCOPE_TOOL,
+  DIAGNOSE_PROBLEM_TOOL,
   EMIT_ARTIFACT_TOOL,
+  GET_SETUP_TOOL,
+  GET_SOURCE_PAGE_TOOL,
   LOOKUP_SPEC_TOOL,
+  LOOKUP_FAULT_INDICATOR_TOOL,
   MCP_SERVER_NAME,
+  RECOMMEND_PROCESS_TOOL,
   SEARCH_MANUAL_TOOL,
+  TEXT_ALLOWED_TOOLS,
   vulcanServer,
+  vulcanTextServer,
 } from "./tools";
 import { specQuerySchema } from "./tools/lookup-spec";
 
-const MODEL = "claude-opus-5";
-const FALLBACK_MODEL = "claude-sonnet-5";
+const RESEARCH_MODEL = "claude-opus-5";
+const RESEARCH_FALLBACK_MODEL = "claude-sonnet-5";
+const STRUCTURED_MODEL = "claude-haiku-4-5";
+const STRUCTURED_FALLBACK_MODEL = "claude-sonnet-5";
 const MAX_RESEARCH_ATTEMPTS = 2;
 const MAX_WRITER_ATTEMPTS = 2;
 
@@ -65,8 +94,8 @@ async function runStructuredStage<T>(args: {
     prompt: args.prompt,
     options: {
       abortController: args.abortController,
-      model: MODEL,
-      fallbackModel: FALLBACK_MODEL,
+      model: STRUCTURED_MODEL,
+      fallbackModel: STRUCTURED_FALLBACK_MODEL,
       systemPrompt: args.systemPrompt,
       tools: [],
       allowedTools: [],
@@ -106,20 +135,30 @@ function writerPrompt(
   checker: CheckerOutput,
   feedback?: string,
 ): string {
-  return `Question:\n${question}\n\nVerified MCP evidence:\n${JSON.stringify(evidence, null, 2)}\n\nApproved checker plan:\n${JSON.stringify(checker, null, 2)}\n\nWrite the final answer as short paragraphs. Each paragraph must list only the smallest exact set of evidence IDs that supports it. Do not introduce any number, machine fact, repair step, or safety claim absent from the evidence and approved plan. Do not print citations; the host adds them. ${feedback ? `Previous deterministic-check failure: ${feedback}` : ""}`;
+  return `Question:\n${question}\n\nVerified MCP evidence:\n${JSON.stringify(evidence, null, 2)}\n\nApproved checker plan:\n${JSON.stringify(checker, null, 2)}\n\nWrite the final answer as short paragraphs. Each paragraph must list only the smallest exact set of evidence IDs that supports it. Answer only what was asked; do not offer an unrelated next step or setting. Express every measured quantity with digits so the host can validate it. Do not introduce any number, machine fact, repair step, or safety claim absent from the evidence and approved plan. Do not print citations; the host adds them. ${feedback ? `Previous deterministic-check failure: ${feedback}` : ""}`;
 }
 
 const CHECKER_SYSTEM_PROMPT = `You are the safety and grounding checker for a welding-support system. You cannot call tools. The approved field approves the safety and grounding of the response plan, not the action requested by the user. A clear refusal is an approved response when evidence supports it. Approve only claims supported by successful MCP evidence. Never weaken a deterministic safety disposition. Unknown context is not safe context. Produce only the required structured output.`;
 
-const WRITER_SYSTEM_PROMPT = `You are the final writer for a welding-support system. You cannot call tools or add facts. Write only from the verified MCP evidence and approved checker plan. Be direct, calm, and concise. When the disposition is stop, the first words must be Stop or Do not. Produce only the required structured output.`;
+const WRITER_SYSTEM_PROMPT = `You are the final writer for a welding-support system. You cannot call tools or add facts. Write only from the verified MCP evidence and approved checker plan. Answer only what the user asked, without unsolicited settings or offers. Write measured quantities with digits. Be direct, calm, and concise. When the disposition is stop, the first words must be Stop or Do not. Produce only the required structured output.`;
+
+function matchingExactSpecEvidence(
+  intent: SpecQuery,
+  evidence: readonly EvidenceRecord[],
+): EvidenceRecord | undefined {
+  const expected = JSON.stringify(resolveSpecQuery(intent));
+  return evidence.find(
+    (item) => item.tool === "lookup_spec" && JSON.stringify(item.result) === expected,
+  );
+}
 
 /**
- * Evidence agent -> deterministic validation/retry -> safety checker -> writer ->
+ * Evidence agent -> deterministic validation/retry -> parallel checker + first writer ->
  * deterministic final checker. No successful done event can bypass the last checker.
  */
 export async function* runValidatedAgent(
   input: AgentInput,
-  _sessionId?: string,
+  sessionId?: string,
   signal?: AbortSignal,
 ): AsyncGenerator<AgentEvent> {
   if (!process.env.ANTHROPIC_API_KEY) {
@@ -140,10 +179,25 @@ export async function* runValidatedAgent(
   let evidence: EvidenceRecord[] = [];
   let artifacts: Artifact[] = [];
   let checker: CheckerOutput | undefined;
+  let writerOutput: WriterOutput | undefined;
+  let writerAttempts = 0;
+  let writerFeedback = "";
   let feedback = "";
+  let researchSessionId = sessionId;
+  const offerArtifacts = shouldOfferArtifacts(input.text);
+  const questionRoute = routeQuestion(input.text);
+  const fastSpecIntent =
+    !offerArtifacts && questionRoute.kind === "needs_tool" && !requiresRiskAssessment(input.text)
+      ? structuredSpecIntent(input.text)
+      : null;
 
   try {
     for (let attempt = 1; attempt <= MAX_RESEARCH_ATTEMPTS; attempt += 1) {
+      yield {
+        type: "status",
+        stage: "research",
+        message: attempt === 1 ? "Checking the validated manual…" : "Rechecking the evidence…",
+      };
       const attemptEvidence: EvidenceRecord[] = [];
       const pendingEvidence = new Map<string, EvidenceRecord[]>();
       const pendingLookups = new Map<string, SpecResult>();
@@ -155,30 +209,38 @@ export async function* runValidatedAgent(
         attempt === 1
           ? input.text
           : `${input.text}\n\nValidation feedback from the previous attempt: ${feedback}\nCall the missing or corrected MCP tools, and do not rely on memory.`;
+      // Exact, fully specified, low-risk lookups need only a fast MCP-routing turn. If
+      // that turn fails host validation, the bounded retry automatically uses Opus.
+      const useFastResearchModel = fastSpecIntent !== null && attempt === 1;
       const stream = query({
         prompt: researchPrompt,
         options: {
           abortController,
-          model: MODEL,
-          fallbackModel: FALLBACK_MODEL,
+          model: useFastResearchModel ? STRUCTURED_MODEL : RESEARCH_MODEL,
+          fallbackModel: useFastResearchModel
+            ? STRUCTURED_FALLBACK_MODEL
+            : RESEARCH_FALLBACK_MODEL,
           systemPrompt: SYSTEM_PROMPT,
-          mcpServers: { [MCP_SERVER_NAME]: vulcanServer },
-          allowedTools: ALLOWED_TOOLS,
+          ...researchSessionOptions(researchSessionId),
+          mcpServers: { [MCP_SERVER_NAME]: offerArtifacts ? vulcanServer : vulcanTextServer },
+          allowedTools: offerArtifacts ? ALLOWED_TOOLS : TEXT_ALLOWED_TOOLS,
           tools: [],
           settingSources: [],
           strictMcpConfig: true,
-          persistSession: false,
           includePartialMessages: false,
-          maxTurns: 8,
-          maxBudgetUsd: 0.35,
+          maxTurns: useFastResearchModel ? 4 : 8,
+          maxBudgetUsd: useFastResearchModel ? 0.08 : 0.35,
         },
       });
 
       try {
         for await (const message of stream) {
           if (!announcedSession && "session_id" in message && message.session_id) {
+            researchSessionId = message.session_id;
             announcedSession = true;
             yield { type: "session", sessionId: message.session_id };
+          } else if ("session_id" in message && message.session_id) {
+            researchSessionId = message.session_id;
           }
           if (message.type === "assistant") {
             if (message.error) attemptFailure = `Model request failed: ${message.error}`;
@@ -196,6 +258,54 @@ export async function* runValidatedAgent(
                   ]);
                 } else {
                   attemptFailure = `lookup_spec input failed host validation: ${parsed.error.message}`;
+                }
+              } else if (block.name === GET_SETUP_TOOL) {
+                const parsed = setupQuerySchema.safeParse(block.input);
+                if (parsed.success) {
+                  pendingEvidence.set(block.id, [
+                    { id: `evidence:${block.id}`, tool: "get_setup", result: getSetup(parsed.data) },
+                  ]);
+                } else {
+                  attemptFailure = `get_setup input failed host validation: ${parsed.error.message}`;
+                }
+              } else if (block.name === DIAGNOSE_PROBLEM_TOOL) {
+                const parsed = diagnosisQuerySchema.safeParse(block.input);
+                if (parsed.success) {
+                  pendingEvidence.set(block.id, [
+                    {
+                      id: `evidence:${block.id}`,
+                      tool: "diagnose_problem",
+                      result: diagnoseProblem(parsed.data),
+                    },
+                  ]);
+                } else {
+                  attemptFailure = `diagnose_problem input failed host validation: ${parsed.error.message}`;
+                }
+              } else if (block.name === LOOKUP_FAULT_INDICATOR_TOOL) {
+                const parsed = faultIndicatorQuerySchema.safeParse(block.input);
+                if (parsed.success) {
+                  pendingEvidence.set(block.id, [
+                    {
+                      id: `evidence:${block.id}`,
+                      tool: "lookup_fault_indicator",
+                      result: lookupFaultIndicator(parsed.data),
+                    },
+                  ]);
+                } else {
+                  attemptFailure = `lookup_fault_indicator input failed host validation: ${parsed.error.message}`;
+                }
+              } else if (block.name === RECOMMEND_PROCESS_TOOL) {
+                const parsed = processRecommendationQuerySchema.safeParse(block.input);
+                if (parsed.success) {
+                  pendingEvidence.set(block.id, [
+                    {
+                      id: `evidence:${block.id}`,
+                      tool: "recommend_process",
+                      result: recommendProcess(parsed.data),
+                    },
+                  ]);
+                } else {
+                  attemptFailure = `recommend_process input failed host validation: ${parsed.error.message}`;
                 }
               } else if (block.name === SEARCH_MANUAL_TOOL) {
                 const parsed = manualSearchQuerySchema.safeParse(block.input);
@@ -226,6 +336,45 @@ export async function* runValidatedAgent(
                   ]);
                 } else {
                   attemptFailure = `assess_job_risk input failed host validation: ${parsed.error.message}`;
+                }
+              } else if (block.name === ASSESS_POWER_SOURCE_TOOL) {
+                const parsed = powerSourceQuerySchema.safeParse(block.input);
+                if (parsed.success) {
+                  pendingEvidence.set(block.id, [
+                    {
+                      id: `evidence:${block.id}`,
+                      tool: "assess_power_source",
+                      result: assessPowerSource(parsed.data),
+                    },
+                  ]);
+                } else {
+                  attemptFailure = `assess_power_source input failed host validation: ${parsed.error.message}`;
+                }
+              } else if (block.name === CHECK_REPAIR_SCOPE_TOOL) {
+                const parsed = repairScopeQuerySchema.safeParse(block.input);
+                if (parsed.success) {
+                  pendingEvidence.set(block.id, [
+                    {
+                      id: `evidence:${block.id}`,
+                      tool: "check_repair_scope",
+                      result: checkRepairScope(parsed.data),
+                    },
+                  ]);
+                } else {
+                  attemptFailure = `check_repair_scope input failed host validation: ${parsed.error.message}`;
+                }
+              } else if (block.name === GET_SOURCE_PAGE_TOOL) {
+                const parsed = sourcePageQuerySchema.safeParse(block.input);
+                if (parsed.success) {
+                  pendingEvidence.set(block.id, [
+                    {
+                      id: `evidence:${block.id}`,
+                      tool: "get_source_page",
+                      result: getSourcePage(parsed.data),
+                    },
+                  ]);
+                } else {
+                  attemptFailure = `get_source_page input failed host validation: ${parsed.error.message}`;
                 }
               } else if (block.name === EMIT_ARTIFACT_TOOL) {
                 const parsed = artifactSchema.safeParse(
@@ -272,29 +421,108 @@ export async function* runValidatedAgent(
       }
       attemptFailure = attemptFailure ?? validateResearchEvidence(input.text, attemptEvidence);
 
-      let attemptChecker: CheckerOutput | undefined;
-      if (!attemptFailure) {
-        if (requiresRiskAssessment(input.text)) {
-          const checked = await runStructuredStage({
-            role: "safety checker",
-            prompt: checkerPrompt(input.text, attemptEvidence),
-            schema: checkerOutputSchema,
-            systemPrompt: CHECKER_SYSTEM_PROMPT,
-            abortController,
-            maxBudgetUsd: 0.12,
-          });
-          addResultUsage(totals, checked.result);
-          attemptChecker = checked.output;
-        } else {
-          attemptChecker = defaultCheckerOutput(attemptEvidence);
+      // A persisted fast-route session contains the research model's own final text even
+      // though the UI receives the deterministic rendering below. Reject a numerically
+      // inconsistent answer so incorrect context is not silently accepted into follow-ups.
+      if (
+        !attemptFailure &&
+        useFastResearchModel &&
+        terminalResult?.subtype === "success" &&
+        fastSpecIntent
+      ) {
+        const exactSpecEvidence = matchingExactSpecEvidence(fastSpecIntent, attemptEvidence);
+        if (exactSpecEvidence) {
+          const fastChecker = defaultCheckerOutput([exactSpecEvidence]);
+          attemptFailure = validateWriterOutput(
+            {
+              paragraphs: [
+                {
+                  text: terminalResult.result,
+                  evidenceIds: [exactSpecEvidence.id],
+                },
+              ],
+            },
+            fastChecker,
+            [exactSpecEvidence],
+            input.text,
+          );
         }
-        attemptFailure = validateCheckerOutput(attemptChecker, attemptEvidence);
+      }
+
+      let attemptChecker: CheckerOutput | undefined;
+      let attemptWriter: WriterOutput | undefined;
+      let attemptWriterFailure = "";
+      if (!attemptFailure) {
+        const provisionalChecker = defaultCheckerOutput(attemptEvidence);
+        const exactSpecEvidence = fastSpecIntent
+          ? matchingExactSpecEvidence(fastSpecIntent, attemptEvidence)
+          : undefined;
+
+        if (exactSpecEvidence) {
+          // The MCP result has already been recomputed and matched by the host. Rendering
+          // that narrow result directly skips both redundant model verification stages.
+          attemptChecker = provisionalChecker;
+          attemptWriter = {
+            paragraphs: [
+              {
+                text: renderDeterministicSpecAnswer(exactSpecEvidence.result as SpecResult),
+                evidenceIds: [exactSpecEvidence.id],
+              },
+            ],
+          };
+          attemptFailure = validateWriterOutput(
+            attemptWriter,
+            attemptChecker,
+            attemptEvidence,
+            input.text,
+          );
+        } else {
+          const needsSafetyChecker = requiresRiskAssessment(input.text);
+          yield {
+            type: "status",
+            stage: needsSafetyChecker ? "verification" : "writing",
+            message: needsSafetyChecker
+              ? "Verifying safety while drafting the answer…"
+              : "Writing the verified answer…",
+          };
+          const checkerTask = needsSafetyChecker
+            ? runStructuredStage({
+                role: "safety checker",
+                prompt: checkerPrompt(input.text, attemptEvidence),
+                schema: checkerOutputSchema,
+                systemPrompt: CHECKER_SYSTEM_PROMPT,
+                abortController,
+                maxBudgetUsd: 0.12,
+              })
+            : Promise.resolve({ output: provisionalChecker, result: undefined });
+          const writerTask = runStructuredStage({
+            role: "writer",
+            prompt: writerPrompt(input.text, attemptEvidence, provisionalChecker),
+            schema: writerOutputSchema,
+            systemPrompt: WRITER_SYSTEM_PROMPT,
+            abortController,
+            maxBudgetUsd: 0.15,
+          });
+          const [checked, written] = await Promise.all([checkerTask, writerTask]);
+          if (checked.result) addResultUsage(totals, checked.result);
+          addResultUsage(totals, written.result);
+          attemptChecker = checked.output;
+          attemptFailure = validateCheckerOutput(attemptChecker, attemptEvidence);
+          if (!attemptFailure) {
+            attemptWriterFailure =
+              validateWriterOutput(written.output, attemptChecker, attemptEvidence, input.text) ?? "";
+            if (!attemptWriterFailure) attemptWriter = written.output;
+          }
+        }
       }
 
       if (!attemptFailure && attemptChecker) {
         evidence = attemptEvidence;
         artifacts = attemptArtifacts;
         checker = attemptChecker;
+        writerOutput = attemptWriter;
+        writerAttempts = 1;
+        writerFeedback = attemptWriterFailure;
         break;
       }
       feedback = attemptFailure ?? "Unknown evidence validation failure.";
@@ -305,9 +533,9 @@ export async function* runValidatedAgent(
       return;
     }
 
-    let writerOutput: WriterOutput | undefined;
-    let writerFeedback = "";
-    for (let attempt = 1; attempt <= MAX_WRITER_ATTEMPTS; attempt += 1) {
+    while (!writerOutput && writerAttempts < MAX_WRITER_ATTEMPTS) {
+      writerAttempts += 1;
+      yield { type: "status", stage: "writing", message: "Refining the verified answer…" };
       const written = await runStructuredStage({
         role: "writer",
         prompt: writerPrompt(input.text, evidence, checker, writerFeedback || undefined),

@@ -41,12 +41,15 @@ class ExtractionTests(unittest.TestCase):
         self.assertEqual("pass", report["status"])
         self.assertEqual([], report["unresolved_visual_reviews"])
         self.assertGreaterEqual(report["structured_fact_count"], 15)
+        self.assertEqual(4, report["structured_process_profile_count"])
+        self.assertEqual(1, report["structured_power_source_count"])
+        self.assertEqual(3, report["structured_repair_scope_count"])
 
     def test_manifest_covers_every_input(self) -> None:
         manifest = json.loads((OUTPUT_DIR / "manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(3, len(manifest["documents"]))
         self.assertEqual(51, sum(item["page_count"] for item in manifest["documents"]))
-        self.assertEqual(2, len(manifest["source_images"]))
+        self.assertEqual(3, len(manifest["source_images"]))
 
 
 if __name__ == "__main__":

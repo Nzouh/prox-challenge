@@ -1,0 +1,147 @@
+[
+  {
+    "advantages": [
+      "Ideal for outdoor or windy conditions.",
+      "Forgiving on rusty or dirty steels.",
+      "Good out-of-position welding capabilities.",
+      "High deposition rates are achievable."
+    ],
+    "applications": [
+      "galvanized_steel",
+      "pipe_tubing",
+      "general_fabrication",
+      "maintenance_repair"
+    ],
+    "cleanliness": "more_spatter",
+    "id": "flux-cored-selection-profile",
+    "material_requirements": {},
+    "materials": [
+      "steel",
+      "stainless_steel"
+    ],
+    "maximum_thickness_inches": 0.3125,
+    "outdoor_or_windy": true,
+    "process": "flux_cored",
+    "required_skill": "low",
+    "rusty_or_dirty_steel": true,
+    "shielding_gas": "not_required",
+    "source": {
+      "file": "files/selection-chart.pdf",
+      "page": 1
+    },
+    "thickness_label": "18 gauge to 5/16 inch",
+    "thinnest_gauge": 18
+  },
+  {
+    "advantages": [
+      "Fast production with high welding speeds.",
+      "Easiest to learn.",
+      "Clean welds with no slag.",
+      "Better control on thin materials."
+    ],
+    "applications": [
+      "sheet_metal",
+      "tubing",
+      "automotive_body",
+      "structural_steel"
+    ],
+    "cleanliness": "clean_minimal_spatter",
+    "id": "mig-selection-profile",
+    "material_requirements": {
+      "aluminum": "A spool gun is required."
+    },
+    "materials": [
+      "steel",
+      "stainless_steel",
+      "aluminum"
+    ],
+    "maximum_thickness_inches": 0.375,
+    "outdoor_or_windy": false,
+    "process": "MIG",
+    "required_skill": "low",
+    "rusty_or_dirty_steel": false,
+    "shielding_gas": "required",
+    "source": {
+      "file": "files/selection-chart.pdf",
+      "page": 1
+    },
+    "thickness_label": "22 gauge to 3/8 inch",
+    "thinnest_gauge": 22
+  },
+  {
+    "advantages": [
+      "Ideal for outdoor or windy conditions.",
+      "Forgiving on rusty or dirty steels.",
+      "Deep penetration.",
+      "A good choice for thicker materials."
+    ],
+    "applications": [
+      "pipe_tubing",
+      "pressure_vessel",
+      "structural_steel",
+      "maintenance_repair"
+    ],
+    "cleanliness": "more_spatter",
+    "id": "stick-selection-profile",
+    "material_requirements": {},
+    "materials": [
+      "steel",
+      "stainless_steel",
+      "castings"
+    ],
+    "maximum_thickness_inches": 0.5,
+    "outdoor_or_windy": true,
+    "process": "stick",
+    "required_skill": "moderate",
+    "rusty_or_dirty_steel": true,
+    "shielding_gas": "not_required",
+    "source": {
+      "file": "files/selection-chart.pdf",
+      "page": 1
+    },
+    "thickness_label": "10 gauge to 1/2 inch",
+    "thinnest_gauge": 10
+  },
+  {
+    "advantages": [
+      "Highest-quality welds.",
+      "Extremely aesthetic weld appearance.",
+      "Can be used on a variety of materials.",
+      "Precise control."
+    ],
+    "applications": [
+      "stainless_exhaust",
+      "thin_wall_pipe_tubing",
+      "bicycle_frame",
+      "metal_art"
+    ],
+    "cleanliness": "extremely_clean",
+    "id": "tig-selection-profile",
+    "material_requirements": {
+      "aluminum": "AC TIG is required.",
+      "chromoly": "DC TIG is required.",
+      "magnesium_alloy": "AC TIG is required.",
+      "stainless_steel": "DC TIG is required.",
+      "steel": "DC TIG is required."
+    },
+    "materials": [
+      "steel",
+      "stainless_steel",
+      "chromoly",
+      "aluminum",
+      "magnesium_alloy"
+    ],
+    "maximum_thickness_inches": 0.1875,
+    "outdoor_or_windy": false,
+    "process": "TIG",
+    "required_skill": "high",
+    "rusty_or_dirty_steel": false,
+    "shielding_gas": "required",
+    "source": {
+      "file": "files/selection-chart.pdf",
+      "page": 1
+    },
+    "thickness_label": "24 gauge to 3/16 inch",
+    "thinnest_gauge": 24
+  }
+]

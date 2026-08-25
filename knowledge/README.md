@@ -13,11 +13,20 @@ python -m venv .venv
 ## Contents
 
 - `51` PDF pages from `3` documents.
-- `2` product images.
+- `3` product images.
 - Page Markdown under `pages/`.
 - High-resolution complex-page renders under `renders/`.
 - Local OCR text and confidence-bearing records under `ocr/`.
 - Structured facts under `tables/facts.json`.
+- Process cable setups under `setups/cable-setups.json`.
+- Process operating setups under `setups/operating-setups.json`.
+- Documented display conditions under `fault-indicators.json`.
+- Process-selection profiles under `process-selection/chart.json`.
+- Power-source requirements under `power/power-sources.json`.
+- Repair-scope classifications under `repair/repair-scope.json`.
+- Symptom/cause/check/remedy relationships under `troubleshooting/graph.json`.
+- Interactive-view hotspot geometry in `hotspots.json`, with `hotspots-overlay.png` as
+  its visual check.
 - Classification and source hashes in `manifest.json`.
 - Visual-review status in `validation/report.md`.
 

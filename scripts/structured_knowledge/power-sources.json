@@ -1,0 +1,27 @@
+[
+  {
+    "id": "omnipro-input-power",
+    "supported_source_type": "grounded_wall_receptacle",
+    "supported_voltage_vac": [120, 240],
+    "frequency_hz": 60,
+    "grounding_required": true,
+    "gfci_required": true,
+    "delayed_action_protection_required": true,
+    "receptacle_must_match_plug": true,
+    "extension_cords_allowed": false,
+    "replacement_cord": "Use one of the supplied power cords or an identical replacement cord.",
+    "published_input_at_rated_output": [
+      {"process": "MIG", "input_voltage": 120, "output_current": 100, "input_current": 20.8},
+      {"process": "MIG", "input_voltage": 240, "output_current": 200, "input_current": 25.5},
+      {"process": "TIG", "input_voltage": 120, "output_current": 125, "input_current": 20.6},
+      {"process": "TIG", "input_voltage": 240, "output_current": 175, "input_current": 15.6},
+      {"process": "stick", "input_voltage": 120, "output_current": 80, "input_current": 19.5},
+      {"process": "stick", "input_voltage": 240, "output_current": 175, "input_current": 23.7}
+    ],
+    "source": {"file": "files/owner-manual.pdf", "page": 20},
+    "additional_sources": [
+      {"file": "files/owner-manual.pdf", "page": 6},
+      {"file": "files/owner-manual.pdf", "page": 7}
+    ]
+  }
+]

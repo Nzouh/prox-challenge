@@ -55,7 +55,7 @@ const validationReportSchema = z.object({
 export type StructuredFact = z.infer<typeof structuredFactSchema>;
 export type KnowledgeManifest = z.infer<typeof manifestSchema>;
 
-function readKnowledgeJson(relativePath: string): unknown {
+export function readKnowledgeJson(relativePath: string): unknown {
   return JSON.parse(readFileSync(join(process.cwd(), "knowledge", relativePath), "utf8"));
 }
 

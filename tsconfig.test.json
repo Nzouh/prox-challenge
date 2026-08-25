@@ -14,7 +14,9 @@
     "tests/**/*.ts",
     "lib/agent/artifacts.ts",
     "lib/agent/domain.ts",
+    "lib/agent/diagnosis.ts",
     "lib/agent/events.ts",
+    "lib/agent/fault-indicators.ts",
     "lib/agent/grounding.ts",
     "lib/agent/input.ts",
     "lib/agent/knowledge.ts",
@@ -22,7 +24,10 @@
     "lib/agent/orchestration.ts",
     "lib/agent/provenance.ts",
     "lib/agent/result.ts",
+    "lib/agent/response-cache.ts",
     "lib/agent/safety.ts",
+    "lib/agent/session.ts",
+    "lib/agent/setups.ts",
     "lib/agent/specs.ts"
   ]
 }

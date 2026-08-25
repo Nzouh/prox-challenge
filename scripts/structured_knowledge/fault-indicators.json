@@ -1,0 +1,30 @@
+[
+  {
+    "id": "thermal-protection-warning",
+    "aliases": ["overheating warning", "overheat warning", "thermal protection warning", "thermal protection tripped"],
+    "label": "Thermal-protection / overheating warning screen",
+    "documented_as_code": false,
+    "meaning": "The welder may have overheated and shut down under its internal thermal protection.",
+    "actions": [
+      "Stop welding and wait with the Power Switch ON for the welder to cool.",
+      "Allow the welder to return to service automatically after cooling.",
+      "Reduce the duration or frequency of welding periods."
+    ],
+    "prohibited_actions": ["Do not bypass or disable the protection."],
+    "source": {"file": "files/owner-manual.pdf", "page": 43}
+  },
+  {
+    "id": "input-voltage-protection-warning",
+    "aliases": ["low voltage warning", "over voltage warning", "low voltage protection", "over voltage protection", "input voltage warning"],
+    "label": "Low- or over-voltage protection warning",
+    "documented_as_code": false,
+    "meaning": "The machine may be in low- or over-voltage protection.",
+    "actions": [
+      "Check the input voltage and ensure it falls within the machine's specified range.",
+      "If the input voltage is correct, press the Reset Button on the back of the machine."
+    ],
+    "prohibited_actions": ["Do not bypass or disable the protection."],
+    "source": {"file": "files/owner-manual.pdf", "page": 43}
+  }
+]
+

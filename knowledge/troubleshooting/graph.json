@@ -1,52 +1,569 @@
 [
   {
-    "possible_causes": [
-      "Insufficient wire-feed pressure",
-      "Incorrect feed-roller size",
-      "Damaged MIG gun, cable, or liner",
-      "Feed tensioner too tight"
+    "aliases": [
+      "wire feed motor runs but wire does not feed",
+      "wire does not feed properly"
     ],
+    "causes": [
+      {
+        "cause": "Insufficient wire-feed pressure",
+        "check": "Check the wire-feed pressure.",
+        "remedy": "Increase wire-feed pressure properly, following step 27 on page 17.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Incorrect feed-roller size",
+        "check": "Confirm the feed roller matches the wire type and size.",
+        "remedy": "Flip the roll to the correct size, following the feed-roller instructions on page 12.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Damaged MIG gun, cable, or liner assembly",
+        "check": "Inspect for visible damage without opening or repairing internal components.",
+        "remedy": "Have a qualified technician inspect and replace parts as necessary.",
+        "repair_scope": "qualified_technician_required"
+      },
+      {
+        "cause": "Feed tensioner is too tight",
+        "check": "Check whether the tensioner applies more pressure than needed.",
+        "remedy": "Loosen it so it applies only enough pressure to prevent continued spinning after the trigger is released.",
+        "repair_scope": "operator_permitted"
+      }
+    ],
+    "id": "wire-feed-improper",
     "problem": "Wire-feed motor runs but wire does not feed properly",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "safety_prerequisite": "Shut off the welder, disconnect it from power, and discharge the MIG gun to ground before adjusting, cleaning, or repairing the unit.",
     "source": {
       "file": "files/owner-manual.pdf",
       "page": 42
     }
   },
   {
-    "possible_causes": [
-      "Excess wire-feed pressure",
-      "Incorrect contact-tip size",
-      "MIG gun cable connector not fully inserted",
-      "Damaged liner"
+    "aliases": [
+      "bird nest",
+      "birds nest",
+      "wire tangles inside feeder",
+      "wire bunches in feeder"
     ],
-    "problem": "Wire creates a bird's nest",
+    "causes": [
+      {
+        "cause": "Excess wire-feed pressure",
+        "check": "Check the wire-feed pressure.",
+        "remedy": "Adjust wire-feed pressure properly, following step 27 on page 17.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Incorrect contact-tip size",
+        "check": "Compare the contact-tip size with the wire used.",
+        "remedy": "Install the proper tip for the wire used.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "MIG gun cable connector not fully inserted",
+        "check": "Check that the connector is fully inserted into the wire-feed mechanism.",
+        "remedy": "Insert it properly, following steps 13 and 14 on page 13.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Damaged liner",
+        "check": "Do not perform an internal liner repair beyond documented operator service.",
+        "remedy": "Have a qualified technician inspect and repair or replace it as necessary.",
+        "repair_scope": "qualified_technician_required"
+      }
+    ],
+    "id": "wire-birds-nest",
+    "problem": "Wire creates a bird's nest during operation",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "safety_prerequisite": "Shut off the welder, disconnect it from power, and discharge the MIG gun to ground before adjusting, cleaning, or repairing the unit.",
     "source": {
       "file": "files/owner-manual.pdf",
       "page": 42
     }
   },
   {
-    "possible_causes": [
-      "Thermal protection tripped",
-      "Insufficient circuit input",
-      "Faulty or improperly connected trigger",
-      "Low/over-voltage protection",
-      "Incorrect mode"
+    "aliases": [
+      "wire stops during welding",
+      "wire stopped feeding",
+      "wire quits feeding"
     ],
-    "problem": "Welder does not function when switched on (MIG/Flux)",
+    "causes": [
+      {
+        "cause": "Gun cable is severely bent",
+        "check": "Check whether the gun cable is bent.",
+        "remedy": "Straighten the gun cable.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Gun liner is clogged or worn",
+        "check": "Check the gun liner for obstruction.",
+        "remedy": "Replace the liner if necessary.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Gun liner is too small for the wire",
+        "check": "Confirm that the liner size matches the welding wire.",
+        "remedy": "Use the correct liner size for the wire.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Wire is tangled on the spool",
+        "check": "Check for cross-winding or a tangled spool.",
+        "remedy": "Correct the wire routing or tangled spool.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Wire is not contacting the feed rollers correctly",
+        "check": "Check the feed-roller groove and feed tension.",
+        "remedy": "Use the correct groove and set the feed tension properly.",
+        "repair_scope": "operator_permitted"
+      }
+    ],
+    "id": "wire-stops-during-welding",
+    "problem": "Wire stops during welding",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "safety_prerequisite": "Shut off the welder, disconnect it from power, and discharge the MIG gun to ground before adjusting, cleaning, or repairing the unit.",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 42
+    }
+  },
+  {
+    "aliases": [
+      "mig arc unstable",
+      "flux core arc unstable",
+      "flux cored arc unstable",
+      "wire welding arc not stable"
+    ],
+    "causes": [
+      {
+        "cause": "Wire is not feeding properly",
+        "check": "Run the documented wire-feed checks.",
+        "remedy": "Correct the wire-feed problem before welding.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Incorrect or worn contact tip or liner",
+        "check": "Check tip and liner size and wear.",
+        "remedy": "Install the proper tip or liner size.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Incorrect wire-feed speed",
+        "check": "Check whether wire-feed speed produces a stable arc.",
+        "remedy": "Adjust wire-feed speed to achieve a stable arc.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Loose gun or ground cable",
+        "check": "Check that all connections are tight.",
+        "remedy": "Secure the connections.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Damaged MIG gun or loose internal gun connection",
+        "check": "Inspect for visible damage without opening components.",
+        "remedy": "Have a qualified technician inspect and repair or replace it.",
+        "repair_scope": "qualified_technician_required"
+      },
+      {
+        "cause": "Incorrect polarity",
+        "check": "Verify DCEP for MIG or DCEN for self-shielded flux-cored welding.",
+        "remedy": "Correct the polarity for the selected process.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Shielding-gas coverage is insufficient or excessive",
+        "check": "Check flow against the settings chart and check that no connector O-rings are exposed.",
+        "remedy": "Set the documented flow and fully insert the gun connector.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Poor workpiece connection",
+        "check": "Check the ground clamp at the workpiece and machine.",
+        "remedy": "Secure the ground clamp and MIG gun connections.",
+        "repair_scope": "operator_permitted"
+      }
+    ],
+    "id": "wire-arc-unstable",
+    "problem": "MIG or flux-cored welding arc is not stable",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "safety_prerequisite": "Shut off the welder, disconnect it from power, and discharge the MIG gun to ground before adjusting, cleaning, or repairing the unit.",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 42
+    }
+  },
+  {
+    "aliases": [
+      "welder does not function when switched on",
+      "mig welder will not start",
+      "flux welder will not start"
+    ],
+    "causes": [
+      {
+        "cause": "Thermal protection tripped",
+        "check": "Check whether an overheating warning appears.",
+        "remedy": "Stop and wait with the Power Switch ON for cooling; then reduce welding duration or frequency.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Circuit supplies insufficient voltage or amperage",
+        "check": "Verify the circuit supplies the published input voltage and amperage.",
+        "remedy": "Use a correctly designed circuit; electrical correction requires a licensed electrician.",
+        "repair_scope": "qualified_technician_required"
+      },
+      {
+        "cause": "Faulty or improperly connected trigger",
+        "check": "Ensure the gun connection is properly seated.",
+        "remedy": "A qualified technician must check and secure or replace the trigger.",
+        "repair_scope": "qualified_technician_required"
+      },
+      {
+        "cause": "Low- or over-voltage protection",
+        "check": "Check that input voltage falls within the specified range.",
+        "remedy": "If input voltage is correct, press the rear Reset Button.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Incorrect mode",
+        "check": "Check the selected process.",
+        "remedy": "Select the correct process.",
+        "repair_scope": "operator_permitted"
+      }
+    ],
+    "id": "welder-not-functioning-wire",
+    "problem": "Welder does not function when switched on in MIG or flux-cored mode",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "safety_prerequisite": "Follow all safety precautions whenever diagnosing or servicing the equipment.",
     "source": {
       "file": "files/owner-manual.pdf",
       "page": 43
     }
   },
   {
-    "possible_causes": [
-      "Thermal protection tripped",
-      "Faulty or improperly connected trigger",
-      "Ground clamp not attached",
-      "Shielding gas not connected"
+    "aliases": [
+      "mig weak arc",
+      "flux core weak arc",
+      "flux cored weak arc",
+      "wire welding weak arc strength"
     ],
-    "problem": "Welder does not function when switched on (TIG/Stick)",
+    "causes": [
+      {
+        "cause": "Incorrect line voltage",
+        "check": "Check the line voltage.",
+        "remedy": "If voltage is insufficient, have a licensed electrician remedy the situation.",
+        "repair_scope": "qualified_technician_required"
+      },
+      {
+        "cause": "Improper cord gauge or length",
+        "check": "Check whether an extension cord or non-matching cord is being used.",
+        "remedy": "Do not use an extension cord; use a supplied power cord or an identical replacement.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Not enough current",
+        "check": "Compare the current setting with the metal thickness.",
+        "remedy": "Set current appropriately for the metal thickness.",
+        "repair_scope": "operator_permitted"
+      }
+    ],
+    "id": "wire-weak-arc",
+    "problem": "Weak arc strength in MIG or flux-cored mode",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "safety_prerequisite": "Shut off the welder, disconnect it from power, and discharge the MIG gun to ground before adjusting, cleaning, or repairing the unit.",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 42
+    }
+  },
+  {
+    "additional_sources": [
+      {
+        "file": "files/owner-manual.pdf",
+        "page": 44
+      }
+    ],
+    "aliases": [
+      "lcd stays dark",
+      "lcd display does not light",
+      "display is blank",
+      "screen stays dark"
+    ],
+    "causes": [
+      {
+        "cause": "Unit is not connected to the outlet properly",
+        "check": "Verify voltage at the outlet and the connection to it.",
+        "remedy": "Correct the external connection without opening the welder.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Outlet is unpowered",
+        "check": "Check circuit-breaker and GFCI devices.",
+        "remedy": "Determine and remedy the cause before resetting a tripped device.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Plug has an incorrect rating",
+        "check": "Compare the installed plug rating with the manual specifications.",
+        "remedy": "Use the correctly rated plug; electrical changes require a qualified electrician.",
+        "repair_scope": "qualified_technician_required"
+      },
+      {
+        "cause": "Machine circuit breaker tripped from high input amperage",
+        "check": "Check the rear Reset Button / breaker state.",
+        "remedy": "Press the Reset Button on the back of the machine after the cause is addressed.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Input power cord is not seated properly",
+        "check": "Check the twist-lock input power cord.",
+        "remedy": "Fully secure the input power cord.",
+        "repair_scope": "operator_permitted"
+      }
+    ],
+    "id": "lcd-display-dark",
+    "problem": "LCD display does not light when the welder is switched on",
+    "processes": [
+      "MIG",
+      "flux_cored",
+      "TIG",
+      "stick"
+    ],
+    "safety_prerequisite": "Follow all safety precautions whenever diagnosing or servicing the equipment.",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 43
+    }
+  },
+  {
+    "aliases": [
+      "wire feeds but arc does not ignite",
+      "wire feeds no arc",
+      "wire feeds but no arc"
+    ],
+    "causes": [
+      {
+        "cause": "Improper ground connection",
+        "check": "Check clamp contact and clean the workpiece near the clamp and weld.",
+        "remedy": "Make a clean, secure workpiece connection.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Improperly sized contact tip",
+        "check": "Compare the tip size with the welding wire.",
+        "remedy": "Install the proper contact-tip size and type.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Contact tip is worn or dirty",
+        "check": "Check for a deformed or enlarged hole and contamination.",
+        "remedy": "Clean the tip or replace it with the proper size and type.",
+        "repair_scope": "operator_permitted"
+      }
+    ],
+    "id": "wire-feeds-no-arc",
+    "problem": "Wire feeds but the arc does not ignite",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "safety_prerequisite": "Follow all safety precautions whenever diagnosing or servicing the equipment.",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 43
+    }
+  },
+  {
+    "aliases": [
+      "porosity",
+      "porous weld",
+      "holes in weld metal"
+    ],
+    "causes": [
+      {
+        "cause": "Shielding-gas bottle is empty",
+        "check": "Check the gas bottle.",
+        "remedy": "Replenish it as necessary.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Shielding-gas flow is too low or too high",
+        "check": "Check the regulator for proper flow.",
+        "remedy": "Set the documented gas flow.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Workpiece is dirty",
+        "check": "Inspect the weld area for contamination.",
+        "remedy": "Clean the workpiece down to bare metal.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Gun is too far from the workpiece",
+        "check": "Check contact-tip-to-work distance.",
+        "remedy": "Use the proper CTWD for the procedure.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Incorrect polarity",
+        "check": "Verify DCEP for MIG or DCEN for self-shielded flux-cored welding.",
+        "remedy": "Correct the polarity.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Welding wire is contaminated",
+        "check": "Inspect the wire for rust and residue.",
+        "remedy": "Use clean wire free of rust and residue.",
+        "repair_scope": "operator_permitted"
+      }
+    ],
+    "id": "weld-porosity",
+    "problem": "Porosity in the weld metal",
+    "processes": [
+      "MIG",
+      "flux_cored"
+    ],
+    "safety_prerequisite": "Follow all safety precautions whenever diagnosing or servicing the equipment.",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 43
+    }
+  },
+  {
+    "aliases": [
+      "tig welder does not function",
+      "stick welder does not function",
+      "tig will not start",
+      "stick will not start"
+    ],
+    "causes": [
+      {
+        "cause": "Thermal protection tripped",
+        "check": "Check for an overheating shutdown.",
+        "remedy": "Reduce the duration or frequency of welding periods.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Faulty or improperly connected trigger",
+        "check": "Check the external trigger connection.",
+        "remedy": "A qualified technician must check and secure or replace the trigger.",
+        "repair_scope": "qualified_technician_required"
+      },
+      {
+        "cause": "Ground clamp is not attached",
+        "check": "Check whether the ground clamp is attached to the workpiece.",
+        "remedy": "Attach the ground clamp to the workpiece.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Shielding gas is not connected",
+        "check": "For TIG, check the shielding-gas connection.",
+        "remedy": "Connect shielding gas to the welder for TIG operation.",
+        "repair_scope": "operator_permitted"
+      }
+    ],
+    "id": "welder-not-functioning-tig-stick",
+    "problem": "Welder does not function when switched on in TIG or Stick mode",
+    "processes": [
+      "TIG",
+      "stick"
+    ],
+    "safety_prerequisite": "Shut off the welder, disconnect it from power, and discharge the electrode to ground before adjusting, cleaning, or repairing the unit.",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 44
+    }
+  },
+  {
+    "aliases": [
+      "tig arc unstable",
+      "stick arc unstable",
+      "electrode arc not stable"
+    ],
+    "causes": [
+      {
+        "cause": "Loose electrode or ground cable",
+        "check": "Check that all cable connections are tight.",
+        "remedy": "Secure the external cable connections.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Damaged electrode holder or loose internal holder connection",
+        "check": "Inspect for visible damage without opening components.",
+        "remedy": "Have a qualified technician inspect and repair or replace it.",
+        "repair_scope": "qualified_technician_required"
+      },
+      {
+        "cause": "Current setting does not match the chart",
+        "check": "Compare the current setting with the recommended chart setting.",
+        "remedy": "Adjust the current to the recommended setting.",
+        "repair_scope": "operator_permitted"
+      },
+      {
+        "cause": "Shielding gas is getting low",
+        "check": "For TIG, check the shielding-gas supply.",
+        "remedy": "Replace the shielding-gas cylinder.",
+        "repair_scope": "operator_permitted"
+      }
+    ],
+    "id": "tig-stick-arc-unstable",
+    "problem": "TIG or Stick welding arc is not stable",
+    "processes": [
+      "TIG",
+      "stick"
+    ],
+    "safety_prerequisite": "Shut off the welder, disconnect it from power, and discharge the electrode to ground before adjusting, cleaning, or repairing the unit.",
+    "source": {
+      "file": "files/owner-manual.pdf",
+      "page": 44
+    }
+  },
+  {
+    "aliases": [
+      "tig weak arc",
+      "stick weak arc",
+      "tig stick weak arc strength"
+    ],
+    "causes": [
+      {
+        "cause": "Incorrect line voltage",
+        "check": "Check the line voltage.",
+        "remedy": "If voltage is insufficient, have a licensed electrician remedy the situation.",
+        "repair_scope": "qualified_technician_required"
+      },
+      {
+        "cause": "Improper cord gauge or length",
+        "check": "Check whether an extension cord or non-matching cord is being used.",
+        "remedy": "Do not use an extension cord; use a supplied power cord or an identical replacement.",
+        "repair_scope": "operator_permitted"
+      }
+    ],
+    "id": "tig-stick-weak-arc",
+    "problem": "Weak arc strength in TIG or Stick mode",
+    "processes": [
+      "TIG",
+      "stick"
+    ],
+    "safety_prerequisite": "Shut off the welder, disconnect it from power, and discharge the electrode to ground before adjusting, cleaning, or repairing the unit.",
     "source": {
       "file": "files/owner-manual.pdf",
       "page": 44

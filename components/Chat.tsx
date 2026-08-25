@@ -1,150 +1,265 @@
 "use client";
 
-import { useState } from "react";
-import type { AgentEvent, AgentUsage } from "@/lib/agent/events";
-import type { Artifact } from "@/lib/agent/artifacts";
-import { decodeSSE } from "@/lib/sse";
+import Image from "next/image";
+import { FormEvent, KeyboardEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
+import frontImage from "@/product-front.webp";
+import { ArcMark } from "./ArcMark";
 import { ArtifactView } from "./artifacts";
+import { USER } from "./Sidebar";
+import { stageLabel, type Conversation } from "@/lib/conversation";
 
-const SUGGESTED = "What's the duty cycle for MIG welding at 200A on 240V?";
+const SUGGESTED_GROUPS: Array<{ label: string; items: string[] }> = [
+  {
+    label: "Setup",
+    items: [
+      "What polarity setup do I need for TIG welding?",
+      "MIG setup checklist for mild steel",
+    ],
+  },
+  {
+    label: "Specs",
+    items: [
+      "Duty cycle for MIG at 200A on 240V?",
+      "What input power options are supported?",
+    ],
+  },
+  {
+    label: "Troubleshooting",
+    items: [
+      "Porosity in flux-cored welds — what first?",
+      "What does an unknown warning indicator mean?",
+    ],
+  },
+];
 
-type ToolCall = { id: string; name: string; ok?: boolean };
+export function Chat({
+  conversation,
+  streaming,
+  onAsk,
+  onCancel,
+  onOpenExplorer,
+}: {
+  conversation: Conversation | null;
+  streaming: boolean;
+  onAsk: (text: string) => void;
+  onCancel: () => void;
+  onOpenExplorer: () => void;
+}) {
+  const [draft, setDraft] = useState("");
+  const [showDevDetails, setShowDevDetails] = useState(false);
+  const [greeting, setGreeting] = useState("Welcome");
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-export function Chat() {
-  const [draft, setDraft] = useState(SUGGESTED);
-  const [question, setQuestion] = useState<string | null>(null);
-  const [answer, setAnswer] = useState("");
-  const [tools, setTools] = useState<ToolCall[]>([]);
-  const [artifact, setArtifact] = useState<Artifact | null>(null);
-  const [usage, setUsage] = useState<{ usage: AgentUsage; costUsd: number } | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [streaming, setStreaming] = useState(false);
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  const turns = conversation?.turns ?? [];
+  const isEmpty = turns.length === 0;
+  const lastAnswerLength = turns.at(-1)?.answer.length ?? 0;
 
-  async function ask(text: string) {
-    setQuestion(text);
-    setAnswer("");
-    setTools([]);
-    setArtifact(null);
-    setUsage(null);
-    setError(null);
-    setStreaming(true);
+  // Clock-dependent, so it cannot be part of the server render without a hydration
+  // mismatch. It resolves on mount instead.
+  useEffect(() => {
+    const hour = new Date().getHours();
+    setGreeting(hour < 12 ? "Morning" : hour < 18 ? "Afternoon" : "Evening");
+  }, []);
 
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          input: { kind: "text", text },
-          ...(sessionId ? { sessionId } : {}),
-        }),
-      });
+  // Follow the stream. Layout effect so the jump lands in the same frame as the text.
+  useLayoutEffect(() => {
+    const element = scrollRef.current;
+    if (element) element.scrollTop = element.scrollHeight;
+  }, [turns.length, lastAnswerLength, conversation?.id]);
 
-      if (!response.ok) {
-        setError(`Request failed: ${response.status} ${await response.text()}`);
-        return;
-      }
+  // Grow the composer with the draft rather than reserving three empty rows.
+  useLayoutEffect(() => {
+    const element = inputRef.current;
+    if (!element) return;
+    element.style.height = "auto";
+    element.style.height = `${Math.min(element.scrollHeight, 168)}px`;
+  }, [draft]);
 
-      for await (const event of decodeSSE(response)) {
-        apply(event);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setStreaming(false);
+  function send() {
+    const text = draft.trim();
+    if (!text || streaming) return;
+    setDraft("");
+    onAsk(text);
+  }
+
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    send();
+  }
+
+  function onComposerKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      send();
     }
   }
 
-  function apply(event: AgentEvent) {
-    switch (event.type) {
-      case "session":
-        setSessionId(event.sessionId);
-        break;
-      case "text_delta":
-        setAnswer((prev) => prev + event.text);
-        break;
-      case "tool_start":
-        setTools((prev) => [...prev, { id: event.id, name: event.name }]);
-        break;
-      case "tool_end":
-        setTools((prev) =>
-          prev.map((t) => (t.id === event.id ? { ...t, ok: event.ok } : t)),
-        );
-        break;
-      case "artifact":
-        setArtifact(event.artifact);
-        break;
-      case "done":
-        setUsage({ usage: event.usage, costUsd: event.costUsd });
-        break;
-      case "error":
-        setError(event.message);
-        break;
-    }
+  function pick(question: string) {
+    setDraft(question);
+    inputRef.current?.focus();
   }
 
   return (
-    <>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (draft.trim() && !streaming) void ask(draft.trim());
-        }}
-      >
-        <input
-          type="text"
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          placeholder="Ask about the machine..."
-          disabled={streaming}
-        />
-        <button type="submit" disabled={streaming || !draft.trim()}>
-          {streaming ? "Thinking" : "Ask"}
+    <main className="chat">
+      <div className="chat-topbar">
+        <button
+          type="button"
+          className="ghost"
+          onClick={() => setShowDevDetails((show) => !show)}
+          aria-pressed={showDevDetails}
+        >
+          {showDevDetails ? "Hide details" : "Developer details"}
         </button>
-      </form>
 
-      <p className="hint">
-        Try:{" "}
-        <button type="button" onClick={() => setDraft(SUGGESTED)}>
-          {SUGGESTED}
+        <button type="button" className="explorer-card" onClick={onOpenExplorer}>
+          <span className="explorer-card-frame">
+            <Image src={frontImage} alt="" sizes="196px" priority />
+          </span>
+          <span className="explorer-card-foot">
+            <span className="explorer-card-title">View components</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="18" y2="12" />
+              <polyline points="12,6 18,12 12,18" />
+            </svg>
+          </span>
         </button>
-      </p>
+      </div>
 
-      {question && (
-        <div className="turn">
-          <p className="question">{question}</p>
-
-          {tools.length > 0 && (
-            <div className="trace">
-              {tools.map((tool) => (
-                <div key={tool.id} className={tool.ok ? "ok" : undefined}>
-                  {tool.ok === undefined ? "→" : "✓"} {shortName(tool.name)}
-                </div>
-              ))}
+      <div className="chat-scroll scroll-slim" ref={scrollRef}>
+        <div className="chat-column">
+          {isEmpty ? (
+            <div className="chat-empty">
+              <div className="chat-empty-lockup">
+                <ArcMark size={30} strokeWidth={2} />
+                <span className="chat-greeting">
+                  {greeting}, {USER.name}
+                </span>
+              </div>
+              <p className="chat-empty-sub">
+                Ask anything about your OmniPro 220 — settings, duty cycles, polarity, or what
+                went wrong with that last bead.
+              </p>
+              <div className="starters">
+                {SUGGESTED_GROUPS.map((group) => (
+                  <div key={group.label} className="starter-group">
+                    <div className="starter-label">{group.label}</div>
+                    <div className="starter-row">
+                      {group.items.map((item) => (
+                        <button key={item} type="button" className="starter" onClick={() => pick(item)}>
+                          {item}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          )}
+          ) : (
+            <div className="thread" aria-live="polite">
+              {turns.map((turn, index) => {
+                const isLive = streaming && index === turns.length - 1;
+                return (
+                  <div key={turn.id} className="turn">
+                    <div className="user-row">
+                      <div className="user-bubble">{turn.question}</div>
+                    </div>
 
-          {artifact && <ArtifactView artifact={artifact} />}
+                    <div className="assistant-row">
+                      <div className="assistant-mark">
+                        <ArcMark size={18} strokeWidth={2.4} />
+                      </div>
+                      <div className="assistant-body">
+                        {turn.status && (
+                          <div className="trace-line">
+                            <span className="spinner" aria-hidden="true" />
+                            <span>{turn.status || stageLabel(turn.stage)}</span>
+                          </div>
+                        )}
 
-          {answer && (
-            <div className="answer">
-              {answer}
-              {streaming && <span className="cursor">▍</span>}
-            </div>
-          )}
+                        {turn.artifact && <ArtifactView artifact={turn.artifact} />}
 
-          {error && <div className="error">{error}</div>}
+                        {turn.answer && (
+                          <div className="answer">
+                            {turn.answer}
+                            {isLive && <span className="caret">▍</span>}
+                          </div>
+                        )}
 
-          {usage && (
-            <div className="usage">
-              {usage.usage.inputTokens.toLocaleString()} in ·{" "}
-              {usage.usage.outputTokens.toLocaleString()} out · cache read{" "}
-              {usage.usage.cacheReadTokens.toLocaleString()} · ${usage.costUsd.toFixed(4)}
+                        {turn.error && <div className="error">{turn.error}</div>}
+
+                        {showDevDetails && (turn.tools.length > 0 || turn.usage) && (
+                          <div className="dev-details">
+                            {turn.tools.length > 0 && (
+                              <div className="trace">
+                                {turn.tools.map((tool) => (
+                                  <div key={tool.id} className={tool.ok ? "ok" : undefined}>
+                                    {tool.ok === undefined ? "→" : "✓"} {shortName(tool.name)}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            {turn.usage && (
+                              <div className="usage">
+                                {turn.usage.cached ? (
+                                  "Validated cached response"
+                                ) : (
+                                  <>
+                                    {turn.usage.usage.inputTokens.toLocaleString()} in ·{" "}
+                                    {turn.usage.usage.outputTokens.toLocaleString()} out · cache read{" "}
+                                    {turn.usage.usage.cacheReadTokens.toLocaleString()} · $
+                                    {turn.usage.costUsd.toFixed(4)}
+                                  </>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
-      )}
-    </>
+      </div>
+
+      <div className="composer-dock">
+        <form className="composer" onSubmit={submit}>
+          <label htmlFor="chat-input" className="sr-only">
+            Ask about the Vulcan OmniPro 220
+          </label>
+          <textarea
+            id="chat-input"
+            ref={inputRef}
+            value={draft}
+            onChange={(event) => setDraft(event.target.value)}
+            onKeyDown={onComposerKeyDown}
+            placeholder="Ask about your OmniPro 220…"
+            rows={1}
+          />
+          {streaming ? (
+            <button type="button" className="send is-stop" onClick={onCancel} aria-label="Stop">
+              <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="6" y="6" width="12" height="12" rx="2.5" fill="currentColor" />
+              </svg>
+            </button>
+          ) : (
+            <button type="submit" className="send" disabled={!draft.trim()} aria-label="Send">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="12" y1="19" x2="12" y2="5" />
+                <polyline points="6,11 12,5 18,11" />
+              </svg>
+            </button>
+          )}
+        </form>
+        <p className="composer-note">
+          Answers are grounded in the OmniPro 220 owner&rsquo;s manual, quick-start guide and
+          selection chart. Enter sends, Shift+Enter adds a line. Check the placards before you weld.
+        </p>
+      </div>
+    </main>
   );
 }
 

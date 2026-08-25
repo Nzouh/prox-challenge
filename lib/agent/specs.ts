@@ -51,6 +51,8 @@ export type DutyCycleSpecResult = FoundBase & {
     inputVoltage: InputVoltage;
     amperage: number;
     periodMinutes: 10;
+    weldMinutes: number;
+    restMinutes: number;
   };
 };
 
@@ -74,6 +76,63 @@ export type SpecResult =
       status: "not_found";
       note: string;
     };
+
+const specLabel: Record<SpecName, string> = {
+  duty_cycle: "duty cycle",
+  welding_current_range: "welding-current range",
+  maximum_ocv: "maximum open-circuit voltage",
+  wire_speed_range: "wire-speed range",
+  wire_spool_capacity: "maximum wire-spool capacity",
+  polarity: "polarity",
+};
+
+const processLabel: Record<WeldProcess, string> = {
+  MIG: "MIG",
+  flux_cored: "flux-cored",
+  TIG: "TIG",
+  stick: "Stick",
+};
+
+function displayRange(value: unknown, unit?: string): string {
+  if (Array.isArray(value) && value.length === 2) {
+    return `${String(value[0])}–${String(value[1])}${unit ? ` ${unit}` : ""}`;
+  }
+  return `${String(value)}${unit ? ` ${unit}` : ""}`;
+}
+
+/**
+ * Render the narrow exact-spec fast path without asking a second model to restate data.
+ * The caller still uses the Anthropic SDK to route the MCP call and establish/resume the
+ * conversation; this renderer only removes a redundant checker/writer pass after the
+ * host has matched the returned evidence to the user's complete structured intent.
+ */
+export function renderDeterministicSpecAnswer(result: SpecResult): string {
+  if (!result.found) {
+    return `The validated sources do not contain an exact published ${specLabel[result.spec]} matching those conditions.`;
+  }
+
+  if (result.spec === "duty_cycle") {
+    const { process, inputVoltage, amperage, weldMinutes, restMinutes, periodMinutes } =
+      result.conditions;
+    return `The ${processLabel[process]} duty cycle at ${amperage} A on ${inputVoltage} V is ${result.value}%. That permits ${weldMinutes} minutes of welding and requires ${restMinutes} minutes of rest in each ${periodMinutes}-minute period.`;
+  }
+
+  const process = result.conditions.process
+    ? `${processLabel[result.conditions.process]} `
+    : "";
+  const voltage = result.conditions.inputVoltage
+    ? ` on ${result.conditions.inputVoltage} V`
+    : "";
+
+  if (result.spec === "polarity" && result.value && typeof result.value === "object") {
+    const connections = Object.entries(result.value as Record<string, unknown>)
+      .map(([component, polarity]) => `${component.replaceAll("_", " ")} is ${String(polarity)}`)
+      .join(" and ");
+    return `For ${processLabel[result.conditions.process!]}, ${connections}.`;
+  }
+
+  return `The published ${process}${specLabel[result.spec]}${voltage} is ${displayRange(result.value, result.unit)}.`;
+}
 
 const factProcess: Record<WeldProcess, string> = {
   MIG: "MIG",
@@ -148,6 +207,8 @@ export function resolveSpecQuery(unparsed: SpecQuery): SpecResult {
         inputVoltage: query.inputVoltage,
         amperage: query.amperage,
         periodMinutes: 10,
+        weldMinutes: (rating.percent / 100) * 10,
+        restMinutes: 10 - (rating.percent / 100) * 10,
       },
       provenance,
       recordId: fact.id,

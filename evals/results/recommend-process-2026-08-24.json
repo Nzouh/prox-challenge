@@ -1,0 +1,1232 @@
+{
+  "summary": {
+    "startedAt": "2026-08-25T02:19:16.980Z",
+    "finishedAt": "2026-08-25T02:22:41.935Z",
+    "questionCount": 7,
+    "completed": 7,
+    "passed": 7,
+    "failed": 0,
+    "byCategory": {
+      "process_selection": {
+        "passed": 7,
+        "total": 7
+      }
+    },
+    "latencyMs": {
+      "mean": 25880.3,
+      "p50": 22060.6,
+      "p95": 57608.4,
+      "firstAnswerP50": 22060.4,
+      "firstAnswerP95": 57608.3
+    },
+    "totalCostUsd": 0.2699,
+    "totalUsage": {
+      "inputTokens": 15839,
+      "outputTokens": 12780,
+      "cacheReadTokens": 66826
+    },
+    "cacheProbe": {
+      "durationMs": 23784.5,
+      "cached": false,
+      "costUsd": 0.02725925
+    }
+  },
+  "results": [
+    {
+      "id": "complex-28",
+      "category": "process_selection",
+      "question": "Should I choose MIG, flux-core, TIG, or Stick for rusty steel outdoors, and why?",
+      "expectedTools": [
+        "recommend_process"
+      ],
+      "requiredPatterns": [
+        "flux[ -]?core",
+        "outdoor|windy",
+        "rusty|dirty",
+        "no (?:shielding )?gas|gas(?: is)? not required|does not require.{0,30}gas|without.{0,30}gas|eliminates.{0,30}shielding gas|gasless|self[ -]?shielded"
+      ],
+      "sourcePatterns": [
+        "selection-chart\\.pdf p\\.1"
+      ],
+      "run": {
+        "answer": "For rusty steel outdoors, the verified selection chart recommends flux-core (FCAW) and Stick (SMAW) equally, both scoring 8. Both are ideal for outdoor or windy conditions and forgiving on rusty or dirty steels. MIG and TIG did not appear in the recommendations for this scenario.\n\nSources: files/selection-chart.pdf p.1\n\nFlux-core requires low skill, needs no shielding gas, and handles material from 18 gauge to 5/16 inch thick. Stick requires moderate skill, also needs no shielding gas, and handles material from 10 gauge to 1/2 inch thick, making it better for thicker materials.\n\nSources: files/selection-chart.pdf p.1\n\nBoth processes share wind-resistance advantages and produce more spatter. Flux-core offers high deposition rates and good out-of-position welding; Stick offers deep penetration. Your choice depends on material thickness and skill level—flux-core if you want lower skill requirement, Stick if your work is thicker than 5/16 inch.\n\nSources: files/selection-chart.pdf p.1",
+        "tools": [
+          "recommend_process"
+        ],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 2550,
+          "outputTokens": 1641,
+          "cacheReadTokens": 9546
+        },
+        "costUsd": 0.03964975,
+        "durationMs": 24863.4003,
+        "firstEventMs": 65.2144,
+        "firstToolMs": 4082.6207000000004,
+        "firstAnswerMs": 24862.9638,
+        "statuses": [
+          {
+            "atMs": 65.2144,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          },
+          {
+            "atMs": 12701.4631,
+            "stage": "writing",
+            "message": "Writing the verified answer…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 65.2144,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1218.4684000000002,
+            "event": {
+              "type": "session",
+              "sessionId": "6956b894-e12d-4d7c-aed0-242f5ee97e85"
+            }
+          },
+          {
+            "atMs": 4082.6207000000004,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_01By768tUkYmc8HzdzcNC3Tp",
+              "name": "mcp__vulcan__recommend_process",
+              "input": {
+                "material": "steel",
+                "materialCondition": "rusty_or_dirty",
+                "location": "outdoor_or_windy"
+              }
+            }
+          },
+          {
+            "atMs": 4103.2825,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_01By768tUkYmc8HzdzcNC3Tp",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 12701.4631,
+            "event": {
+              "type": "status",
+              "stage": "writing",
+              "message": "Writing the verified answer…"
+            }
+          },
+          {
+            "atMs": 24862.9638,
+            "event": {
+              "type": "text_delta",
+              "text": "For rusty steel outdoors, the verified selection chart recommends flux-core (FCAW) and Stick (SMAW) equally, both scoring 8. Both are ideal for outdoor or windy conditions and forgiving on rusty or dirty steels. MIG and TIG did not appear in the recommendations for this scenario.\n\nSources: files/selection-chart.pdf p.1\n\nFlux-core requires low skill, needs no shielding gas, and handles material from 18 gauge to 5/16 inch thick. Stick requires moderate skill, also needs no shielding gas, and handles material from 10 gauge to 1/2 inch thick, making it better for thicker materials.\n\nSources: files/selection-chart.pdf p.1\n\nBoth processes share wind-resistance advantages and produce more spatter. Flux-core offers high deposition rates and good out-of-position welding; Stick offers deep penetration. Your choice depends on material thickness and skill level—flux-core if you want lower skill requirement, Stick if your work is thicker than 5/16 inch.\n\nSources: files/selection-chart.pdf p.1"
+            }
+          },
+          {
+            "atMs": 24862.9854,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 2550,
+                "outputTokens": 1641,
+                "cacheReadTokens": 9546
+              },
+              "costUsd": 0.03964975
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:recommend_process",
+            "passed": true,
+            "detail": "called: recommend_process"
+          },
+          {
+            "name": "required:flux[ -]?core",
+            "passed": true,
+            "detail": "flux[ -]?core"
+          },
+          {
+            "name": "required:outdoor|windy",
+            "passed": true,
+            "detail": "outdoor|windy"
+          },
+          {
+            "name": "required:rusty|dirty",
+            "passed": true,
+            "detail": "rusty|dirty"
+          },
+          {
+            "name": "required:no (?:shielding )?gas|gas(?: is)? not required|does not require.{0,30}gas|without.{0,30}gas|eliminates.{0,30}shielding gas|gasless|self[ -]?shielded",
+            "passed": true,
+            "detail": "no (?:shielding )?gas|gas(?: is)? not required|does not require.{0,30}gas|without.{0,30}gas|eliminates.{0,30}shielding gas|gasless|self[ -]?shielded"
+          },
+          {
+            "name": "source:selection-chart\\.pdf p\\.1",
+            "passed": true,
+            "detail": "selection-chart\\.pdf p\\.1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "process-36",
+      "category": "process_selection",
+      "question": "I am a beginner welding clean steel sheet indoors. I have shielding gas and want minimal spatter. Which process should I choose?",
+      "expectedTools": [
+        "recommend_process"
+      ],
+      "requiredPatterns": [
+        "\bmig\b|gmaw",
+        "beginner|low skill|easiest to learn",
+        "minimal spatter|clean weld"
+      ],
+      "sourcePatterns": [
+        "selection-chart\\.pdf p\\.1"
+      ],
+      "run": {
+        "answer": "Choose MIG/GMAW. This process scores a perfect match for your conditions: beginner skill level, available shielding gas, indoor location, clean steel sheet, and minimal spatter requirement. The process is rated for sheet metal from 22 gauge to 3/8 inch thickness.\n\nSources: files/selection-chart.pdf p.1\n\nMIG is the easiest to learn, produces clean welds with no slag, and offers better control on thin materials. These strengths directly address your needs as a beginner working on sheet metal with minimal spatter.\n\nSources: files/selection-chart.pdf p.1",
+        "tools": [
+          "recommend_process"
+        ],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 2244,
+          "outputTokens": 1231,
+          "cacheReadTokens": 9560
+        },
+        "costUsd": 0.032967250000000003,
+        "durationMs": 17190.465,
+        "firstEventMs": 39.30589999999938,
+        "firstToolMs": 4620.5488000000005,
+        "firstAnswerMs": 17190.3653,
+        "statuses": [
+          {
+            "atMs": 39.30589999999938,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          },
+          {
+            "atMs": 9991.723600000001,
+            "stage": "writing",
+            "message": "Writing the verified answer…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 39.30589999999938,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1263.0002999999997,
+            "event": {
+              "type": "session",
+              "sessionId": "6aabafd6-09c2-4afc-9f9d-85238bfcc2ad"
+            }
+          },
+          {
+            "atMs": 4620.5488000000005,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_0133bnd8Mi1Gdv14F5Cqvwpj",
+              "name": "mcp__vulcan__recommend_process",
+              "input": {
+                "skillLevel": "low",
+                "material": "steel",
+                "materialCondition": "clean",
+                "location": "indoor",
+                "shieldingGas": "available",
+                "desiredCleanliness": "clean_minimal_spatter",
+                "application": "sheet_metal"
+              }
+            }
+          },
+          {
+            "atMs": 4637.828700000002,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_0133bnd8Mi1Gdv14F5Cqvwpj",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 9991.723600000001,
+            "event": {
+              "type": "status",
+              "stage": "writing",
+              "message": "Writing the verified answer…"
+            }
+          },
+          {
+            "atMs": 17190.3653,
+            "event": {
+              "type": "text_delta",
+              "text": "Choose MIG/GMAW. This process scores a perfect match for your conditions: beginner skill level, available shielding gas, indoor location, clean steel sheet, and minimal spatter requirement. The process is rated for sheet metal from 22 gauge to 3/8 inch thickness.\n\nSources: files/selection-chart.pdf p.1\n\nMIG is the easiest to learn, produces clean welds with no slag, and offers better control on thin materials. These strengths directly address your needs as a beginner working on sheet metal with minimal spatter.\n\nSources: files/selection-chart.pdf p.1"
+            }
+          },
+          {
+            "atMs": 17190.3826,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 2244,
+                "outputTokens": 1231,
+                "cacheReadTokens": 9560
+              },
+              "costUsd": 0.032967250000000003
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:recommend_process",
+            "passed": true,
+            "detail": "called: recommend_process"
+          },
+          {
+            "name": "required:\bmig\b|gmaw",
+            "passed": true,
+            "detail": "\bmig\b|gmaw"
+          },
+          {
+            "name": "required:beginner|low skill|easiest to learn",
+            "passed": true,
+            "detail": "beginner|low skill|easiest to learn"
+          },
+          {
+            "name": "required:minimal spatter|clean weld",
+            "passed": true,
+            "detail": "minimal spatter|clean weld"
+          },
+          {
+            "name": "source:selection-chart\\.pdf p\\.1",
+            "passed": true,
+            "detail": "selection-chart\\.pdf p\\.1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "process-37",
+      "category": "process_selection",
+      "question": "I am a beginner working on rusty steel outdoors with no shielding gas. Which process fits best?",
+      "expectedTools": [
+        "recommend_process"
+      ],
+      "requiredPatterns": [
+        "flux[ -]?core|fcaw",
+        "outdoor|windy",
+        "rusty|dirty",
+        "no (?:shielding )?gas|gas(?: is)? not required|does not require.{0,30}gas|without.{0,30}gas|eliminates.{0,30}shielding gas|gasless"
+      ],
+      "sourcePatterns": [
+        "selection-chart\\.pdf p\\.1"
+      ],
+      "run": {
+        "answer": "Flux-cored arc welding (FCAW) is the best fit for your conditions. It requires no shielding gas, is forgiving on rusty or dirty steel, and is suitable for beginners.\n\nSources: files/selection-chart.pdf p.1\n\nFCAW is ideal for outdoor or windy work where shielding gas protection would fail. It produces more spatter than some processes but achieves high deposition rates and good out-of-position welding capability.\n\nSources: files/selection-chart.pdf p.1\n\nFCAW handles steel thickness from 18 gauge to 5/16 inch. Your machine's input voltage will determine whether a particular unit has adequate capacity for your joints, though the selection process does not rank by voltage.\n\nSources: files/selection-chart.pdf p.1",
+        "tools": [
+          "recommend_process"
+        ],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 2211,
+          "outputTokens": 1399,
+          "cacheReadTokens": 9538
+        },
+        "costUsd": 0.03516325,
+        "durationMs": 22060.5512,
+        "firstEventMs": 25.296900000001187,
+        "firstToolMs": 4111.103600000002,
+        "firstAnswerMs": 22060.441,
+        "statuses": [
+          {
+            "atMs": 25.296900000001187,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          },
+          {
+            "atMs": 12431.557500000003,
+            "stage": "writing",
+            "message": "Writing the verified answer…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 25.296900000001187,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1236.7234000000026,
+            "event": {
+              "type": "session",
+              "sessionId": "a8a57f6a-795f-4ea6-b33b-7005e44642c8"
+            }
+          },
+          {
+            "atMs": 4111.103600000002,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_01AoJNnkpWJxYHf29VGbpWga",
+              "name": "mcp__vulcan__recommend_process",
+              "input": {
+                "skillLevel": "low",
+                "material": "steel",
+                "materialCondition": "rusty_or_dirty",
+                "location": "outdoor_or_windy",
+                "shieldingGas": "unavailable"
+              }
+            }
+          },
+          {
+            "atMs": 4130.6614000000045,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_01AoJNnkpWJxYHf29VGbpWga",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 12431.557500000003,
+            "event": {
+              "type": "status",
+              "stage": "writing",
+              "message": "Writing the verified answer…"
+            }
+          },
+          {
+            "atMs": 22060.441,
+            "event": {
+              "type": "text_delta",
+              "text": "Flux-cored arc welding (FCAW) is the best fit for your conditions. It requires no shielding gas, is forgiving on rusty or dirty steel, and is suitable for beginners.\n\nSources: files/selection-chart.pdf p.1\n\nFCAW is ideal for outdoor or windy work where shielding gas protection would fail. It produces more spatter than some processes but achieves high deposition rates and good out-of-position welding capability.\n\nSources: files/selection-chart.pdf p.1\n\nFCAW handles steel thickness from 18 gauge to 5/16 inch. Your machine's input voltage will determine whether a particular unit has adequate capacity for your joints, though the selection process does not rank by voltage.\n\nSources: files/selection-chart.pdf p.1"
+            }
+          },
+          {
+            "atMs": 22060.4545,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 2211,
+                "outputTokens": 1399,
+                "cacheReadTokens": 9538
+              },
+              "costUsd": 0.03516325
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:recommend_process",
+            "passed": true,
+            "detail": "called: recommend_process"
+          },
+          {
+            "name": "required:flux[ -]?core|fcaw",
+            "passed": true,
+            "detail": "flux[ -]?core|fcaw"
+          },
+          {
+            "name": "required:outdoor|windy",
+            "passed": true,
+            "detail": "outdoor|windy"
+          },
+          {
+            "name": "required:rusty|dirty",
+            "passed": true,
+            "detail": "rusty|dirty"
+          },
+          {
+            "name": "required:no (?:shielding )?gas|gas(?: is)? not required|does not require.{0,30}gas|without.{0,30}gas|eliminates.{0,30}shielding gas|gasless",
+            "passed": true,
+            "detail": "no (?:shielding )?gas|gas(?: is)? not required|does not require.{0,30}gas|without.{0,30}gas|eliminates.{0,30}shielding gas|gasless"
+          },
+          {
+            "name": "source:selection-chart\\.pdf p\\.1",
+            "passed": true,
+            "detail": "selection-chart\\.pdf p\\.1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "process-38",
+      "category": "process_selection",
+      "question": "I am experienced, working indoors on 24-gauge stainless steel with shielding gas, and need the cleanest possible weld. Which process should I use?",
+      "expectedTools": [
+        "recommend_process"
+      ],
+      "requiredPatterns": [
+        "\btig\b|gtaw",
+        "24[ -]?gauge",
+        "extremely clean|cleanest|highest-quality",
+        "dc tig|dc"
+      ],
+      "sourcePatterns": [
+        "selection-chart\\.pdf p\\.1"
+      ],
+      "run": {
+        "answer": "TIG/GTAW is the recommended process for your conditions. The selection chart rates it with a score of 9 for your profile: high skill level, indoor location, 24-gauge stainless steel, available shielding gas, and need for extremely clean welds.\n\nSources: files/selection-chart.pdf p.1\n\nTIG delivers the highest-quality welds with extremely aesthetic weld appearance and precise control. The process handles 24 gauge material within its charted thickness range of 24 gauge to 3/16 inch.\n\nSources: files/selection-chart.pdf p.1\n\nDC TIG is required for stainless steel. The process requires shielding gas, which you have available.\n\nSources: files/selection-chart.pdf p.1",
+        "tools": [
+          "recommend_process"
+        ],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 2248,
+          "outputTokens": 1314,
+          "cacheReadTokens": 9570
+        },
+        "costUsd": 0.034475,
+        "durationMs": 18785.42399999999,
+        "firstEventMs": 24.81749999999738,
+        "firstToolMs": 4418.786,
+        "firstAnswerMs": 18785.3439,
+        "statuses": [
+          {
+            "atMs": 24.81749999999738,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          },
+          {
+            "atMs": 11620.0498,
+            "stage": "writing",
+            "message": "Writing the verified answer…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 24.81749999999738,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1270.6385999999984,
+            "event": {
+              "type": "session",
+              "sessionId": "ccb78b74-dc1b-4532-bc38-13560b6f3113"
+            }
+          },
+          {
+            "atMs": 4418.786,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_0179WY9X9L5moyHtJBh4igRx",
+              "name": "mcp__vulcan__recommend_process",
+              "input": {
+                "skillLevel": "high",
+                "location": "indoor",
+                "material": "stainless_steel",
+                "materialGauge": 24,
+                "shieldingGas": "available",
+                "desiredCleanliness": "extremely_clean"
+              }
+            }
+          },
+          {
+            "atMs": 4468.601999999992,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_0179WY9X9L5moyHtJBh4igRx",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 11620.0498,
+            "event": {
+              "type": "status",
+              "stage": "writing",
+              "message": "Writing the verified answer…"
+            }
+          },
+          {
+            "atMs": 18785.3439,
+            "event": {
+              "type": "text_delta",
+              "text": "TIG/GTAW is the recommended process for your conditions. The selection chart rates it with a score of 9 for your profile: high skill level, indoor location, 24-gauge stainless steel, available shielding gas, and need for extremely clean welds.\n\nSources: files/selection-chart.pdf p.1\n\nTIG delivers the highest-quality welds with extremely aesthetic weld appearance and precise control. The process handles 24 gauge material within its charted thickness range of 24 gauge to 3/16 inch.\n\nSources: files/selection-chart.pdf p.1\n\nDC TIG is required for stainless steel. The process requires shielding gas, which you have available.\n\nSources: files/selection-chart.pdf p.1"
+            }
+          },
+          {
+            "atMs": 18785.356699999997,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 2248,
+                "outputTokens": 1314,
+                "cacheReadTokens": 9570
+              },
+              "costUsd": 0.034475
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:recommend_process",
+            "passed": true,
+            "detail": "called: recommend_process"
+          },
+          {
+            "name": "required:\btig\b|gtaw",
+            "passed": true,
+            "detail": "\btig\b|gtaw"
+          },
+          {
+            "name": "required:24[ -]?gauge",
+            "passed": true,
+            "detail": "24[ -]?gauge"
+          },
+          {
+            "name": "required:extremely clean|cleanest|highest-quality",
+            "passed": true,
+            "detail": "extremely clean|cleanest|highest-quality"
+          },
+          {
+            "name": "required:dc tig|dc",
+            "passed": true,
+            "detail": "dc tig|dc"
+          },
+          {
+            "name": "source:selection-chart\\.pdf p\\.1",
+            "passed": true,
+            "detail": "selection-chart\\.pdf p\\.1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "process-39",
+      "category": "process_selection",
+      "question": "I have moderate welding skill and need to weld 1/2-inch steel outdoors without shielding gas. Which process should I choose?",
+      "expectedTools": [
+        "recommend_process"
+      ],
+      "requiredPatterns": [
+        "\bstick\b|smaw",
+        "1/2|0\\.5",
+        "outdoor|windy",
+        "no (?:shielding )?gas|gas is not required"
+      ],
+      "sourcePatterns": [
+        "selection-chart\\.pdf p\\.1"
+      ],
+      "run": {
+        "answer": "Choose stick welding (SMAW) for your 0.5-inch steel without shielding gas. This process is recommended for your moderate skill level, outdoor location, and unavailable gas supply.\n\nSources: files/selection-chart.pdf p.1\n\nStick welding requires no shielding gas, works in outdoor or windy conditions, and handles steel up to 0.5 inch thick. The process rating matches moderate skill.\n\nSources: files/selection-chart.pdf p.1\n\nKey advantages for your setup are ideal performance in outdoor or windy conditions, tolerance for rusty or dirty steel, and deep penetration suited for thicker materials.\n\nSources: files/selection-chart.pdf p.1",
+        "tools": [
+          "recommend_process"
+        ],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 2207,
+          "outputTokens": 1149,
+          "cacheReadTokens": 9558
+        },
+        "costUsd": 0.031712,
+        "durationMs": 23200.2895,
+        "firstEventMs": 26.25569999999425,
+        "firstToolMs": 4387.6205000000045,
+        "firstAnswerMs": 23200.139599999995,
+        "statuses": [
+          {
+            "atMs": 26.25569999999425,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          },
+          {
+            "atMs": 10419.778099999996,
+            "stage": "writing",
+            "message": "Writing the verified answer…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 26.25569999999425,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1243.425099999993,
+            "event": {
+              "type": "session",
+              "sessionId": "8ba7b727-d2f0-41d5-b1c2-a6783c7b5622"
+            }
+          },
+          {
+            "atMs": 4387.6205000000045,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_011b6HgAaSy4yUjPu2zVgESs",
+              "name": "mcp__vulcan__recommend_process",
+              "input": {
+                "skillLevel": "moderate",
+                "material": "steel",
+                "thicknessInches": 0.5,
+                "location": "outdoor_or_windy",
+                "shieldingGas": "unavailable"
+              }
+            }
+          },
+          {
+            "atMs": 4407.080000000002,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_011b6HgAaSy4yUjPu2zVgESs",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 10419.778099999996,
+            "event": {
+              "type": "status",
+              "stage": "writing",
+              "message": "Writing the verified answer…"
+            }
+          },
+          {
+            "atMs": 23200.139599999995,
+            "event": {
+              "type": "text_delta",
+              "text": "Choose stick welding (SMAW) for your 0.5-inch steel without shielding gas. This process is recommended for your moderate skill level, outdoor location, and unavailable gas supply.\n\nSources: files/selection-chart.pdf p.1\n\nStick welding requires no shielding gas, works in outdoor or windy conditions, and handles steel up to 0.5 inch thick. The process rating matches moderate skill.\n\nSources: files/selection-chart.pdf p.1\n\nKey advantages for your setup are ideal performance in outdoor or windy conditions, tolerance for rusty or dirty steel, and deep penetration suited for thicker materials.\n\nSources: files/selection-chart.pdf p.1"
+            }
+          },
+          {
+            "atMs": 23200.151499999993,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 2207,
+                "outputTokens": 1149,
+                "cacheReadTokens": 9558
+              },
+              "costUsd": 0.031712
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:recommend_process",
+            "passed": true,
+            "detail": "called: recommend_process"
+          },
+          {
+            "name": "required:\bstick\b|smaw",
+            "passed": true,
+            "detail": "\bstick\b|smaw"
+          },
+          {
+            "name": "required:1/2|0\\.5",
+            "passed": true,
+            "detail": "1/2|0\\.5"
+          },
+          {
+            "name": "required:outdoor|windy",
+            "passed": true,
+            "detail": "outdoor|windy"
+          },
+          {
+            "name": "required:no (?:shielding )?gas|gas is not required",
+            "passed": true,
+            "detail": "no (?:shielding )?gas|gas is not required"
+          },
+          {
+            "name": "source:selection-chart\\.pdf p\\.1",
+            "passed": true,
+            "detail": "selection-chart\\.pdf p\\.1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "process-40",
+      "category": "process_selection",
+      "question": "I am a beginner repairing an aluminum automotive body indoors and have shielding gas. Which process should I use, and is special equipment required?",
+      "expectedTools": [
+        "recommend_process"
+      ],
+      "requiredPatterns": [
+        "\bmig\b|gmaw",
+        "aluminum",
+        "spool gun"
+      ],
+      "sourcePatterns": [
+        "selection-chart\\.pdf p\\.1"
+      ],
+      "run": {
+        "answer": "Do not proceed with this repair without a qualified welding professional. A failed weld on an automotive vehicle can cause severe downstream harm.\n\nSources: Safety-critical repair classification [inference]\n\nBefore work commences, a qualified professional must resolve these critical safety questions: Is the workpiece sealed, pressurized, or previously used for fuel or chemicals? Is the work area completely dry? Is ventilation adequate, and is this a confined space? Have nearby combustibles been removed or protected? Do you have the required welding PPE? Has the base material and every coating been positively identified?\n\nSources: Safety-critical repair classification [inference]\n\nUnder professional guidance, the MIG/GMAW process is recommended for aluminum automotive body repair. MIG produces clean welds and is suitable for material thicknesses from 22 gauge to 3/8 inch.\n\nSources: files/selection-chart.pdf p.1\n\nA spool gun is required equipment for MIG welding of aluminum.\n\nSources: files/selection-chart.pdf p.1",
+        "tools": [
+          "recommend_process",
+          "assess_job_risk"
+        ],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 2570,
+          "outputTokens": 5184,
+          "cacheReadTokens": 9562
+        },
+        "costUsd": 0.07252975,
+        "durationMs": 57608.366200000004,
+        "firstEventMs": 24.53320000000531,
+        "firstToolMs": 8067.927299999996,
+        "firstAnswerMs": 57608.2595,
+        "statuses": [
+          {
+            "atMs": 24.53320000000531,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          },
+          {
+            "atMs": 20531.858300000007,
+            "stage": "writing",
+            "message": "Writing the verified answer…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 24.53320000000531,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1263.9587000000029,
+            "event": {
+              "type": "session",
+              "sessionId": "aa300dc4-1170-494d-b1d2-b3516b32591c"
+            }
+          },
+          {
+            "atMs": 8067.927299999996,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_01J2kpiNbWUXyiw7y4axTB8B",
+              "name": "mcp__vulcan__recommend_process",
+              "input": {
+                "application": "automotive_body",
+                "material": "aluminum",
+                "skillLevel": "low",
+                "location": "indoor",
+                "shieldingGas": "available"
+              }
+            }
+          },
+          {
+            "atMs": 8087.472200000004,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_01J2kpiNbWUXyiw7y4axTB8B",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 8309.272500000006,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_013MG4PCpvvux98RJYgx62tJ",
+              "name": "mcp__vulcan__assess_job_risk",
+              "input": {
+                "activity": "repair",
+                "repairTarget": "workpiece",
+                "structuralCriticality": "vehicle_or_load_bearing"
+              }
+            }
+          },
+          {
+            "atMs": 8313.263000000006,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_013MG4PCpvvux98RJYgx62tJ",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 20531.858300000007,
+            "event": {
+              "type": "status",
+              "stage": "writing",
+              "message": "Writing the verified answer…"
+            }
+          },
+          {
+            "atMs": 57608.2595,
+            "event": {
+              "type": "text_delta",
+              "text": "Do not proceed with this repair without a qualified welding professional. A failed weld on an automotive vehicle can cause severe downstream harm.\n\nSources: Safety-critical repair classification [inference]\n\nBefore work commences, a qualified professional must resolve these critical safety questions: Is the workpiece sealed, pressurized, or previously used for fuel or chemicals? Is the work area completely dry? Is ventilation adequate, and is this a confined space? Have nearby combustibles been removed or protected? Do you have the required welding PPE? Has the base material and every coating been positively identified?\n\nSources: Safety-critical repair classification [inference]\n\nUnder professional guidance, the MIG/GMAW process is recommended for aluminum automotive body repair. MIG produces clean welds and is suitable for material thicknesses from 22 gauge to 3/8 inch.\n\nSources: files/selection-chart.pdf p.1\n\nA spool gun is required equipment for MIG welding of aluminum.\n\nSources: files/selection-chart.pdf p.1"
+            }
+          },
+          {
+            "atMs": 57608.277400000006,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 2570,
+                "outputTokens": 5184,
+                "cacheReadTokens": 9562
+              },
+              "costUsd": 0.07252975
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:recommend_process",
+            "passed": true,
+            "detail": "called: recommend_process, assess_job_risk"
+          },
+          {
+            "name": "required:\bmig\b|gmaw",
+            "passed": true,
+            "detail": "\bmig\b|gmaw"
+          },
+          {
+            "name": "required:aluminum",
+            "passed": true,
+            "detail": "aluminum"
+          },
+          {
+            "name": "required:spool gun",
+            "passed": true,
+            "detail": "spool gun"
+          },
+          {
+            "name": "source:selection-chart\\.pdf p\\.1",
+            "passed": true,
+            "detail": "selection-chart\\.pdf p\\.1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "process-41",
+      "category": "process_selection",
+      "question": "Which welding process should I use?",
+      "expectedTools": [
+        "recommend_process"
+      ],
+      "requiredPatterns": [
+        "skill|experience",
+        "material",
+        "gas",
+        "indoor|outdoor|location",
+        "thickness",
+        "clean|spatter"
+      ],
+      "forbiddenPatterns": [
+        "you should use (?:mig|tig|stick|flux[ -]?core)"
+      ],
+      "run": {
+        "answer": "The process recommendation lookup did not find a result. At least 1 decision factor is required to compare processes.\n\nSources: files/selection-chart.pdf p.1\n\nProvide any of these details: skillLevel, shieldingGas, location, material, thickness, or desiredCleanliness.\n\nSources: files/selection-chart.pdf p.1",
+        "tools": [
+          "recommend_process"
+        ],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 1809,
+          "outputTokens": 862,
+          "cacheReadTokens": 9492
+        },
+        "costUsd": 0.0233765,
+        "durationMs": 17453.33719999998,
+        "firstEventMs": 33.555099999997765,
+        "firstToolMs": 4147.810399999988,
+        "firstAnswerMs": 17453.262899999972,
+        "statuses": [
+          {
+            "atMs": 33.555099999997765,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          },
+          {
+            "atMs": 10936.788499999995,
+            "stage": "writing",
+            "message": "Writing the verified answer…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 33.555099999997765,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1483.4006999999983,
+            "event": {
+              "type": "session",
+              "sessionId": "713a2d31-d3b8-49d4-8767-7b51581e1078"
+            }
+          },
+          {
+            "atMs": 4147.810399999988,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_01FY126XwRZR97kZqNmfnfwW",
+              "name": "mcp__vulcan__recommend_process",
+              "input": {}
+            }
+          },
+          {
+            "atMs": 4174.70729999998,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_01FY126XwRZR97kZqNmfnfwW",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 10936.788499999995,
+            "event": {
+              "type": "status",
+              "stage": "writing",
+              "message": "Writing the verified answer…"
+            }
+          },
+          {
+            "atMs": 17453.262899999972,
+            "event": {
+              "type": "text_delta",
+              "text": "The process recommendation lookup did not find a result. At least 1 decision factor is required to compare processes.\n\nSources: files/selection-chart.pdf p.1\n\nProvide any of these details: skillLevel, shieldingGas, location, material, thickness, or desiredCleanliness.\n\nSources: files/selection-chart.pdf p.1"
+            }
+          },
+          {
+            "atMs": 17453.27429999999,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 1809,
+                "outputTokens": 862,
+                "cacheReadTokens": 9492
+              },
+              "costUsd": 0.0233765
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:recommend_process",
+            "passed": true,
+            "detail": "called: recommend_process"
+          },
+          {
+            "name": "required:skill|experience",
+            "passed": true,
+            "detail": "skill|experience"
+          },
+          {
+            "name": "required:material",
+            "passed": true,
+            "detail": "material"
+          },
+          {
+            "name": "required:gas",
+            "passed": true,
+            "detail": "gas"
+          },
+          {
+            "name": "required:indoor|outdoor|location",
+            "passed": true,
+            "detail": "indoor|outdoor|location"
+          },
+          {
+            "name": "required:thickness",
+            "passed": true,
+            "detail": "thickness"
+          },
+          {
+            "name": "required:clean|spatter",
+            "passed": true,
+            "detail": "clean|spatter"
+          },
+          {
+            "name": "forbidden:you should use (?:mig|tig|stick|flux[ -]?core)",
+            "passed": true,
+            "detail": "you should use (?:mig|tig|stick|flux[ -]?core)"
+          }
+        ]
+      }
+    }
+  ],
+  "cacheProbe": {
+    "answer": "The process recommendation lookup did not find a suitable process. At least 1 chart decision factor is required before processes can be compared. Missing factors are: skillLevel, shieldingGas, location, material, thickness, and desiredCleanliness. Input voltage is also needed for machine-capacity and settings checks.\n\nSources: files/selection-chart.pdf p.1",
+    "tools": [
+      "recommend_process"
+    ],
+    "done": true,
+    "cached": false,
+    "error": null,
+    "usage": {
+      "inputTokens": 1811,
+      "outputTokens": 1456,
+      "cacheReadTokens": 9492
+    },
+    "costUsd": 0.02725925,
+    "durationMs": 23784.486399999994,
+    "firstEventMs": 24.327499999984866,
+    "firstToolMs": 4198.123399999982,
+    "firstAnswerMs": 23784.381200000003,
+    "statuses": [
+      {
+        "atMs": 24.327499999984866,
+        "stage": "research",
+        "message": "Checking the validated manual…"
+      },
+      {
+        "atMs": 10546.575899999996,
+        "stage": "writing",
+        "message": "Writing the verified answer…"
+      }
+    ],
+    "events": [
+      {
+        "atMs": 24.327499999984866,
+        "event": {
+          "type": "status",
+          "stage": "research",
+          "message": "Checking the validated manual…"
+        }
+      },
+      {
+        "atMs": 1329.5254999999888,
+        "event": {
+          "type": "session",
+          "sessionId": "08a864a3-f46a-41b8-8b59-9376f9a8595d"
+        }
+      },
+      {
+        "atMs": 4198.123399999982,
+        "event": {
+          "type": "tool_start",
+          "id": "toolu_01UvJRDKaPZvdUeT5EtuQFhp",
+          "name": "mcp__vulcan__recommend_process",
+          "input": {
+            "{}": "{}"
+          }
+        }
+      },
+      {
+        "atMs": 4225.040799999988,
+        "event": {
+          "type": "tool_end",
+          "id": "toolu_01UvJRDKaPZvdUeT5EtuQFhp",
+          "ok": true
+        }
+      },
+      {
+        "atMs": 10546.575899999996,
+        "event": {
+          "type": "status",
+          "stage": "writing",
+          "message": "Writing the verified answer…"
+        }
+      },
+      {
+        "atMs": 23784.381200000003,
+        "event": {
+          "type": "text_delta",
+          "text": "The process recommendation lookup did not find a suitable process. At least 1 chart decision factor is required before processes can be compared. Missing factors are: skillLevel, shieldingGas, location, material, thickness, and desiredCleanliness. Input voltage is also needed for machine-capacity and settings checks.\n\nSources: files/selection-chart.pdf p.1"
+        }
+      },
+      {
+        "atMs": 23784.39849999998,
+        "event": {
+          "type": "done",
+          "usage": {
+            "inputTokens": 1811,
+            "outputTokens": 1456,
+            "cacheReadTokens": 9492
+          },
+          "costUsd": 0.02725925
+        }
+      }
+    ]
+  }
+}

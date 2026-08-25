@@ -1,0 +1,55 @@
+[
+  {
+    "id": "stick-cable-setup",
+    "process": "stick",
+    "prerequisites": ["Turn the Power Switch off and unplug the Welder before setup."],
+    "steps": [
+      {"order": 1, "component": "ground_clamp", "state": "required", "instruction": "Connect the ground clamp to the negative terminal."},
+      {"order": 2, "component": "electrode_holder", "state": "required", "instruction": "Connect the electrode holder to the positive terminal."},
+      {"order": 3, "component": "wire_feed_power", "state": "disconnected", "instruction": "Leave wire-feed power disconnected."}
+    ],
+    "source": {"file": "files/quick-start-guide.pdf", "page": 2},
+    "safety_source": {"file": "files/owner-manual.pdf", "page": 24}
+  },
+  {
+    "id": "mig-cable-setup",
+    "process": "MIG",
+    "prerequisites": ["Turn the Power Switch off and unplug the Welder before setup."],
+    "steps": [
+      {"order": 1, "component": "ground_clamp", "state": "required", "instruction": "Connect the ground clamp to the negative terminal."},
+      {"order": 2, "component": "wire_feed_power", "state": "required", "instruction": "Connect wire-feed power to the positive terminal."},
+      {"order": 3, "component": "mig_gun", "state": "required", "instruction": "Connect the MIG gun to the wire feed."},
+      {"order": 4, "component": "wire_feed_control", "state": "required", "instruction": "Connect the wire-feed control cable inside the welder."}
+    ],
+    "source": {"file": "files/quick-start-guide.pdf", "page": 2},
+    "safety_source": {"file": "files/owner-manual.pdf", "page": 10}
+  },
+  {
+    "id": "flux-cored-cable-setup",
+    "process": "flux_cored",
+    "prerequisites": ["Turn the Power Switch off and unplug the Welder before setup."],
+    "steps": [
+      {"order": 1, "component": "ground_clamp", "state": "required", "instruction": "Connect the ground clamp to the positive terminal."},
+      {"order": 2, "component": "wire_feed_power", "state": "required", "instruction": "Connect wire-feed power to the negative terminal."},
+      {"order": 3, "component": "mig_gun", "state": "required", "instruction": "Connect the MIG gun to the wire feed."},
+      {"order": 4, "component": "wire_feed_control", "state": "required", "instruction": "Connect the wire-feed control cable inside the welder."}
+    ],
+    "source": {"file": "files/quick-start-guide.pdf", "page": 2},
+    "safety_source": {"file": "files/owner-manual.pdf", "page": 10}
+  },
+  {
+    "id": "tig-cable-setup",
+    "process": "TIG",
+    "prerequisites": ["Turn the Power Switch off and unplug the Welder before setup."],
+    "steps": [
+      {"order": 1, "component": "ground_clamp", "state": "required", "instruction": "Connect the ground clamp to the positive terminal."},
+      {"order": 2, "component": "tig_torch", "state": "required", "instruction": "Connect the TIG torch to the negative terminal."},
+      {"order": 3, "component": "shielding_gas", "state": "required", "instruction": "Connect the gas line to the gas regulator."},
+      {"order": 4, "component": "foot_pedal", "state": "optional", "instruction": "If using the optional foot pedal, connect it inside the welder."},
+      {"order": 5, "component": "wire_feed_power", "state": "disconnected", "instruction": "Leave wire-feed power disconnected."}
+    ],
+    "source": {"file": "files/quick-start-guide.pdf", "page": 2},
+    "safety_source": {"file": "files/owner-manual.pdf", "page": 24}
+  }
+]
+

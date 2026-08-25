@@ -1,0 +1,750 @@
+{
+  "views": {
+    "front": {
+      "image": "product-front.webp",
+      "parts": [
+        {
+          "center": {
+            "x": 0.64067,
+            "y": 0.39725
+          },
+          "center_px": {
+            "x": 768.8,
+            "y": 476.7
+          },
+          "description": "Returns to the previous screen without changing the current setting.",
+          "description_provenance": {
+            "page": 20,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "geometry_method": "projected",
+          "id": "back_button",
+          "label": "Back Button",
+          "provenance": {
+            "page": 8,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.02333,
+            "type": "circle"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.49762,
+            "y": 0.50197
+          },
+          "center_px": {
+            "x": 597.1,
+            "y": 602.4
+          },
+          "description": "Turn it to move through processes and settings; press it to select one and go to the next screen.",
+          "description_provenance": {
+            "page": 20,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "geometry_method": "projected",
+          "id": "control_knob",
+          "label": "Control Knob",
+          "provenance": {
+            "page": 8,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.03667,
+            "type": "circle"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.35275,
+            "y": 0.39858
+          },
+          "center_px": {
+            "x": 423.3,
+            "y": 478.3
+          },
+          "description": "Returns the display to the process-selection screen. Every setup procedure in the manual starts by pressing it before choosing MIG, Flux-Cored, TIG or Stick.",
+          "description_provenance": {
+            "basis": "owner-manual.pdf pp. 20, 30, 32",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "projected",
+          "id": "home_button",
+          "label": "Home Button",
+          "provenance": {
+            "page": 8,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.02333,
+            "type": "circle"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.49602,
+            "y": 0.39023
+          },
+          "center_px": {
+            "x": 595.2,
+            "y": 468.3
+          },
+          "description": "Shows the selected process and its settings, and displays the warning screen if the welder overheats and shuts itself down.",
+          "description_provenance": {
+            "basis": "owner-manual.pdf pp. 19, 20",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "projected",
+          "id": "lcd_display",
+          "label": "LCD Display",
+          "provenance": {
+            "page": 8,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "h": 0.13667,
+            "type": "rect",
+            "w": 0.21333
+          },
+          "zoom": 1.641
+        },
+        {
+          "center": {
+            "x": 0.38667,
+            "y": 0.49833
+          },
+          "center_px": {
+            "x": 464.0,
+            "y": 598.0
+          },
+          "description": "Sets the left-hand value on whichever screen is showing -- wire or electrode diameter during setup, then wire feed speed (amperage) while welding.",
+          "description_provenance": {
+            "basis": "owner-manual.pdf pp. 20, 30, 32",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "projected",
+          "id": "left_knob",
+          "label": "Left Knob",
+          "provenance": {
+            "page": 8,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.02667,
+            "type": "circle"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.35142,
+            "y": 0.65083
+          },
+          "center_px": {
+            "x": 421.7,
+            "y": 781.0
+          },
+          "description": "Pass-through for the MIG or spool gun cable. The connector goes through here and locks into the wire feed inside; if it is not fully seated the gas connection leaks and shielding gas will not reach the weld.",
+          "description_provenance": {
+            "basis": "owner-manual.pdf pp. 13, 17",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "measured",
+          "id": "mig_gun_spool_gun_cable_socket",
+          "label": "MIG Gun / Spool Gun Cable Socket",
+          "provenance": {
+            "page": 8,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "h": 0.02833,
+            "type": "rect",
+            "w": 0.03667
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.50183,
+            "y": 0.80733
+          },
+          "center_px": {
+            "x": 602.2,
+            "y": 968.8
+          },
+          "description": "One of the two output terminals. What belongs here changes with the process: ground clamp for MIG and Stick, wire feed power for Flux-Cored, torch for TIG.",
+          "description_provenance": {
+            "basis": "quick-start-guide.pdf p. 2; owner-manual.pdf p. 13",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "measured",
+          "id": "negative_socket",
+          "label": "Negative Socket",
+          "provenance": {
+            "page": 8,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.02667,
+            "type": "circle"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.64267,
+            "y": 0.80392
+          },
+          "center_px": {
+            "x": 771.2,
+            "y": 964.7
+          },
+          "description": "The other output terminal, and its role also changes with the process: wire feed power for MIG, electrode holder for Stick, ground clamp for Flux-Cored and TIG.",
+          "description_provenance": {
+            "basis": "quick-start-guide.pdf p. 2; owner-manual.pdf p. 13",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "measured",
+          "id": "positive_socket",
+          "label": "Positive Socket",
+          "provenance": {
+            "page": 8,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.02667,
+            "type": "circle"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.46917,
+            "y": 0.685
+          },
+          "center_px": {
+            "x": 563.0,
+            "y": 822.0
+          },
+          "description": "Switches the welder on and off. The manual requires it OFF and the welder unplugged before any setup, wire change or maintenance.",
+          "description_provenance": {
+            "basis": "owner-manual.pdf pp. 10, 16, 17",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "measured",
+          "id": "power_switch",
+          "label": "Power Switch",
+          "provenance": {
+            "page": 8,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "h": 0.05417,
+            "type": "rect",
+            "w": 0.0525
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.60583,
+            "y": 0.49667
+          },
+          "center_px": {
+            "x": 727.0,
+            "y": 596.0
+          },
+          "description": "Sets the right-hand value -- material thickness during setup, then voltage while welding. In TIG it also switches the torch on.",
+          "description_provenance": {
+            "basis": "owner-manual.pdf pp. 20, 30",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "projected",
+          "id": "right_knob",
+          "label": "Right Knob",
+          "provenance": {
+            "page": 8,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.02667,
+            "type": "circle"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.4015,
+            "y": 0.80433
+          },
+          "center_px": {
+            "x": 481.8,
+            "y": 965.2
+          },
+          "description": "Shielding gas connection for an optional spool gun, used only when one is fitted -- its gas hose connects here rather than to the regulator.",
+          "description_provenance": {
+            "page": 17,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "geometry_method": "measured",
+          "id": "spool_gun_gas_outlet",
+          "label": "Spool Gun Gas Outlet",
+          "provenance": {
+            "page": 8,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.02667,
+            "type": "circle"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.57,
+            "y": 0.825
+          },
+          "center_px": {
+            "x": 684.0,
+            "y": 990.0
+          },
+          "description": "Short lead that powers the wire feed. It plugs into whichever output socket the process calls for -- positive for MIG, negative for Flux-Cored -- and twists clockwise to lock.",
+          "description_provenance": {
+            "basis": "quick-start-guide.pdf p. 2; owner-manual.pdf p. 13",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "measured",
+          "id": "wire_feed_power_cable",
+          "label": "Wire Feed Power Cable",
+          "provenance": {
+            "page": 8,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.02167,
+            "type": "circle"
+          },
+          "zoom": 3.4
+        }
+      ],
+      "regions": [],
+      "size": {
+        "height": 1200,
+        "width": 1200
+      },
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 8
+      },
+      "validation": {
+        "errors_px": {
+          "back_button": 0.0,
+          "control_knob": 5.78,
+          "home_button": 0.0,
+          "left_knob": 0.0,
+          "right_knob": 0.0
+        },
+        "held_out_error_px": 5.78,
+        "held_out_point": "control_knob",
+        "method": "homography from page 8, validated against a held-out point"
+      }
+    },
+    "inside": {
+      "image": "product-inside.webp",
+      "parts": [
+        {
+          "center": {
+            "x": 0.65167,
+            "y": 0.54667
+          },
+          "center_px": {
+            "x": 782.0,
+            "y": 656.0
+          },
+          "description": "Feeds wire through the gun for loading without striking an arc. The manual has you hold it until two inches of wire have fed through, with the gun pointed away from everything.",
+          "description_provenance": {
+            "page": 16,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "geometry_method": "measured",
+          "id": "cold_wire_feed_switch",
+          "label": "Cold Wire Feed Switch",
+          "provenance": {
+            "page": 9,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "h": 0.02167,
+            "type": "rect",
+            "w": 0.01833
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.65833,
+            "y": 0.71833
+          },
+          "center_px": {
+            "x": 790.0,
+            "y": 862.0
+          },
+          "description": "Unscrews to release the feed roller. The roller must suit the wire type and be turned so its groove matches the wire size marked on the spool.",
+          "description_provenance": {
+            "basis": "owner-manual.pdf p. 12",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "measured",
+          "id": "feed_roller_knob",
+          "label": "Feed Roller Knob",
+          "parent": "wire_feed_mechanism",
+          "provenance": {
+            "page": 9,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.01833,
+            "type": "circle"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.65167,
+            "y": 0.62917
+          },
+          "center_px": {
+            "x": 782.0,
+            "y": 755.0
+          },
+          "description": "Sets how hard the roller grips the wire -- the manual calls for 3-5 on solid wire and 2-3 on flux-cored, which is softer and crushes if overtightened. Loosening it releases the idler arm.",
+          "description_provenance": {
+            "basis": "owner-manual.pdf pp. 11, 15, 16",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "measured",
+          "id": "feed_tensioner",
+          "label": "Feed Tensioner",
+          "parent": "wire_feed_mechanism",
+          "provenance": {
+            "page": 9,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "rx": 0.02167,
+            "ry": 0.02917,
+            "type": "ellipse"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.67,
+            "y": 0.795
+          },
+          "center_px": {
+            "x": 804.0,
+            "y": 954.0
+          },
+          "description": "Where the TIG foot pedal plugs in, inside the machine. TIG only.",
+          "description_provenance": {
+            "basis": "quick-start-guide.pdf p. 2; owner-manual.pdf p. 9",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "measured",
+          "id": "foot_pedal_socket",
+          "label": "Foot Pedal Socket",
+          "provenance": {
+            "page": 9,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.01167,
+            "type": "circle"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.67333,
+            "y": 0.68
+          },
+          "center_px": {
+            "x": 808.0,
+            "y": 816.0
+          },
+          "description": "Spring-loaded arm that presses the wire onto the feed roller. It swings up when the tensioner is released, and is pushed back down to seat new wire.",
+          "description_provenance": {
+            "basis": "owner-manual.pdf pp. 11, 15",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "measured",
+          "id": "idler_arm",
+          "label": "Idler Arm",
+          "parent": "wire_feed_mechanism",
+          "provenance": {
+            "page": 9,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "rx": 0.02,
+            "ry": 0.015,
+            "type": "ellipse"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.40083,
+            "y": 0.72
+          },
+          "center_px": {
+            "x": 481.0,
+            "y": 864.0
+          },
+          "description": "Screws into the spool adapter to hold the spool on its spindle. Unscrewing it is the first step in changing wire.",
+          "description_provenance": {
+            "basis": "owner-manual.pdf p. 11; quick-start-guide.pdf p. 1",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "measured",
+          "id": "spool_knob",
+          "label": "Spool Knob",
+          "parent": "wire_spool",
+          "provenance": {
+            "page": 9,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.03333,
+            "type": "circle"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.70583,
+            "y": 0.79
+          },
+          "center_px": {
+            "x": 847.0,
+            "y": 948.0
+          },
+          "description": "The wire feed control cable plugs in here and tightens with a lock ring. The plug fits one orientation only.",
+          "description_provenance": {
+            "page": 13,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "geometry_method": "measured",
+          "geometry_note": "Hidden in this view by the control cable plugged into it; placed from the panel pictogram printed directly beneath the socket, and confirmed against a close-range photograph of the same bay.",
+          "id": "wire_feed_control_socket",
+          "label": "Wire Feed Control Socket",
+          "provenance": {
+            "page": 9,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.0125,
+            "type": "circle"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.66333,
+            "y": 0.68833
+          },
+          "center_px": {
+            "x": 796.0,
+            "y": 826.0
+          },
+          "description": "Drives wire from the spool out to the gun. The gun cable connector plugs into the socket on this assembly, and the tensioner, idler arm and feed roller all sit on it.",
+          "description_provenance": {
+            "basis": "owner-manual.pdf pp. 13, 15",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "measured",
+          "id": "wire_feed_mechanism",
+          "label": "Wire Feed Mechanism",
+          "provenance": {
+            "page": 9,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "points": [
+              {
+                "x": 0.5825,
+                "y": 0.61833
+              },
+              {
+                "x": 0.74583,
+                "y": 0.66
+              },
+              {
+                "x": 0.72583,
+                "y": 0.755
+              },
+              {
+                "x": 0.585,
+                "y": 0.72167
+              }
+            ],
+            "type": "polygon"
+          },
+          "zoom": 2.143
+        },
+        {
+          "center": {
+            "x": 0.56333,
+            "y": 0.66583
+          },
+          "center_px": {
+            "x": 676.0,
+            "y": 799.0
+          },
+          "description": "Guides wire from the spool into the feed mechanism. Wire passes through it and the feed guide before reaching the roller.",
+          "description_provenance": {
+            "basis": "owner-manual.pdf p. 15",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "measured",
+          "id": "wire_inlet_liner",
+          "label": "Wire Inlet Liner",
+          "provenance": {
+            "page": 9,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "points": [
+              {
+                "x": 0.54583,
+                "y": 0.65417
+              },
+              {
+                "x": 0.57583,
+                "y": 0.66417
+              },
+              {
+                "x": 0.58083,
+                "y": 0.6775
+              },
+              {
+                "x": 0.55083,
+                "y": 0.66667
+              }
+            ],
+            "type": "polygon"
+          },
+          "zoom": 3.4
+        },
+        {
+          "center": {
+            "x": 0.4075,
+            "y": 0.69167
+          },
+          "center_px": {
+            "x": 489.0,
+            "y": 830.0
+          },
+          "description": "Holds the welding wire. The wire size is marked on the spool and the feed roller has to be set to match it. Takes a 2 lb spool, or 10-12 lb with the adapter.",
+          "description_provenance": {
+            "basis": "owner-manual.pdf p. 12; quick-start-guide.pdf p. 1",
+            "source": "inference",
+            "tier": 3
+          },
+          "geometry_method": "measured",
+          "id": "wire_spool",
+          "label": "Wire Spool",
+          "provenance": {
+            "page": 9,
+            "source": "files/owner-manual.pdf",
+            "tier": 1
+          },
+          "shape": {
+            "r": 0.06333,
+            "type": "circle"
+          },
+          "zoom": 2.763
+        }
+      ],
+      "regions": [
+        {
+          "center": {
+            "x": 0.54583,
+            "y": 0.67083
+          },
+          "center_px": {
+            "x": 655.0,
+            "y": 805.0
+          },
+          "id": "interior",
+          "label": "Interior",
+          "shape": {
+            "h": 0.35,
+            "type": "rect",
+            "w": 0.49167
+          },
+          "zoom": 1.831
+        }
+      ],
+      "size": {
+        "height": 1200,
+        "width": 1200
+      },
+      "source": {
+        "file": "files/owner-manual.pdf",
+        "page": 9
+      },
+      "validation": {
+        "method": "measured directly in the photograph; page-9 projection rejected",
+        "projection_rejected_because": "local scale is not constant (spool radius 0.658, spool-to-roller 0.721, spool-to-cold-switch 0.779) and the spool knob sits 34px off its own disc centre -- parts lie at different depths, and the identifiable features are near-collinear"
+      }
+    }
+  }
+}

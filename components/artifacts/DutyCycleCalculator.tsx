@@ -20,9 +20,8 @@ export function DutyCycleCalculator(props: DutyCycleArtifact) {
 
   return (
     <div className="artifact">
-      <div className="artifact-kind">Duty cycle</div>
-
       <div className="artifact-headline">
+        <span className="artifact-kind">Duty cycle</span>
         <span className="artifact-value">{props.dutyCyclePct}%</span>
       </div>
       <div className="artifact-conditions">
