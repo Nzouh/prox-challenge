@@ -1,0 +1,45 @@
+# Arc, served whole from one container at zouhari.dev/arc.
+#
+# Not a worker behind a frontend: this machine serves the UI and runs the Agent SDK. That
+# is forced by the SDK itself — its CLI is a single ~323MB native binary, and a Vercel
+# function caps at 250MB uncompressed, so the agent cannot be split onto serverless.
+#
+# zouhari.dev rewrites /arc and /arc/:path* to this app's origin.
+
+app = "arc-agent-zouhari"
+primary_region = "sjc"
+
+[build]
+  dockerfile = "Dockerfile"
+
+  # Build-time, not runtime: Next inlines basePath into the client bundle and rewrites
+  # every asset URL, so the mount point is baked into the image. Changing it is a rebuild.
+  [build.args]
+    NEXT_PUBLIC_BASE_PATH = "/arc"
+
+[env]
+  PORT = "3000"
+  # ARC_PUBLIC_BASE_PATH is deliberately unset. It exists to prefix source-asset URLs when
+  # this server sits at / behind a frontend mounted elsewhere. Here the server is itself at
+  # /arc, so basePath already prefixes them and setting it would only duplicate the value.
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+
+  # Answers stream for a minute or more, and a suspended machine loses the Agent SDK
+  # sessions held on its disk. Keep one warm rather than paying a cold start in front of a
+  # response that has already started streaming.
+  auto_stop_machines = false
+  auto_start_machines = true
+
+  # Exactly one machine, deployed with --ha=false. Agent SDK sessions live on the machine's
+  # own disk, so a second machine would not share them: requests round-robin, every other
+  # follow-up would miss its session, and the stale-session fallback would silently drop
+  # the conversation's context. One machine is a correctness requirement here, not thrift.
+  min_machines_running = 1
+
+[[vm]]
+  memory = "2gb"
+  cpu_kind = "shared"
+  cpus = 1

@@ -12,3 +12,4 @@ assets/reference-images/branding
 assets/reference-images/validation
 files
 *.tsbuildinfo
+fly.toml
