@@ -4,6 +4,7 @@ import Image from "next/image";
 import { FormEvent, KeyboardEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
 import frontImage from "@/product-front.webp";
 import { ArcMark } from "./ArcMark";
+import arcLogo from "@/public/arc-logo.png";
 import { ArtifactView } from "./artifacts";
 import { USER } from "./Sidebar";
 import { stageLabel, type Conversation } from "@/lib/conversation";
@@ -131,7 +132,7 @@ export function Chat({
           {isEmpty ? (
             <div className="chat-empty">
               <div className="chat-empty-lockup">
-                <ArcMark size={30} strokeWidth={2} />
+                <Image className="brand-logo" src={arcLogo} alt="" width={44} height={44} priority />
                 <span className="chat-greeting">
                   {greeting}, {USER.name}
                 </span>
@@ -177,7 +178,9 @@ export function Chat({
                           </div>
                         )}
 
-                        {turn.artifact && <ArtifactView artifact={turn.artifact} />}
+                        {turn.artifacts.map((artifact, artifactIndex) => (
+                          <ArtifactView key={`${artifact.type}-${artifactIndex}`} artifact={artifact} />
+                        ))}
 
                         {turn.answer && (
                           <div className="answer">

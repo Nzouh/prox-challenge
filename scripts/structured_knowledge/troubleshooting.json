@@ -54,11 +54,12 @@
       {"cause": "Incorrect wire-feed speed", "check": "Check whether wire-feed speed produces a stable arc.", "remedy": "Adjust wire-feed speed to achieve a stable arc.", "repair_scope": "operator_permitted"},
       {"cause": "Loose gun or ground cable", "check": "Check that all connections are tight.", "remedy": "Secure the connections.", "repair_scope": "operator_permitted"},
       {"cause": "Damaged MIG gun or loose internal gun connection", "check": "Inspect for visible damage without opening components.", "remedy": "Have a qualified technician inspect and repair or replace it.", "repair_scope": "qualified_technician_required"},
-      {"cause": "Incorrect polarity", "check": "Verify DCEP for MIG or DCEN for self-shielded flux-cored welding.", "remedy": "Correct the polarity for the selected process.", "repair_scope": "operator_permitted"},
-      {"cause": "Shielding-gas coverage is insufficient or excessive", "check": "Check flow against the settings chart and check that no connector O-rings are exposed.", "remedy": "Set the documented flow and fully insert the gun connector.", "repair_scope": "operator_permitted"},
+      {"cause": "Incorrect polarity", "check": "Verify DCEP for MIG or DCEN for self-shielded flux-cored welding.", "remedy": "Correct the polarity for the selected process.", "repair_scope": "operator_permitted", "evidence_queries": [{"tool": "lookup_spec", "spec": "polarity"}]},
+      {"cause": "Shielding-gas coverage is insufficient or excessive", "check": "Check flow against the settings chart and check that no connector O-rings are exposed.", "remedy": "Set the documented flow and fully insert the gun connector.", "repair_scope": "operator_permitted", "evidence_queries": [{"tool": "get_setup", "stage": "power_controls", "required_terms": ["gas", "flow"]}]},
       {"cause": "Poor workpiece connection", "check": "Check the ground clamp at the workpiece and machine.", "remedy": "Secure the ground clamp and MIG gun connections.", "repair_scope": "operator_permitted"}
     ],
-    "source": {"file": "files/owner-manual.pdf", "page": 42}
+    "source": {"file": "files/owner-manual.pdf", "page": 42},
+    "additional_sources": [{"file": "files/quick-start-guide.pdf", "page": 2}]
   },
   {
     "id": "welder-not-functioning-wire",
@@ -125,13 +126,17 @@
     "safety_prerequisite": "Follow all safety precautions whenever diagnosing or servicing the equipment.",
     "causes": [
       {"cause": "Shielding-gas bottle is empty", "check": "Check the gas bottle.", "remedy": "Replenish it as necessary.", "repair_scope": "operator_permitted"},
-      {"cause": "Shielding-gas flow is too low or too high", "check": "Check the regulator for proper flow.", "remedy": "Set the documented gas flow.", "repair_scope": "operator_permitted"},
+      {"cause": "Shielding-gas flow is too low or too high", "check": "Check the regulator for proper flow.", "remedy": "Set the documented gas flow.", "repair_scope": "operator_permitted", "evidence_queries": [{"tool": "get_setup", "stage": "power_controls", "required_terms": ["gas", "flow"]}]},
       {"cause": "Workpiece is dirty", "check": "Inspect the weld area for contamination.", "remedy": "Clean the workpiece down to bare metal.", "repair_scope": "operator_permitted"},
       {"cause": "Gun is too far from the workpiece", "check": "Check contact-tip-to-work distance.", "remedy": "Use the proper CTWD for the procedure.", "repair_scope": "operator_permitted"},
-      {"cause": "Incorrect polarity", "check": "Verify DCEP for MIG or DCEN for self-shielded flux-cored welding.", "remedy": "Correct the polarity.", "repair_scope": "operator_permitted"},
+      {"cause": "Incorrect polarity", "check": "Verify DCEP for MIG or DCEN for self-shielded flux-cored welding.", "remedy": "Correct the polarity.", "repair_scope": "operator_permitted", "evidence_queries": [{"tool": "lookup_spec", "spec": "polarity"}]},
       {"cause": "Welding wire is contaminated", "check": "Inspect the wire for rust and residue.", "remedy": "Use clean wire free of rust and residue.", "repair_scope": "operator_permitted"}
     ],
-    "source": {"file": "files/owner-manual.pdf", "page": 43}
+    "source": {"file": "files/owner-manual.pdf", "page": 43},
+    "additional_sources": [
+      {"file": "files/owner-manual.pdf", "page": 20},
+      {"file": "files/quick-start-guide.pdf", "page": 2}
+    ]
   },
   {
     "id": "welder-not-functioning-tig-stick",

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { SourceVisualArtifact } from "./artifacts";
 import { knowledgeManifest, provenanceFor } from "./knowledge";
 
 export const sourcePageKindSchema = z.enum(["document_page", "source_image"]);
@@ -66,3 +67,24 @@ export function getSourcePage(unparsed: SourcePageQuery) {
 }
 
 export type SourcePageResult = ReturnType<typeof getSourcePage>;
+
+export function sourceVisualUrl(query: SourcePageQuery): string {
+  const params = new URLSearchParams({ kind: query.kind, source: query.source, view: query.view ?? "detail" });
+  if (query.page !== undefined) params.set("page", String(query.page));
+  return `/api/source-assets?${params.toString()}`;
+}
+
+/** Only a found, visually reviewed result with a real render path becomes a visible artifact. */
+export function buildSourceVisualArtifact(
+  query: SourcePageQuery,
+  result: SourcePageResult,
+): SourceVisualArtifact | null {
+  if (!result.found || !result.selectedPath || !result.visualReviewed) return null;
+  return {
+    type: "source_visual",
+    imageUrl: sourceVisualUrl(query),
+    page: result.page,
+    provenance: result.provenance,
+    caption: result.page ? `Reviewed manual page ${result.page}` : "Reviewed source image",
+  };
+}

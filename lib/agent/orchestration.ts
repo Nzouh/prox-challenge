@@ -3,7 +3,7 @@ import type { ManualSearchResult } from "./manual-search";
 import type { JobRiskResult } from "./safety";
 import { specQuerySchema, type SpecQuery, type SpecResult } from "./specs";
 import type { SetupResult } from "./setups";
-import type { DiagnosisResult } from "./diagnosis";
+import { hasDocumentedSymptomPhrase, type DiagnosisResult } from "./diagnosis";
 import type { FaultIndicatorResult } from "./fault-indicators";
 import type { ProcessRecommendationResult } from "./process-recommendation";
 import type { PowerSourceResult } from "./power-source";
@@ -79,11 +79,15 @@ const FAULT_INDICATOR_LANGUAGE =
 const PROCESS_RECOMMENDATION_LANGUAGE =
   /\b(?:which|best|choose|recommend|suitable|better|should\s+i\s+(?:use|choose))\b.{0,120}\b(?:mig|flux(?:[ -]?core|[ -]?cored)|tig|stick|welding\s+process|process)\b|\bwhat\s+(?:welding\s+)?process\b|\b(?:mig|flux(?:[ -]?core|[ -]?cored)|tig|stick)\b.{0,120}\b(?:choose|recommend|best|better|suitable|should\s+i\s+use)\b/i;
 const POWER_SOURCE_LANGUAGE =
-  /\b(?:power\s+source|generator|inverter|battery\s+bank|ev\s+(?:vehicle|battery)|receptacle|outlet|extension\s+cord|gfci|ground(?:ed|ing)|phase|frequency|plug\s+into|circuit)\b/i;
+  /\b(?:power\s+source|generator|inverter|battery\s+bank|ev\s+(?:vehicle|battery)|receptacle|outlet|extension\s+cord|gfci|breaker|ground(?:ed|ing)|phase|frequency|plug\s+into)\b|\b(?:branch|supply|input|dedicated|household|\d+(?:\.\d+)?\s*(?:a|amps?))\s+circuit\b|\bcircuit\b.{0,30}\b(?:breaker|capacity|amperage|amps?)\b/i;
 const REPAIR_SCOPE_LANGUAGE =
   /\b(?:repair|replace|fix|open\s+(?:the\s+)?(?:case|cover|enclosure|housing)|internal\s+wiring|circuit\s+board|pcb|technician|diy|bypass|disable|override|modify\s+(?:the\s+)?plug)\b/i;
 const SOURCE_PAGE_LANGUAGE =
-  /\b(?:show|display|open|view|see)\b.{0,80}\b(?:manual\s+page|source\s+(?:page|image)|diagram|photo|image)\b/i;
+  /\b(?:show|display|open|view|see)\b.{0,80}\b(?:manual\s+page|source\s+(?:page|image)|diagram|photo|image)\b|\b(?:polarity\s+setup|wire[- ]feed\s+(?:mechanism|diagram)|front\s+panel(?:\s+(?:controls?|diagram|layout|buttons?|display))?|weld(?:ing)?\s+diagnos(?:is|e)(?:\s+(?:image|examples?|diagram))?)\b/i;
+
+/** First-use, cable connections, and polarity hookups — the setup graph, never memory. */
+const SETUP_LANGUAGE =
+  /\b(?:first[- ]?(?:use|time)|new\s+(?:welder|machine)|unbox\w*|out\s+of\s+the\s+box|getting\s+started|polarity\s+(?:setup|setting|connection)|load(?:ing)?\s+(?:the\s+)?(?:wire|spool)|thread(?:ing)?\s+(?:the\s+)?wire)\b|\b(?:set[- ]?up|start[- ]?up|hook\s*up|connect(?:ing)?)\b.{0,40}\b(?:cables?|ground\s+clamp|electrode\s+holder|gun|torch|wire[- ]feed|welder|machine|checklist|steps?|process)\b|\b(?:mig|flux[- ]?cored?|tig|stick)\b.{0,30}\bset[- ]?up\b/i;
 
 function uniqueMatches(question: string, pattern: RegExp): string[] {
   return [...new Set([...question.matchAll(pattern)].map((match) => match[1]!.toLowerCase()))];
@@ -173,6 +177,10 @@ export function requiresSourcePage(question: string): boolean {
   return SOURCE_PAGE_LANGUAGE.test(question);
 }
 
+export function requiresSetup(question: string): boolean {
+  return SETUP_LANGUAGE.test(question) || /\b(?:initial|complete|full)\s+set[- ]?up\b/i.test(question);
+}
+
 export type QuestionRoute = {
   kind: "direct_answer" | "needs_tool" | "needs_clarification" | "needs_safety_review";
   tools: EvidenceRecord["tool"][];
@@ -206,10 +214,8 @@ export function routeQuestion(question: string): QuestionRoute {
   if (requiresPowerSourceAssessment(text)) tools.push("assess_power_source");
   if (requiresRepairScopeCheck(text)) tools.push("check_repair_scope");
   if (requiresSourcePage(text)) tools.push("get_source_page");
-  if (/\b(?:setup|set[- ]?up|start[- ]?up|connect|cables?|polarity)\b/i.test(text)) {
-    tools.push("get_setup");
-  }
-  if (/\b(?:diagnos(?:e|is)|troubleshoot|won't|doesn't|not working|problem|symptom)\b/i.test(text)) {
+  if (requiresSetup(text)) tools.push("get_setup");
+  if (requiresDiagnosis(text)) {
     tools.push("diagnose_problem");
   }
   if (tools.length > 0) {
@@ -219,6 +225,19 @@ export function routeQuestion(question: string): QuestionRoute {
     return { kind: "needs_tool", tools: ["search_manual"], reason: "The question asks for a machine-specific fact." };
   }
   return { kind: "needs_clarification", tools: [], reason: "The request is not specific enough to route safely." };
+}
+
+const DIAGNOSTIC_LANGUAGE =
+  /\b(?:diagnos(?:e|is)|troubleshoot|won't|doesn't|not working|problem|symptom|help me fix)\b/i;
+
+/** Route documented symptom language through the diagnostic graph even when the user does
+ * not say "diagnose" or "troubleshoot". The graph matcher is the source of truth, so this
+ * automatically covers newly extracted symptoms without adding keyword conditionals. */
+export function requiresDiagnosis(question: string): boolean {
+  const text = question.trim();
+  if (!text) return false;
+  if (DIAGNOSTIC_LANGUAGE.test(text)) return true;
+  return hasDocumentedSymptomPhrase(text);
 }
 
 export function riskDisposition(evidence: readonly EvidenceRecord[]): CheckerOutput["safetyDisposition"] {
@@ -273,6 +292,15 @@ export function validateResearchEvidence(question: string, evidence: readonly Ev
     !evidence.some((item) => item.tool === "get_source_page")
   ) {
     return "The question asks to view a source page or image but get_source_page was not called.";
+  }
+  if (requiresSetup(question) && !evidence.some((item) => item.tool === "get_setup")) {
+    return "The question asks about first-use, cable connections, or polarity setup but get_setup was not called.";
+  }
+  if (
+    requiresDiagnosis(question) &&
+    !evidence.some((item) => item.tool === "diagnose_problem")
+  ) {
+    return "The question reports a symptom or asks what to check, but diagnose_problem was not called.";
   }
   const specIntent = structuredSpecIntent(question);
   if (specIntent) {
@@ -447,10 +475,48 @@ function collectProvenance(value: unknown, found: Array<Record<string, unknown>>
   return found;
 }
 
-export function renderWriterOutput(output: WriterOutput, evidence: readonly EvidenceRecord[]): string {
+/* "Source" is a welding word before it is a citation word: the machine itself is a power
+   source, and a symptom has a source. Those uses are stripped before the citation test so
+   "what's the duty cycle of this power source" does not read as a request for pages. */
+const DOMAIN_SOURCE =
+  /\b(?:power|welding|weld|current|voltage|heat|gas|arc|input)\s+sources?\b|\bsources?\s+of\s+(?:the\s+)?(?:problem|issue|fault|leak|porosity|noise|spatter|heat|gas|current)\b/gi;
+
+const SOURCE_REQUEST: readonly RegExp[] = [
+  /\bcite\b|\bcitations?\b|\bcited\b/i,
+  /\bsources?\b|\breferences?\b/i,
+  /\bwh(?:ich|at)\s+(?:page|section|chapter|figure|table)\b/i,
+  /\bpage\s+numbers?\b/i,
+  /\bwhere\s+in\s+the\s+(?:manual|guide|chart|book|docs?)\b/i,
+  /\bwhere\s+(?:does|did|do|is|are)\b[^?]*\b(?:from|come|coming|say|says|said|stated?)\b/i,
+  /\baccording\s+to\b/i,
+  /\bback\s+(?:that|this|it)\s+up\b|\bprove\s+(?:that|this|it)\b/i,
+  /\bshow\s+me\s+(?:the\s+)?(?:manual|page|source)/i,
+];
+
+/**
+ * True when the person asking wants to be shown where the answer came from.
+ *
+ * Provenance is otherwise kept out of the prose: appending it to every paragraph turned
+ * each answer into a bibliography, which buried the answer for someone standing at a
+ * machine. The evidence itself is unchanged — validation still requires a citable record
+ * behind every claim (PLAN.md section 4); this only governs whether the citation is
+ * spoken aloud.
+ */
+export function asksForSources(question: string): boolean {
+  const cleaned = question.replace(DOMAIN_SOURCE, " ");
+  return SOURCE_REQUEST.some((pattern) => pattern.test(cleaned));
+}
+
+export function renderWriterOutput(
+  output: WriterOutput,
+  evidence: readonly EvidenceRecord[],
+  question: string,
+): string {
+  const includeSources = asksForSources(question);
   const evidenceById = new Map(evidence.map((item) => [item.id, item]));
   return output.paragraphs
     .map((paragraph) => {
+      if (!includeSources) return paragraph.text;
       const citations = paragraph.evidenceIds.flatMap((id) =>
         collectProvenance(evidenceById.get(id)?.result),
       );

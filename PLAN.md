@@ -206,6 +206,21 @@ crop to the content region first, then render that crop large. Rendering a full 
 
 ## 6. Open questions
 
+### Immediate next slice: setup answers with authoritative visuals
+
+For first-use, polarity, wire-feed, front-panel, and weld-diagnosis questions, route to
+`get_setup` or the relevant validated lookup before `search_manual`. When the manifest has
+an applicable reviewed page/image, emit a `source_visual` beside the grounded prose. For
+multi-step setup, render a deterministic checklist/flow from the returned steps; do not let
+the model invent Mermaid syntax or machine connections. The asset API must serve only paths
+and pages present in `knowledge/manifest.json`, with tests rejecting unknown sources, wrong
+pages, unreviewed renders, and unsupported URLs.
+
+Resolved: Sideshow was removed rather than adopted. Mermaid is serialised host-side from
+the `diagnose_problem` graph and rendered in-app, which keeps the diagram inside the same
+validation path as every other artifact and works in a hosted deployment, where a
+localhost MCP server could never be reached.
+
 - **Session-state carrier** — the Agent SDK has no `role:"system"` message, so the volatile
   half of the envelope needs one of the three carriers in §3. Decide on day 3, against real
   state and a real `cache_read_input_tokens` reading.

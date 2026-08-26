@@ -3,6 +3,26 @@ import { weldProcessSchema } from "./domain";
 import { provenanceFor, readKnowledgeJson } from "./knowledge";
 
 const sourceSchema = z.object({ file: z.string().min(1), page: z.number().int().positive() });
+const evidenceQuerySchema = z.discriminatedUnion("tool", [
+  z.object({
+    tool: z.literal("lookup_spec"),
+    spec: z.enum([
+      "duty_cycle",
+      "welding_current_range",
+      "maximum_ocv",
+      "wire_speed_range",
+      "wire_spool_capacity",
+      "polarity",
+    ]),
+    inputVoltage: z.union([z.literal(120), z.literal(240)]).optional(),
+    amperage: z.number().positive().optional(),
+  }),
+  z.object({
+    tool: z.literal("get_setup"),
+    stage: z.enum(["cables", "workpiece", "consumables", "power_controls", "shutdown", "all"]),
+    required_terms: z.array(z.string().trim().min(1)).min(1).max(8),
+  }),
+]);
 export const repairScopeSchema = z.enum([
   "operator_permitted",
   "qualified_technician_required",
@@ -13,6 +33,7 @@ const causeSchema = z.object({
   check: z.string().min(1),
   remedy: z.string().min(1),
   repair_scope: repairScopeSchema,
+  evidence_queries: z.array(evidenceQuerySchema).max(6).optional(),
 });
 
 const diagnosticRecordSchema = z.object({
@@ -56,6 +77,20 @@ function candidatesFor(query: DiagnosisQuery) {
   return query.process
     ? diagnosticRecords.filter((record) => record.processes.includes(query.process!))
     : diagnosticRecords;
+}
+
+/** Exact/contained phrase probe for orchestration. Unlike diagnostic matching itself, this
+ * deliberately excludes token-overlap fallback so specification questions cannot be
+ * misrouted merely because they share words such as welding, wire, or current. */
+export function hasDocumentedSymptomPhrase(question: string): boolean {
+  const normalized = normalize(question);
+  if (!normalized) return false;
+  return diagnosticRecords.some((record) =>
+    [record.problem, ...record.aliases].some((label) => {
+      const candidate = normalize(label);
+      return normalized === candidate || normalized.includes(candidate);
+    }),
+  );
 }
 
 function matchRecords(query: DiagnosisQuery) {

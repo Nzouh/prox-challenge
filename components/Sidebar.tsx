@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo } from "react";
-import { ArcMark } from "./ArcMark";
+import Image from "next/image";
+import arcLogo from "@/public/arc-logo.png";
 import { groupConversations, type Conversation } from "@/lib/conversation";
 
 export const USER = { name: "Nabil", context: "Garage workshop" };
@@ -34,7 +35,7 @@ export function Sidebar({
   return (
     <aside className="sidebar">
       <div className="sidebar-lockup">
-        <ArcMark size={20} />
+        <Image className="brand-logo" src={arcLogo} alt="" width={28} height={28} priority />
         <div>
           <span className="sidebar-wordmark">Arc</span>
           <span className="sidebar-tagline">OmniPro 220 agent</span>

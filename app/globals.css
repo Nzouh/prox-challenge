@@ -279,11 +279,13 @@ input, textarea, button { font: inherit; }
   position: relative;
 }
 
+/* Only the ghost button stays in flow, so this band is one button tall. The explorer card
+   used to sit here too, which made the whole row as tall as the card and cost the thread
+   ~180px of height on every screenful. */
 .chat-topbar {
   flex: none;
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
   gap: 16px;
   padding: 18px 26px 0;
 }
@@ -302,9 +304,14 @@ input, textarea, button { font: inherit; }
 .ghost:hover { border-color: var(--accent); color: var(--accent-soft); }
 .ghost[aria-pressed="true"] { color: var(--accent-bright); border-color: var(--line-3); }
 
+/* Floats in the chat's top-right corner (.chat is the positioned ancestor) so it occupies
+   only its own box. It is translucent and blurred because content passes under it. */
 .explorer-card {
+  position: absolute;
+  top: 18px;
+  right: 26px;
+  z-index: 5;
   width: 196px;
-  flex: none;
   padding: 10px;
   border-radius: 20px;
   border: 1px solid var(--line-2);
@@ -378,6 +385,8 @@ input, textarea, button { font: inherit; }
   text-align: center;
 }
 
+.brand-logo { display: block; width: auto; height: auto; flex: none; }
+
 .chat-empty-lockup { display: flex; align-items: center; gap: 14px; color: var(--accent); }
 
 .chat-greeting {
@@ -423,6 +432,13 @@ input, textarea, button { font: inherit; }
 /* Thread */
 
 .thread { display: flex; flex-direction: column; gap: 34px; }
+
+/* Wide enough and the 740px column clears the floating card entirely. Narrower, the two
+   would overlap, so the first turn starts below it — and unlike the old fixed row, that
+   clearance scrolls away instead of costing height on every screenful. */
+@media (max-width: 1500px) {
+  .thread { padding-top: 158px; }
+}
 .turn { display: flex; flex-direction: column; gap: 34px; animation: fade-in 0.24s ease both; }
 
 .user-row { display: flex; justify-content: flex-end; }
@@ -574,6 +590,237 @@ input, textarea, button { font: inherit; }
 }
 
 /* ---- Artifacts (rendered inside the chat, so they stay on the dark surface) ---- */
+.source-visual { margin: 16px 0; }
+.source-visual img { display: block; max-width: 100%; height: auto; border-radius: 8px; }
+.source-visual figcaption { display: flex; justify-content: space-between; gap: 12px; margin-top: 8px; color: var(--muted-2); font-size: 0.82rem; }
+.source-visual figcaption small { text-align: right; }
+
+.setup-checklist-process { font-size: 18px; }
+
+.setup-checklist-prereqs {
+  margin: 4px 0 16px;
+  padding-left: 18px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.setup-checklist-group + .setup-checklist-group { margin-top: 18px; }
+
+.setup-checklist-stage {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  margin-bottom: 8px;
+}
+
+.setup-checklist-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+
+.setup-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  background: var(--raise-2);
+}
+
+.setup-step-order {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--panel);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.setup-step-body { display: flex; flex-direction: column; gap: 2px; }
+.setup-step-instruction { font-size: 14px; color: var(--text); }
+.setup-step-meta { font-size: 11px; color: var(--muted-2); }
+
+.setup-step-disconnected .setup-step-instruction { color: var(--muted); }
+.setup-step-optional .setup-step-meta,
+.setup-step-conditional .setup-step-meta { color: var(--accent-bright); }
+
+.setup-checklist-provenance {
+  margin-top: 18px;
+}
+
+.setup-checklist-provenance-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+/* Polarity cable map. Terminal identity is carried by the +/- glyph and the written
+   endpoint as well as the hue, so it survives greyscale and colour-blindness. */
+.polarity-map-process { font-size: 18px; }
+
+.polarity-map-summary {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 6px 0 14px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.polarity-map-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--line-3);
+  background: var(--raise-2);
+  color: var(--text-2);
+}
+
+.polarity-map-prereqs {
+  margin: 0 0 14px;
+  padding-left: 18px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.polarity-map-diagram { display: block; width: 100%; height: auto; }
+
+.polarity-map-machine { fill: var(--raise-2); stroke: var(--line-3); stroke-width: 1; }
+.polarity-map-machine-text { fill: var(--text-2); font-size: 14px; font-family: var(--sans); }
+.polarity-map-machine-sub {
+  fill: var(--muted-2);
+  font-size: 10.5px;
+  font-family: var(--mono);
+  letter-spacing: 0.08em;
+}
+
+.polarity-cable { stroke-width: 3; stroke-linecap: round; }
+.cable-positive { stroke: var(--accent-bright); }
+.cable-negative { stroke: var(--tier2); }
+
+.polarity-terminal { stroke: var(--panel); stroke-width: 2; }
+.terminal-positive { fill: var(--accent-bright); }
+.terminal-negative { fill: var(--tier2); }
+.polarity-terminal-glyph {
+  fill: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--sans);
+}
+
+.polarity-chip { fill: var(--raise-2); stroke-width: 1; }
+.chip-positive { stroke: var(--accent-bright); }
+.chip-negative { stroke: var(--tier2); }
+.polarity-chip-name { fill: var(--text); font-size: 13px; font-family: var(--sans); }
+.polarity-chip-meta { fill: var(--muted-2); font-size: 10.5px; font-family: var(--mono); }
+
+.polarity-map-connections {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.polarity-connection {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  background: var(--raise-2);
+}
+
+.polarity-connection-order {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--panel);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.polarity-connection-body { display: flex; flex-direction: column; gap: 2px; }
+.polarity-connection-instruction { font-size: 14px; color: var(--text); }
+.polarity-connection-meta { font-size: 11px; color: var(--muted-2); }
+
+.polarity-connection-disconnected .polarity-connection-instruction { color: var(--muted); }
+.polarity-connection-optional .polarity-connection-meta { color: var(--accent-bright); }
+
+.polarity-map-note { margin: 12px 0 0; font-size: 12px; color: var(--muted-2); }
+
+.polarity-map-provenance { margin-top: 18px; }
+
+.polarity-map-provenance-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+/* One real manual step, followed only by its action and outcome controls. */
+.troubleshooting-step {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.troubleshooting-step:hover { color: var(--accent-soft); }
+.troubleshooting-action { margin: 0 0 16px; color: var(--text); }
+.troubleshooting-outcomes { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.troubleshooting-outcomes button,
+.troubleshooting-next {
+  border: 1px solid var(--line-3);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-3);
+  padding: 7px 11px;
+  cursor: pointer;
+}
+
+.troubleshooting-outcomes button:hover,
+.troubleshooting-next:hover { background: var(--raise-2); color: var(--text); }
+.troubleshooting-expansion { margin-top: 16px; }
+.troubleshooting-next { display: block; margin-top: 16px; }
+.troubleshooting-next:disabled { cursor: not-allowed; opacity: 0.45; }
+.troubleshooting-result { margin: 0; color: var(--text); }
+
+/* Mermaid renders one three-node decision at a time, so no horizontal scrolling or
+   duplicate branch list is needed at phone widths. */
+.flow-diagram {
+  width: 100%;
+}
+
+.flow-diagram svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.flow-diagram g.node[role="button"]:focus { outline: 2px solid var(--accent); outline-offset: 3px; }
+.flow-diagram g.node.flow-node-complete rect,
+.flow-diagram g.node.flow-node-complete polygon { stroke: var(--sage); }
+.flow-diagram g.node.flow-node-active rect,
+.flow-diagram g.node.flow-node-active polygon { stroke: var(--accent); stroke-width: 2px; }
+.flow-diagram g.node.flow-node-selected rect,
+.flow-diagram g.node.flow-node-selected polygon { stroke: var(--accent-bright); stroke-width: 3px; }
 
 .artifact {
   border: 1px solid var(--line-2);
@@ -1060,7 +1307,8 @@ input, textarea, button { font: inherit; }
   .sidebar-empty { white-space: nowrap; }
 
   .chat-topbar { padding: 12px 16px 0; }
-  .explorer-card { width: 132px; padding: 7px; border-radius: 16px; }
+  .explorer-card { top: 12px; right: 16px; width: 132px; padding: 7px; border-radius: 16px; }
+  .thread { padding-top: 120px; }
   .explorer-card-title { font-size: 13px; }
   .chat-column { padding: 0 16px; }
   .composer-dock { padding: 0 16px 16px; }

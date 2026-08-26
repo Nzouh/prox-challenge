@@ -76,8 +76,12 @@ export function AppShell() {
             tools: t.tools.map((tool) => (tool.id === event.id ? { ...tool, ok: event.ok } : tool)),
           }));
           break;
+        case "evidence":
+          // Evidence summaries are streamed for evaluation and observability. The user
+          // interface continues to render the grounded answer and artifacts themselves.
+          break;
         case "artifact":
-          patchTurn(conversationId, turnId, (t) => ({ ...t, artifact: event.artifact }));
+          patchTurn(conversationId, turnId, (t) => ({ ...t, artifacts: [...t.artifacts, event.artifact] }));
           break;
         case "done":
           patchTurn(conversationId, turnId, (t) => ({
@@ -117,7 +121,7 @@ export function AppShell() {
         status: "Starting response…",
         stage: null,
         tools: [],
-        artifact: null,
+        artifacts: [],
         usage: null,
         error: null,
       };

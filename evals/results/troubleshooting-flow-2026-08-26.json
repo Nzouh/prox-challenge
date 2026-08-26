@@ -1,0 +1,649 @@
+{
+  "partial": true,
+  "results": [
+    {
+      "id": "flow-48",
+      "category": "troubleshooting_flow",
+      "question": "My weld has porosity. What should I check?",
+      "expectedTools": [
+        "diagnose_problem"
+      ],
+      "allowedTools": [
+        "diagnose_problem"
+      ],
+      "expectedArtifacts": [
+        "troubleshooting_flow"
+      ],
+      "requiredArtifactPatterns": [
+        "weld-porosity",
+        "Check the gas bottle",
+        "20.30 SCFH",
+        "ground is negative",
+        "wire feed power is positive"
+      ],
+      "run": {
+        "answer": "",
+        "tools": [],
+        "artifacts": [],
+        "artifactTypes": [],
+        "done": false,
+        "cached": false,
+        "error": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)",
+        "usage": null,
+        "costUsd": 0,
+        "durationMs": 180309.0085,
+        "firstEventMs": 218.6207,
+        "firstToolMs": null,
+        "firstAnswerMs": null,
+        "statuses": [
+          {
+            "atMs": 218.6207,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 218.6207,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 4097.2509,
+            "event": {
+              "type": "session",
+              "sessionId": "c74a3943-5531-478f-97f0-772e238028e9"
+            }
+          },
+          {
+            "atMs": 180307.9921,
+            "event": {
+              "type": "error",
+              "message": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)"
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": false,
+            "detail": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)"
+          },
+          {
+            "name": "tool:diagnose_problem",
+            "passed": false,
+            "detail": "called: none"
+          },
+          {
+            "name": "tools:unexpected",
+            "passed": true,
+            "detail": "unexpected: none"
+          },
+          {
+            "name": "artifact:troubleshooting_flow",
+            "passed": false,
+            "detail": "emitted: none"
+          },
+          {
+            "name": "artifact-required:weld-porosity",
+            "passed": false,
+            "detail": "weld-porosity"
+          },
+          {
+            "name": "artifact-required:Check the gas bottle",
+            "passed": false,
+            "detail": "Check the gas bottle"
+          },
+          {
+            "name": "artifact-required:20.30 SCFH",
+            "passed": false,
+            "detail": "20.30 SCFH"
+          },
+          {
+            "name": "artifact-required:ground is negative",
+            "passed": false,
+            "detail": "ground is negative"
+          },
+          {
+            "name": "artifact-required:wire feed power is positive",
+            "passed": false,
+            "detail": "wire feed power is positive"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flow-49",
+      "category": "troubleshooting_flow",
+      "question": "Wire feeds from my MIG gun, but the arc will not ignite. What should I check?",
+      "expectedTools": [
+        "diagnose_problem"
+      ],
+      "allowedTools": [
+        "diagnose_problem"
+      ],
+      "expectedArtifacts": [
+        "troubleshooting_flow"
+      ],
+      "requiredArtifactPatterns": [
+        "wire-feeds-no-arc",
+        "Check clamp contact",
+        "contact-tip size",
+        "worn or dirty"
+      ],
+      "run": {
+        "answer": "",
+        "tools": [],
+        "artifacts": [],
+        "artifactTypes": [],
+        "done": false,
+        "cached": false,
+        "error": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)",
+        "usage": null,
+        "costUsd": 0,
+        "durationMs": 187493.3535,
+        "firstEventMs": 47.80230000001029,
+        "firstToolMs": null,
+        "firstAnswerMs": null,
+        "statuses": [
+          {
+            "atMs": 47.80230000001029,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 47.80230000001029,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 2170.356700000004,
+            "event": {
+              "type": "session",
+              "sessionId": "fa5a0f58-f5e5-4c12-bde7-1c291b440333"
+            }
+          },
+          {
+            "atMs": 187493.0861,
+            "event": {
+              "type": "error",
+              "message": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)"
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": false,
+            "detail": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)"
+          },
+          {
+            "name": "tool:diagnose_problem",
+            "passed": false,
+            "detail": "called: none"
+          },
+          {
+            "name": "tools:unexpected",
+            "passed": true,
+            "detail": "unexpected: none"
+          },
+          {
+            "name": "artifact:troubleshooting_flow",
+            "passed": false,
+            "detail": "emitted: none"
+          },
+          {
+            "name": "artifact-required:wire-feeds-no-arc",
+            "passed": false,
+            "detail": "wire-feeds-no-arc"
+          },
+          {
+            "name": "artifact-required:Check clamp contact",
+            "passed": false,
+            "detail": "Check clamp contact"
+          },
+          {
+            "name": "artifact-required:contact-tip size",
+            "passed": false,
+            "detail": "contact-tip size"
+          },
+          {
+            "name": "artifact-required:worn or dirty",
+            "passed": false,
+            "detail": "worn or dirty"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flow-50",
+      "category": "troubleshooting_flow",
+      "question": "The wire-feed motor runs, but the wire does not feed properly. Help me check it.",
+      "expectedTools": [
+        "diagnose_problem"
+      ],
+      "allowedTools": [
+        "diagnose_problem"
+      ],
+      "expectedArtifacts": [
+        "troubleshooting_flow"
+      ],
+      "requiredArtifactPatterns": [
+        "wire-feed-improper",
+        "feed-roller",
+        "tensioner",
+        "MIG gun"
+      ],
+      "run": {
+        "answer": "",
+        "tools": [],
+        "artifacts": [],
+        "artifactTypes": [],
+        "done": false,
+        "cached": false,
+        "error": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)",
+        "usage": null,
+        "costUsd": 0,
+        "durationMs": 175345.41510000004,
+        "firstEventMs": 32.15400000003865,
+        "firstToolMs": null,
+        "firstAnswerMs": null,
+        "statuses": [
+          {
+            "atMs": 32.15400000003865,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 32.15400000003865,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 2118.2876000000397,
+            "event": {
+              "type": "session",
+              "sessionId": "ff796593-8848-4bf0-bf07-d05cf163100a"
+            }
+          },
+          {
+            "atMs": 175345.10870000004,
+            "event": {
+              "type": "error",
+              "message": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)"
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": false,
+            "detail": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)"
+          },
+          {
+            "name": "tool:diagnose_problem",
+            "passed": false,
+            "detail": "called: none"
+          },
+          {
+            "name": "tools:unexpected",
+            "passed": true,
+            "detail": "unexpected: none"
+          },
+          {
+            "name": "artifact:troubleshooting_flow",
+            "passed": false,
+            "detail": "emitted: none"
+          },
+          {
+            "name": "artifact-required:wire-feed-improper",
+            "passed": false,
+            "detail": "wire-feed-improper"
+          },
+          {
+            "name": "artifact-required:feed-roller",
+            "passed": false,
+            "detail": "feed-roller"
+          },
+          {
+            "name": "artifact-required:tensioner",
+            "passed": false,
+            "detail": "tensioner"
+          },
+          {
+            "name": "artifact-required:MIG gun",
+            "passed": false,
+            "detail": "MIG gun"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flow-51",
+      "category": "troubleshooting_flow",
+      "question": "My TIG arc is unstable. Walk me through the checks.",
+      "expectedTools": [
+        "diagnose_problem"
+      ],
+      "allowedTools": [
+        "diagnose_problem"
+      ],
+      "expectedArtifacts": [
+        "troubleshooting_flow"
+      ],
+      "requiredArtifactPatterns": [
+        "tig-stick-arc-unstable",
+        "cable connections are tight",
+        "current setting",
+        "shielding-gas supply"
+      ],
+      "run": {
+        "answer": "",
+        "tools": [],
+        "artifacts": [],
+        "artifactTypes": [],
+        "done": false,
+        "cached": false,
+        "error": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)",
+        "usage": null,
+        "costUsd": 0,
+        "durationMs": 181811.66739999992,
+        "firstEventMs": 36.510099999955855,
+        "firstToolMs": null,
+        "firstAnswerMs": null,
+        "statuses": [
+          {
+            "atMs": 36.510099999955855,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 36.510099999955855,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 2111.34719999996,
+            "event": {
+              "type": "session",
+              "sessionId": "8b6b33cf-7700-4224-8fbc-20fbc54454d7"
+            }
+          },
+          {
+            "atMs": 181811.53489999997,
+            "event": {
+              "type": "error",
+              "message": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)"
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": false,
+            "detail": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)"
+          },
+          {
+            "name": "tool:diagnose_problem",
+            "passed": false,
+            "detail": "called: none"
+          },
+          {
+            "name": "tools:unexpected",
+            "passed": true,
+            "detail": "unexpected: none"
+          },
+          {
+            "name": "artifact:troubleshooting_flow",
+            "passed": false,
+            "detail": "emitted: none"
+          },
+          {
+            "name": "artifact-required:tig-stick-arc-unstable",
+            "passed": false,
+            "detail": "tig-stick-arc-unstable"
+          },
+          {
+            "name": "artifact-required:cable connections are tight",
+            "passed": false,
+            "detail": "cable connections are tight"
+          },
+          {
+            "name": "artifact-required:current setting",
+            "passed": false,
+            "detail": "current setting"
+          },
+          {
+            "name": "artifact-required:shielding-gas supply",
+            "passed": false,
+            "detail": "shielding-gas supply"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flow-52",
+      "category": "troubleshooting_flow",
+      "question": "Help me troubleshoot a flux capacitor rattling inside the welder.",
+      "expectedTools": [
+        "diagnose_problem"
+      ],
+      "allowedTools": [
+        "diagnose_problem"
+      ],
+      "forbiddenArtifacts": [
+        "troubleshooting_flow"
+      ],
+      "requiredPatterns": [
+        "not (?:documented|found|validated)|unknown symptom|no matching symptom"
+      ],
+      "forbiddenPatterns": [
+        "replace the flux capacitor|tighten the flux capacitor"
+      ],
+      "run": {
+        "answer": "",
+        "tools": [],
+        "artifacts": [],
+        "artifactTypes": [],
+        "done": false,
+        "cached": false,
+        "error": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)",
+        "usage": null,
+        "costUsd": 0,
+        "durationMs": 182439.5381,
+        "firstEventMs": 48.8697000000393,
+        "firstToolMs": null,
+        "firstAnswerMs": null,
+        "statuses": [
+          {
+            "atMs": 48.8697000000393,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 48.8697000000393,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 2180.492500000051,
+            "event": {
+              "type": "session",
+              "sessionId": "11480e9b-e47c-4dbe-88e8-1e840cb94fa5"
+            }
+          },
+          {
+            "atMs": 182439.12679999997,
+            "event": {
+              "type": "error",
+              "message": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)"
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": false,
+            "detail": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)"
+          },
+          {
+            "name": "tool:diagnose_problem",
+            "passed": false,
+            "detail": "called: none"
+          },
+          {
+            "name": "tools:unexpected",
+            "passed": true,
+            "detail": "unexpected: none"
+          },
+          {
+            "name": "artifact-forbidden:troubleshooting_flow",
+            "passed": true,
+            "detail": "emitted: none"
+          },
+          {
+            "name": "required:not (?:documented|found|validated)|unknown symptom|no matching symptom",
+            "passed": false,
+            "detail": "not (?:documented|found|validated)|unknown symptom|no matching symptom"
+          },
+          {
+            "name": "forbidden:replace the flux capacitor|tighten the flux capacitor",
+            "passed": true,
+            "detail": "replace the flux capacitor|tighten the flux capacitor"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flow-53",
+      "category": "troubleshooting_flow",
+      "question": "What is the maximum open-circuit voltage?",
+      "expectedTools": [
+        "lookup_spec"
+      ],
+      "allowedTools": [
+        "lookup_spec"
+      ],
+      "forbiddenArtifacts": [
+        "troubleshooting_flow"
+      ],
+      "requiredPatterns": [
+        "\\b86\\s*(?:v|vdc|volts?)\\b"
+      ],
+      "run": {
+        "answer": "",
+        "tools": [],
+        "artifacts": [],
+        "artifactTypes": [],
+        "done": false,
+        "cached": false,
+        "error": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)",
+        "usage": null,
+        "costUsd": 0,
+        "durationMs": 185665.34049999993,
+        "firstEventMs": 26.072199999936856,
+        "firstToolMs": null,
+        "firstAnswerMs": null,
+        "statuses": [
+          {
+            "atMs": 26.072199999936856,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 26.072199999936856,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 2148.1202999999514,
+            "event": {
+              "type": "session",
+              "sessionId": "25b56e2b-acaf-4c51-b66c-48b1b8bf4a02"
+            }
+          },
+          {
+            "atMs": 185665.18579999986,
+            "event": {
+              "type": "error",
+              "message": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)"
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": false,
+            "detail": "Claude Code returned an error result: API Error: Connection refused — a firewall or proxy may be blocking it (ConnectionRefused)"
+          },
+          {
+            "name": "tool:lookup_spec",
+            "passed": false,
+            "detail": "called: none"
+          },
+          {
+            "name": "tools:unexpected",
+            "passed": true,
+            "detail": "unexpected: none"
+          },
+          {
+            "name": "artifact-forbidden:troubleshooting_flow",
+            "passed": true,
+            "detail": "emitted: none"
+          },
+          {
+            "name": "required:\\b86\\s*(?:v|vdc|volts?)\\b",
+            "passed": false,
+            "detail": "\\b86\\s*(?:v|vdc|volts?)\\b"
+          }
+        ]
+      }
+    }
+  ]
+}

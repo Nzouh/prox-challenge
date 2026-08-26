@@ -1,0 +1,2171 @@
+{
+  "summary": {
+    "startedAt": "2026-08-26T20:30:27.733Z",
+    "finishedAt": "2026-08-26T20:31:56.250Z",
+    "questionCount": 6,
+    "completed": 6,
+    "passed": 6,
+    "failed": 0,
+    "byCategory": {
+      "troubleshooting_flow": {
+        "passed": 6,
+        "total": 6
+      }
+    },
+    "toolRouting": {
+      "passed": 7,
+      "total": 7
+    },
+    "toolEfficiencyWarnings": 2,
+    "artifactRouting": {
+      "passed": 6,
+      "total": 6
+    },
+    "latencyMs": {
+      "mean": 13753.5,
+      "p50": 10192.4,
+      "p95": 32741.7,
+      "firstAnswerP50": 5630.3,
+      "firstAnswerP95": 32741.4
+    },
+    "totalCostUsd": 0.1543,
+    "totalUsage": {
+      "inputTokens": 2288,
+      "outputTokens": 3681,
+      "cacheReadTokens": 96034
+    },
+    "cacheProbe": {
+      "durationMs": 5951.3,
+      "cached": false,
+      "costUsd": 0.0034448499999999997
+    }
+  },
+  "results": [
+    {
+      "id": "flow-48",
+      "category": "troubleshooting_flow",
+      "question": "My weld has porosity. What should I check?",
+      "expectedTools": [
+        "diagnose_problem"
+      ],
+      "expectedEvidence": [
+        {
+          "tool": "diagnose_problem",
+          "status": "documented",
+          "recordId": "weld-porosity"
+        }
+      ],
+      "expectedArtifacts": [
+        "troubleshooting_flow"
+      ],
+      "requiredArtifactPatterns": [
+        "weld-porosity",
+        "Check the gas bottle",
+        "20.30 SCFH",
+        "ground is negative",
+        "wire feed power is positive"
+      ],
+      "run": {
+        "answer": "",
+        "tools": [
+          "diagnose_problem"
+        ],
+        "toolCalls": [
+          {
+            "name": "diagnose_problem",
+            "input": {
+              "symptom": "porosity in weld"
+            }
+          }
+        ],
+        "evidence": [
+          {
+            "tool": "diagnose_problem",
+            "found": true,
+            "status": "documented",
+            "recordId": "weld-porosity"
+          }
+        ],
+        "artifacts": [
+          {
+            "type": "troubleshooting_flow",
+            "recordId": "weld-porosity",
+            "problem": "Porosity in the weld metal",
+            "processes": [
+              "MIG",
+              "flux_cored"
+            ],
+            "mermaidStages": [
+              "flowchart TD\n  c1[\"Check the gas bottle.\"]",
+              "flowchart TD\n  c1[\"Check the gas bottle.\"]\n  c2[\"Check the regulator for proper<br/>flow.\"]\n  c1 --> c2",
+              "flowchart TD\n  c1[\"Check the gas bottle.\"]\n  c2[\"Check the regulator for proper<br/>flow.\"]\n  c3[\"Inspect the weld area for<br/>contamination.\"]\n  c1 --> c2\n  c2 --> c3",
+              "flowchart TD\n  c1[\"Check the gas bottle.\"]\n  c2[\"Check the regulator for proper<br/>flow.\"]\n  c3[\"Inspect the weld area for<br/>contamination.\"]\n  c4[\"Check contact-tip-to-work<br/>distance.\"]\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4",
+              "flowchart TD\n  c1[\"Check the gas bottle.\"]\n  c2[\"Check the regulator for proper<br/>flow.\"]\n  c3[\"Inspect the weld area for<br/>contamination.\"]\n  c4[\"Check contact-tip-to-work<br/>distance.\"]\n  c5[\"Verify DCEP for MIG or DCEN for<br/>self-shielded flux-cored welding.\"]\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  c4 --> c5",
+              "flowchart TD\n  c1[\"Check the gas bottle.\"]\n  c2[\"Check the regulator for proper<br/>flow.\"]\n  c3[\"Inspect the weld area for<br/>contamination.\"]\n  c4[\"Check contact-tip-to-work<br/>distance.\"]\n  c5[\"Verify DCEP for MIG or DCEN for<br/>self-shielded flux-cored welding.\"]\n  c6[\"Inspect the wire for rust and<br/>residue.\"]\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  c4 --> c5\n  c5 --> c6",
+              "flowchart TD\n  c1[\"Check the gas bottle.\"]\n  c2[\"Check the regulator for proper<br/>flow.\"]\n  c3[\"Inspect the weld area for<br/>contamination.\"]\n  c4[\"Check contact-tip-to-work<br/>distance.\"]\n  c5[\"Verify DCEP for MIG or DCEN for<br/>self-shielded flux-cored welding.\"]\n  c6[\"Inspect the wire for rust and<br/>residue.\"]\n  exhausted[\"Checks exhausted\"]\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  c4 --> c5\n  c5 --> c6\n  c6 --> exhausted\n  classDef exhausted fill:#2c2620,stroke:#3a332b,color:#f3ede3\n  class exhausted exhausted"
+            ],
+            "branches": [
+              {
+                "key": "c1",
+                "id": "weld-porosity:1",
+                "cause": "Shielding-gas bottle is empty",
+                "check": "Check the gas bottle.",
+                "remedy": "Replenish it as necessary.",
+                "supportingVisual": {
+                  "type": "source_visual",
+                  "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=43",
+                  "page": 43,
+                  "provenance": {
+                    "tier": 1,
+                    "source": "files/owner-manual.pdf",
+                    "page": 43,
+                    "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                  },
+                  "caption": "Reviewed manual page 43"
+                },
+                "repairScope": "operator_permitted"
+              },
+              {
+                "key": "c2",
+                "id": "weld-porosity:2",
+                "cause": "Shielding-gas flow is too low or too high",
+                "check": "Check the regulator for proper flow.",
+                "remedy": "Set the documented gas flow.",
+                "specifics": [
+                  {
+                    "text": "MIG: With adequate ventilation and no gas leak, open the cylinder valve fully and set shielding-gas flow to 20–30 SCFH.",
+                    "provenance": {
+                      "tier": 1,
+                      "source": "files/owner-manual.pdf",
+                      "page": 21,
+                      "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                    }
+                  }
+                ],
+                "repairScope": "operator_permitted"
+              },
+              {
+                "key": "c3",
+                "id": "weld-porosity:3",
+                "cause": "Workpiece is dirty",
+                "check": "Inspect the weld area for contamination.",
+                "remedy": "Clean the workpiece down to bare metal.",
+                "repairScope": "operator_permitted"
+              },
+              {
+                "key": "c4",
+                "id": "weld-porosity:4",
+                "cause": "Gun is too far from the workpiece",
+                "check": "Check contact-tip-to-work distance.",
+                "remedy": "Use the proper CTWD for the procedure.",
+                "supportingVisual": {
+                  "type": "source_visual",
+                  "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=43",
+                  "page": 43,
+                  "provenance": {
+                    "tier": 1,
+                    "source": "files/owner-manual.pdf",
+                    "page": 43,
+                    "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                  },
+                  "caption": "Reviewed manual page 43"
+                },
+                "repairScope": "operator_permitted"
+              },
+              {
+                "key": "c5",
+                "id": "weld-porosity:5",
+                "cause": "Incorrect polarity",
+                "check": "Verify DCEP for MIG or DCEN for self-shielded flux-cored welding.",
+                "remedy": "Correct the polarity.",
+                "specifics": [
+                  {
+                    "text": "For MIG, ground is negative and wire feed power is positive.",
+                    "provenance": {
+                      "tier": 1,
+                      "source": "files/quick-start-guide.pdf",
+                      "page": 2,
+                      "sourceHash": "4a44c4b18988c05b9dabaa953392f9ecd598dcc689d4a75ec2f54f06a6fa400e"
+                    }
+                  },
+                  {
+                    "text": "For flux-cored, ground is positive and wire feed power is negative.",
+                    "provenance": {
+                      "tier": 1,
+                      "source": "files/quick-start-guide.pdf",
+                      "page": 2,
+                      "sourceHash": "4a44c4b18988c05b9dabaa953392f9ecd598dcc689d4a75ec2f54f06a6fa400e"
+                    }
+                  }
+                ],
+                "repairScope": "operator_permitted"
+              },
+              {
+                "key": "c6",
+                "id": "weld-porosity:6",
+                "cause": "Welding wire is contaminated",
+                "check": "Inspect the wire for rust and residue.",
+                "remedy": "Use clean wire free of rust and residue.",
+                "repairScope": "operator_permitted"
+              }
+            ],
+            "provenance": [
+              {
+                "tier": 1,
+                "source": "files/owner-manual.pdf",
+                "page": 43,
+                "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+              },
+              {
+                "tier": 1,
+                "source": "files/owner-manual.pdf",
+                "page": 20,
+                "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+              },
+              {
+                "tier": 1,
+                "source": "files/quick-start-guide.pdf",
+                "page": 2,
+                "sourceHash": "4a44c4b18988c05b9dabaa953392f9ecd598dcc689d4a75ec2f54f06a6fa400e"
+              },
+              {
+                "tier": 1,
+                "source": "files/owner-manual.pdf",
+                "page": 21,
+                "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+              }
+            ]
+          }
+        ],
+        "artifactTypes": [
+          "troubleshooting_flow"
+        ],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 4,
+          "outputTokens": 329,
+          "cacheReadTokens": 13944
+        },
+        "costUsd": 0.02232975,
+        "durationMs": 10192.397,
+        "firstEventMs": 92.809,
+        "firstToolMs": 4438.4567,
+        "firstAnswerMs": null,
+        "statuses": [
+          {
+            "atMs": 92.809,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 92.809,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1336.5533,
+            "event": {
+              "type": "session",
+              "sessionId": "ed278142-9bd3-44d8-b7d5-681ffe88efed"
+            }
+          },
+          {
+            "atMs": 4438.4567,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_014i7gMuiiPGTwHB3G2YH2YW",
+              "name": "mcp__vulcan__diagnose_problem",
+              "input": {
+                "symptom": "porosity in weld"
+              }
+            }
+          },
+          {
+            "atMs": 4496.995199999999,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_014i7gMuiiPGTwHB3G2YH2YW",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 10191.1872,
+            "event": {
+              "type": "evidence",
+              "evidence": {
+                "tool": "diagnose_problem",
+                "found": true,
+                "status": "documented",
+                "recordId": "weld-porosity"
+              }
+            }
+          },
+          {
+            "atMs": 10191.2293,
+            "event": {
+              "type": "artifact",
+              "artifact": {
+                "type": "troubleshooting_flow",
+                "recordId": "weld-porosity",
+                "problem": "Porosity in the weld metal",
+                "processes": [
+                  "MIG",
+                  "flux_cored"
+                ],
+                "mermaidStages": [
+                  "flowchart TD\n  c1[\"Check the gas bottle.\"]",
+                  "flowchart TD\n  c1[\"Check the gas bottle.\"]\n  c2[\"Check the regulator for proper<br/>flow.\"]\n  c1 --> c2",
+                  "flowchart TD\n  c1[\"Check the gas bottle.\"]\n  c2[\"Check the regulator for proper<br/>flow.\"]\n  c3[\"Inspect the weld area for<br/>contamination.\"]\n  c1 --> c2\n  c2 --> c3",
+                  "flowchart TD\n  c1[\"Check the gas bottle.\"]\n  c2[\"Check the regulator for proper<br/>flow.\"]\n  c3[\"Inspect the weld area for<br/>contamination.\"]\n  c4[\"Check contact-tip-to-work<br/>distance.\"]\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4",
+                  "flowchart TD\n  c1[\"Check the gas bottle.\"]\n  c2[\"Check the regulator for proper<br/>flow.\"]\n  c3[\"Inspect the weld area for<br/>contamination.\"]\n  c4[\"Check contact-tip-to-work<br/>distance.\"]\n  c5[\"Verify DCEP for MIG or DCEN for<br/>self-shielded flux-cored welding.\"]\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  c4 --> c5",
+                  "flowchart TD\n  c1[\"Check the gas bottle.\"]\n  c2[\"Check the regulator for proper<br/>flow.\"]\n  c3[\"Inspect the weld area for<br/>contamination.\"]\n  c4[\"Check contact-tip-to-work<br/>distance.\"]\n  c5[\"Verify DCEP for MIG or DCEN for<br/>self-shielded flux-cored welding.\"]\n  c6[\"Inspect the wire for rust and<br/>residue.\"]\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  c4 --> c5\n  c5 --> c6",
+                  "flowchart TD\n  c1[\"Check the gas bottle.\"]\n  c2[\"Check the regulator for proper<br/>flow.\"]\n  c3[\"Inspect the weld area for<br/>contamination.\"]\n  c4[\"Check contact-tip-to-work<br/>distance.\"]\n  c5[\"Verify DCEP for MIG or DCEN for<br/>self-shielded flux-cored welding.\"]\n  c6[\"Inspect the wire for rust and<br/>residue.\"]\n  exhausted[\"Checks exhausted\"]\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  c4 --> c5\n  c5 --> c6\n  c6 --> exhausted\n  classDef exhausted fill:#2c2620,stroke:#3a332b,color:#f3ede3\n  class exhausted exhausted"
+                ],
+                "branches": [
+                  {
+                    "key": "c1",
+                    "id": "weld-porosity:1",
+                    "cause": "Shielding-gas bottle is empty",
+                    "check": "Check the gas bottle.",
+                    "remedy": "Replenish it as necessary.",
+                    "supportingVisual": {
+                      "type": "source_visual",
+                      "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=43",
+                      "page": 43,
+                      "provenance": {
+                        "tier": 1,
+                        "source": "files/owner-manual.pdf",
+                        "page": 43,
+                        "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                      },
+                      "caption": "Reviewed manual page 43"
+                    },
+                    "repairScope": "operator_permitted"
+                  },
+                  {
+                    "key": "c2",
+                    "id": "weld-porosity:2",
+                    "cause": "Shielding-gas flow is too low or too high",
+                    "check": "Check the regulator for proper flow.",
+                    "remedy": "Set the documented gas flow.",
+                    "specifics": [
+                      {
+                        "text": "MIG: With adequate ventilation and no gas leak, open the cylinder valve fully and set shielding-gas flow to 20–30 SCFH.",
+                        "provenance": {
+                          "tier": 1,
+                          "source": "files/owner-manual.pdf",
+                          "page": 21,
+                          "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                        }
+                      }
+                    ],
+                    "repairScope": "operator_permitted"
+                  },
+                  {
+                    "key": "c3",
+                    "id": "weld-porosity:3",
+                    "cause": "Workpiece is dirty",
+                    "check": "Inspect the weld area for contamination.",
+                    "remedy": "Clean the workpiece down to bare metal.",
+                    "repairScope": "operator_permitted"
+                  },
+                  {
+                    "key": "c4",
+                    "id": "weld-porosity:4",
+                    "cause": "Gun is too far from the workpiece",
+                    "check": "Check contact-tip-to-work distance.",
+                    "remedy": "Use the proper CTWD for the procedure.",
+                    "supportingVisual": {
+                      "type": "source_visual",
+                      "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=43",
+                      "page": 43,
+                      "provenance": {
+                        "tier": 1,
+                        "source": "files/owner-manual.pdf",
+                        "page": 43,
+                        "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                      },
+                      "caption": "Reviewed manual page 43"
+                    },
+                    "repairScope": "operator_permitted"
+                  },
+                  {
+                    "key": "c5",
+                    "id": "weld-porosity:5",
+                    "cause": "Incorrect polarity",
+                    "check": "Verify DCEP for MIG or DCEN for self-shielded flux-cored welding.",
+                    "remedy": "Correct the polarity.",
+                    "specifics": [
+                      {
+                        "text": "For MIG, ground is negative and wire feed power is positive.",
+                        "provenance": {
+                          "tier": 1,
+                          "source": "files/quick-start-guide.pdf",
+                          "page": 2,
+                          "sourceHash": "4a44c4b18988c05b9dabaa953392f9ecd598dcc689d4a75ec2f54f06a6fa400e"
+                        }
+                      },
+                      {
+                        "text": "For flux-cored, ground is positive and wire feed power is negative.",
+                        "provenance": {
+                          "tier": 1,
+                          "source": "files/quick-start-guide.pdf",
+                          "page": 2,
+                          "sourceHash": "4a44c4b18988c05b9dabaa953392f9ecd598dcc689d4a75ec2f54f06a6fa400e"
+                        }
+                      }
+                    ],
+                    "repairScope": "operator_permitted"
+                  },
+                  {
+                    "key": "c6",
+                    "id": "weld-porosity:6",
+                    "cause": "Welding wire is contaminated",
+                    "check": "Inspect the wire for rust and residue.",
+                    "remedy": "Use clean wire free of rust and residue.",
+                    "repairScope": "operator_permitted"
+                  }
+                ],
+                "provenance": [
+                  {
+                    "tier": 1,
+                    "source": "files/owner-manual.pdf",
+                    "page": 43,
+                    "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                  },
+                  {
+                    "tier": 1,
+                    "source": "files/owner-manual.pdf",
+                    "page": 20,
+                    "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                  },
+                  {
+                    "tier": 1,
+                    "source": "files/quick-start-guide.pdf",
+                    "page": 2,
+                    "sourceHash": "4a44c4b18988c05b9dabaa953392f9ecd598dcc689d4a75ec2f54f06a6fa400e"
+                  },
+                  {
+                    "tier": 1,
+                    "source": "files/owner-manual.pdf",
+                    "page": 21,
+                    "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "atMs": 10191.345000000001,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 4,
+                "outputTokens": 329,
+                "cacheReadTokens": 13944
+              },
+              "costUsd": 0.02232975
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:diagnose_problem",
+            "passed": true,
+            "detail": "called: diagnose_problem"
+          },
+          {
+            "name": "evidence:{\"recordId\":\"weld-porosity\",\"status\":\"documented\",\"tool\":\"diagnose_problem\"}",
+            "passed": true,
+            "detail": "observed: [{\"found\":true,\"recordId\":\"weld-porosity\",\"status\":\"documented\",\"tool\":\"diagnose_problem\"}]"
+          },
+          {
+            "name": "artifact:troubleshooting_flow",
+            "passed": true,
+            "detail": "emitted: troubleshooting_flow"
+          },
+          {
+            "name": "artifact-required:weld-porosity",
+            "passed": true,
+            "detail": "weld-porosity"
+          },
+          {
+            "name": "artifact-required:Check the gas bottle",
+            "passed": true,
+            "detail": "Check the gas bottle"
+          },
+          {
+            "name": "artifact-required:20.30 SCFH",
+            "passed": true,
+            "detail": "20.30 SCFH"
+          },
+          {
+            "name": "artifact-required:ground is negative",
+            "passed": true,
+            "detail": "ground is negative"
+          },
+          {
+            "name": "artifact-required:wire feed power is positive",
+            "passed": true,
+            "detail": "wire feed power is positive"
+          }
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "id": "flow-49",
+      "category": "troubleshooting_flow",
+      "question": "Wire feeds from my MIG gun, but the arc will not ignite. What should I check?",
+      "expectedTools": [
+        "diagnose_problem"
+      ],
+      "expectedEvidence": [
+        {
+          "tool": "diagnose_problem",
+          "status": "documented",
+          "recordId": "wire-feeds-no-arc"
+        }
+      ],
+      "expectedArtifacts": [
+        "troubleshooting_flow"
+      ],
+      "requiredArtifactPatterns": [
+        "wire-feeds-no-arc",
+        "Check clamp contact",
+        "contact-tip size",
+        "worn or dirty"
+      ],
+      "run": {
+        "answer": "",
+        "tools": [
+          "diagnose_problem"
+        ],
+        "toolCalls": [
+          {
+            "name": "diagnose_problem",
+            "input": {
+              "symptom": "wire feeds but arc will not ignite / no arc",
+              "process": "MIG"
+            }
+          }
+        ],
+        "evidence": [
+          {
+            "tool": "diagnose_problem",
+            "found": true,
+            "status": "documented",
+            "recordId": "wire-feeds-no-arc"
+          }
+        ],
+        "artifacts": [
+          {
+            "type": "troubleshooting_flow",
+            "recordId": "wire-feeds-no-arc",
+            "problem": "Wire feeds but the arc does not ignite",
+            "processes": [
+              "MIG",
+              "flux_cored"
+            ],
+            "mermaidStages": [
+              "flowchart TD\n  c1[\"Check clamp contact and clean the<br/>workpiece near the clamp and weld.\"]",
+              "flowchart TD\n  c1[\"Check clamp contact and clean the<br/>workpiece near the clamp and weld.\"]\n  c2[\"Compare the tip size with the<br/>welding wire.\"]\n  c1 --> c2",
+              "flowchart TD\n  c1[\"Check clamp contact and clean the<br/>workpiece near the clamp and weld.\"]\n  c2[\"Compare the tip size with the<br/>welding wire.\"]\n  c3[\"Check for a deformed or enlarged<br/>hole and contamination.\"]\n  c1 --> c2\n  c2 --> c3",
+              "flowchart TD\n  c1[\"Check clamp contact and clean the<br/>workpiece near the clamp and weld.\"]\n  c2[\"Compare the tip size with the<br/>welding wire.\"]\n  c3[\"Check for a deformed or enlarged<br/>hole and contamination.\"]\n  exhausted[\"Checks exhausted\"]\n  c1 --> c2\n  c2 --> c3\n  c3 --> exhausted\n  classDef exhausted fill:#2c2620,stroke:#3a332b,color:#f3ede3\n  class exhausted exhausted"
+            ],
+            "branches": [
+              {
+                "key": "c1",
+                "id": "wire-feeds-no-arc:1",
+                "cause": "Improper ground connection",
+                "check": "Check clamp contact and clean the workpiece near the clamp and weld.",
+                "remedy": "Make a clean, secure workpiece connection.",
+                "repairScope": "operator_permitted"
+              },
+              {
+                "key": "c2",
+                "id": "wire-feeds-no-arc:2",
+                "cause": "Improperly sized contact tip",
+                "check": "Compare the tip size with the welding wire.",
+                "remedy": "Install the proper contact-tip size and type.",
+                "supportingVisual": {
+                  "type": "source_visual",
+                  "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=43",
+                  "page": 43,
+                  "provenance": {
+                    "tier": 1,
+                    "source": "files/owner-manual.pdf",
+                    "page": 43,
+                    "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                  },
+                  "caption": "Reviewed manual page 43"
+                },
+                "repairScope": "operator_permitted"
+              },
+              {
+                "key": "c3",
+                "id": "wire-feeds-no-arc:3",
+                "cause": "Contact tip is worn or dirty",
+                "check": "Check for a deformed or enlarged hole and contamination.",
+                "remedy": "Clean the tip or replace it with the proper size and type.",
+                "supportingVisual": {
+                  "type": "source_visual",
+                  "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=43",
+                  "page": 43,
+                  "provenance": {
+                    "tier": 1,
+                    "source": "files/owner-manual.pdf",
+                    "page": 43,
+                    "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                  },
+                  "caption": "Reviewed manual page 43"
+                },
+                "repairScope": "operator_permitted"
+              }
+            ],
+            "provenance": [
+              {
+                "tier": 1,
+                "source": "files/owner-manual.pdf",
+                "page": 43,
+                "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+              }
+            ]
+          }
+        ],
+        "artifactTypes": [
+          "troubleshooting_flow"
+        ],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 4,
+          "outputTokens": 367,
+          "cacheReadTokens": 13976
+        },
+        "costUsd": 0.020941,
+        "durationMs": 11107.1254,
+        "firstEventMs": 59.92699999999968,
+        "firstToolMs": 4948.2264,
+        "firstAnswerMs": null,
+        "statuses": [
+          {
+            "atMs": 59.92699999999968,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 59.92699999999968,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1330.2942000000003,
+            "event": {
+              "type": "session",
+              "sessionId": "56bbf0a6-873e-4545-9506-87cd32a73e02"
+            }
+          },
+          {
+            "atMs": 4948.2264,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_01X3Ve42Kum1ju66b8iNK8uh",
+              "name": "mcp__vulcan__diagnose_problem",
+              "input": {
+                "symptom": "wire feeds but arc will not ignite / no arc",
+                "process": "MIG"
+              }
+            }
+          },
+          {
+            "atMs": 5016.1831,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_01X3Ve42Kum1ju66b8iNK8uh",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 11106.6858,
+            "event": {
+              "type": "evidence",
+              "evidence": {
+                "tool": "diagnose_problem",
+                "found": true,
+                "status": "documented",
+                "recordId": "wire-feeds-no-arc"
+              }
+            }
+          },
+          {
+            "atMs": 11106.7163,
+            "event": {
+              "type": "artifact",
+              "artifact": {
+                "type": "troubleshooting_flow",
+                "recordId": "wire-feeds-no-arc",
+                "problem": "Wire feeds but the arc does not ignite",
+                "processes": [
+                  "MIG",
+                  "flux_cored"
+                ],
+                "mermaidStages": [
+                  "flowchart TD\n  c1[\"Check clamp contact and clean the<br/>workpiece near the clamp and weld.\"]",
+                  "flowchart TD\n  c1[\"Check clamp contact and clean the<br/>workpiece near the clamp and weld.\"]\n  c2[\"Compare the tip size with the<br/>welding wire.\"]\n  c1 --> c2",
+                  "flowchart TD\n  c1[\"Check clamp contact and clean the<br/>workpiece near the clamp and weld.\"]\n  c2[\"Compare the tip size with the<br/>welding wire.\"]\n  c3[\"Check for a deformed or enlarged<br/>hole and contamination.\"]\n  c1 --> c2\n  c2 --> c3",
+                  "flowchart TD\n  c1[\"Check clamp contact and clean the<br/>workpiece near the clamp and weld.\"]\n  c2[\"Compare the tip size with the<br/>welding wire.\"]\n  c3[\"Check for a deformed or enlarged<br/>hole and contamination.\"]\n  exhausted[\"Checks exhausted\"]\n  c1 --> c2\n  c2 --> c3\n  c3 --> exhausted\n  classDef exhausted fill:#2c2620,stroke:#3a332b,color:#f3ede3\n  class exhausted exhausted"
+                ],
+                "branches": [
+                  {
+                    "key": "c1",
+                    "id": "wire-feeds-no-arc:1",
+                    "cause": "Improper ground connection",
+                    "check": "Check clamp contact and clean the workpiece near the clamp and weld.",
+                    "remedy": "Make a clean, secure workpiece connection.",
+                    "repairScope": "operator_permitted"
+                  },
+                  {
+                    "key": "c2",
+                    "id": "wire-feeds-no-arc:2",
+                    "cause": "Improperly sized contact tip",
+                    "check": "Compare the tip size with the welding wire.",
+                    "remedy": "Install the proper contact-tip size and type.",
+                    "supportingVisual": {
+                      "type": "source_visual",
+                      "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=43",
+                      "page": 43,
+                      "provenance": {
+                        "tier": 1,
+                        "source": "files/owner-manual.pdf",
+                        "page": 43,
+                        "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                      },
+                      "caption": "Reviewed manual page 43"
+                    },
+                    "repairScope": "operator_permitted"
+                  },
+                  {
+                    "key": "c3",
+                    "id": "wire-feeds-no-arc:3",
+                    "cause": "Contact tip is worn or dirty",
+                    "check": "Check for a deformed or enlarged hole and contamination.",
+                    "remedy": "Clean the tip or replace it with the proper size and type.",
+                    "supportingVisual": {
+                      "type": "source_visual",
+                      "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=43",
+                      "page": 43,
+                      "provenance": {
+                        "tier": 1,
+                        "source": "files/owner-manual.pdf",
+                        "page": 43,
+                        "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                      },
+                      "caption": "Reviewed manual page 43"
+                    },
+                    "repairScope": "operator_permitted"
+                  }
+                ],
+                "provenance": [
+                  {
+                    "tier": 1,
+                    "source": "files/owner-manual.pdf",
+                    "page": 43,
+                    "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "atMs": 11106.7634,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 4,
+                "outputTokens": 367,
+                "cacheReadTokens": 13976
+              },
+              "costUsd": 0.020941
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:diagnose_problem",
+            "passed": true,
+            "detail": "called: diagnose_problem"
+          },
+          {
+            "name": "evidence:{\"recordId\":\"wire-feeds-no-arc\",\"status\":\"documented\",\"tool\":\"diagnose_problem\"}",
+            "passed": true,
+            "detail": "observed: [{\"found\":true,\"recordId\":\"wire-feeds-no-arc\",\"status\":\"documented\",\"tool\":\"diagnose_problem\"}]"
+          },
+          {
+            "name": "artifact:troubleshooting_flow",
+            "passed": true,
+            "detail": "emitted: troubleshooting_flow"
+          },
+          {
+            "name": "artifact-required:wire-feeds-no-arc",
+            "passed": true,
+            "detail": "wire-feeds-no-arc"
+          },
+          {
+            "name": "artifact-required:Check clamp contact",
+            "passed": true,
+            "detail": "Check clamp contact"
+          },
+          {
+            "name": "artifact-required:contact-tip size",
+            "passed": true,
+            "detail": "contact-tip size"
+          },
+          {
+            "name": "artifact-required:worn or dirty",
+            "passed": true,
+            "detail": "worn or dirty"
+          }
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "id": "flow-50",
+      "category": "troubleshooting_flow",
+      "question": "The wire-feed motor runs, but the wire does not feed properly. Help me check it.",
+      "expectedTools": [
+        "diagnose_problem"
+      ],
+      "expectedEvidence": [
+        {
+          "tool": "diagnose_problem",
+          "status": "documented",
+          "recordId": "wire-feed-improper"
+        }
+      ],
+      "expectedArtifacts": [
+        "troubleshooting_flow"
+      ],
+      "requiredArtifactPatterns": [
+        "wire-feed-improper",
+        "feed-roller",
+        "tensioner",
+        "MIG gun"
+      ],
+      "run": {
+        "answer": "",
+        "tools": [
+          "diagnose_problem",
+          "get_source_page"
+        ],
+        "toolCalls": [
+          {
+            "name": "diagnose_problem",
+            "input": {
+              "symptom": "wire-feed motor runs but wire does not feed properly"
+            }
+          },
+          {
+            "name": "get_source_page",
+            "input": {
+              "kind": "source_image",
+              "source": "product-inside.webp"
+            }
+          }
+        ],
+        "evidence": [
+          {
+            "tool": "diagnose_problem",
+            "found": true,
+            "status": "documented",
+            "recordId": "wire-feed-improper"
+          },
+          {
+            "tool": "get_source_page",
+            "found": true,
+            "status": "reviewed_image"
+          }
+        ],
+        "artifacts": [
+          {
+            "type": "troubleshooting_flow",
+            "recordId": "wire-feed-improper",
+            "problem": "Wire-feed motor runs but wire does not feed properly",
+            "processes": [
+              "MIG",
+              "flux_cored"
+            ],
+            "stopCondition": "Shut off the welder, disconnect it from power, and discharge the MIG gun to ground before adjusting, cleaning, or repairing the unit.",
+            "mermaidStages": [
+              "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the MIG<br/>gun to ground before adjusting,<br/>cleaning, or repairing the unit.\"]\n  c1[\"Check the wire-feed pressure.\"]\n  safety --> c1\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+              "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the MIG<br/>gun to ground before adjusting,<br/>cleaning, or repairing the unit.\"]\n  c1[\"Check the wire-feed pressure.\"]\n  c2[\"Confirm the feed roller matches<br/>the wire type and size.\"]\n  safety --> c1\n  c1 --> c2\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+              "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the MIG<br/>gun to ground before adjusting,<br/>cleaning, or repairing the unit.\"]\n  c1[\"Check the wire-feed pressure.\"]\n  c2[\"Confirm the feed roller matches<br/>the wire type and size.\"]\n  c3[\"Inspect for visible damage without<br/>opening or repairing internal<br/>components.\"]\n  safety --> c1\n  c1 --> c2\n  c2 --> c3\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+              "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the MIG<br/>gun to ground before adjusting,<br/>cleaning, or repairing the unit.\"]\n  c1[\"Check the wire-feed pressure.\"]\n  c2[\"Confirm the feed roller matches<br/>the wire type and size.\"]\n  c3[\"Inspect for visible damage without<br/>opening or repairing internal<br/>components.\"]\n  c4[\"Check whether the tensioner<br/>applies more pressure than needed.\"]\n  safety --> c1\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+              "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the MIG<br/>gun to ground before adjusting,<br/>cleaning, or repairing the unit.\"]\n  c1[\"Check the wire-feed pressure.\"]\n  c2[\"Confirm the feed roller matches<br/>the wire type and size.\"]\n  c3[\"Inspect for visible damage without<br/>opening or repairing internal<br/>components.\"]\n  c4[\"Check whether the tensioner<br/>applies more pressure than needed.\"]\n  exhausted[\"Checks exhausted\"]\n  safety --> c1\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  c4 --> exhausted\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  classDef exhausted fill:#2c2620,stroke:#3a332b,color:#f3ede3\n  class safety safety\n  class exhausted exhausted"
+            ],
+            "branches": [
+              {
+                "key": "c1",
+                "id": "wire-feed-improper:1",
+                "cause": "Insufficient wire-feed pressure",
+                "check": "Check the wire-feed pressure.",
+                "remedy": "Increase wire-feed pressure properly, following step 27 on page 17.",
+                "repairScope": "operator_permitted"
+              },
+              {
+                "key": "c2",
+                "id": "wire-feed-improper:2",
+                "cause": "Incorrect feed-roller size",
+                "check": "Confirm the feed roller matches the wire type and size.",
+                "remedy": "Flip the roll to the correct size, following the feed-roller instructions on page 12.",
+                "supportingVisual": {
+                  "type": "source_visual",
+                  "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=42",
+                  "page": 42,
+                  "provenance": {
+                    "tier": 1,
+                    "source": "files/owner-manual.pdf",
+                    "page": 42,
+                    "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                  },
+                  "caption": "Reviewed manual page 42"
+                },
+                "repairScope": "operator_permitted"
+              },
+              {
+                "key": "c3",
+                "id": "wire-feed-improper:3",
+                "cause": "Damaged MIG gun, cable, or liner assembly",
+                "check": "Inspect for visible damage without opening or repairing internal components.",
+                "remedy": "Have a qualified technician inspect and replace parts as necessary.",
+                "supportingVisual": {
+                  "type": "source_visual",
+                  "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=42",
+                  "page": 42,
+                  "provenance": {
+                    "tier": 1,
+                    "source": "files/owner-manual.pdf",
+                    "page": 42,
+                    "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                  },
+                  "caption": "Reviewed manual page 42"
+                },
+                "repairScope": "qualified_technician_required"
+              },
+              {
+                "key": "c4",
+                "id": "wire-feed-improper:4",
+                "cause": "Feed tensioner is too tight",
+                "check": "Check whether the tensioner applies more pressure than needed.",
+                "remedy": "Loosen it so it applies only enough pressure to prevent continued spinning after the trigger is released.",
+                "repairScope": "operator_permitted"
+              }
+            ],
+            "provenance": [
+              {
+                "tier": 1,
+                "source": "files/owner-manual.pdf",
+                "page": 42,
+                "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+              }
+            ]
+          },
+          {
+            "type": "source_visual",
+            "imageUrl": "/api/source-assets?kind=source_image&source=product-inside.webp&view=detail",
+            "provenance": {
+              "tier": 1,
+              "source": "product-inside.webp",
+              "sourceHash": "1513e0ae01be1f565835c90633b6ec79225c3f89197785b1eeda5aa91b233325"
+            },
+            "caption": "Reviewed source image"
+          }
+        ],
+        "artifactTypes": [
+          "troubleshooting_flow",
+          "source_visual"
+        ],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 6,
+          "outputTokens": 554,
+          "cacheReadTokens": 21688
+        },
+        "costUsd": 0.034022250000000004,
+        "durationMs": 14017.2356,
+        "firstEventMs": 39.7999000000018,
+        "firstToolMs": 4331.668400000002,
+        "firstAnswerMs": null,
+        "statuses": [
+          {
+            "atMs": 39.7999000000018,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 39.7999000000018,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1340.4750000000022,
+            "event": {
+              "type": "session",
+              "sessionId": "46d2c172-2e0d-475d-8578-5b68fac9e0c7"
+            }
+          },
+          {
+            "atMs": 4331.668400000002,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_01CprKU8foxh8RfVnqB6agMW",
+              "name": "mcp__vulcan__diagnose_problem",
+              "input": {
+                "symptom": "wire-feed motor runs but wire does not feed properly"
+              }
+            }
+          },
+          {
+            "atMs": 4394.537900000003,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_01CprKU8foxh8RfVnqB6agMW",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 10010.3187,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_012D25N7r8CMsz99SY1sHU4M",
+              "name": "mcp__vulcan__get_source_page",
+              "input": {
+                "kind": "source_image",
+                "source": "product-inside.webp"
+              }
+            }
+          },
+          {
+            "atMs": 10031.477900000002,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_012D25N7r8CMsz99SY1sHU4M",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 14016.963799999998,
+            "event": {
+              "type": "evidence",
+              "evidence": {
+                "tool": "diagnose_problem",
+                "found": true,
+                "status": "documented",
+                "recordId": "wire-feed-improper"
+              }
+            }
+          },
+          {
+            "atMs": 14016.9856,
+            "event": {
+              "type": "evidence",
+              "evidence": {
+                "tool": "get_source_page",
+                "found": true,
+                "status": "reviewed_image"
+              }
+            }
+          },
+          {
+            "atMs": 14017.0072,
+            "event": {
+              "type": "artifact",
+              "artifact": {
+                "type": "troubleshooting_flow",
+                "recordId": "wire-feed-improper",
+                "problem": "Wire-feed motor runs but wire does not feed properly",
+                "processes": [
+                  "MIG",
+                  "flux_cored"
+                ],
+                "stopCondition": "Shut off the welder, disconnect it from power, and discharge the MIG gun to ground before adjusting, cleaning, or repairing the unit.",
+                "mermaidStages": [
+                  "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the MIG<br/>gun to ground before adjusting,<br/>cleaning, or repairing the unit.\"]\n  c1[\"Check the wire-feed pressure.\"]\n  safety --> c1\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+                  "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the MIG<br/>gun to ground before adjusting,<br/>cleaning, or repairing the unit.\"]\n  c1[\"Check the wire-feed pressure.\"]\n  c2[\"Confirm the feed roller matches<br/>the wire type and size.\"]\n  safety --> c1\n  c1 --> c2\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+                  "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the MIG<br/>gun to ground before adjusting,<br/>cleaning, or repairing the unit.\"]\n  c1[\"Check the wire-feed pressure.\"]\n  c2[\"Confirm the feed roller matches<br/>the wire type and size.\"]\n  c3[\"Inspect for visible damage without<br/>opening or repairing internal<br/>components.\"]\n  safety --> c1\n  c1 --> c2\n  c2 --> c3\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+                  "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the MIG<br/>gun to ground before adjusting,<br/>cleaning, or repairing the unit.\"]\n  c1[\"Check the wire-feed pressure.\"]\n  c2[\"Confirm the feed roller matches<br/>the wire type and size.\"]\n  c3[\"Inspect for visible damage without<br/>opening or repairing internal<br/>components.\"]\n  c4[\"Check whether the tensioner<br/>applies more pressure than needed.\"]\n  safety --> c1\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+                  "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the MIG<br/>gun to ground before adjusting,<br/>cleaning, or repairing the unit.\"]\n  c1[\"Check the wire-feed pressure.\"]\n  c2[\"Confirm the feed roller matches<br/>the wire type and size.\"]\n  c3[\"Inspect for visible damage without<br/>opening or repairing internal<br/>components.\"]\n  c4[\"Check whether the tensioner<br/>applies more pressure than needed.\"]\n  exhausted[\"Checks exhausted\"]\n  safety --> c1\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  c4 --> exhausted\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  classDef exhausted fill:#2c2620,stroke:#3a332b,color:#f3ede3\n  class safety safety\n  class exhausted exhausted"
+                ],
+                "branches": [
+                  {
+                    "key": "c1",
+                    "id": "wire-feed-improper:1",
+                    "cause": "Insufficient wire-feed pressure",
+                    "check": "Check the wire-feed pressure.",
+                    "remedy": "Increase wire-feed pressure properly, following step 27 on page 17.",
+                    "repairScope": "operator_permitted"
+                  },
+                  {
+                    "key": "c2",
+                    "id": "wire-feed-improper:2",
+                    "cause": "Incorrect feed-roller size",
+                    "check": "Confirm the feed roller matches the wire type and size.",
+                    "remedy": "Flip the roll to the correct size, following the feed-roller instructions on page 12.",
+                    "supportingVisual": {
+                      "type": "source_visual",
+                      "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=42",
+                      "page": 42,
+                      "provenance": {
+                        "tier": 1,
+                        "source": "files/owner-manual.pdf",
+                        "page": 42,
+                        "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                      },
+                      "caption": "Reviewed manual page 42"
+                    },
+                    "repairScope": "operator_permitted"
+                  },
+                  {
+                    "key": "c3",
+                    "id": "wire-feed-improper:3",
+                    "cause": "Damaged MIG gun, cable, or liner assembly",
+                    "check": "Inspect for visible damage without opening or repairing internal components.",
+                    "remedy": "Have a qualified technician inspect and replace parts as necessary.",
+                    "supportingVisual": {
+                      "type": "source_visual",
+                      "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=42",
+                      "page": 42,
+                      "provenance": {
+                        "tier": 1,
+                        "source": "files/owner-manual.pdf",
+                        "page": 42,
+                        "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                      },
+                      "caption": "Reviewed manual page 42"
+                    },
+                    "repairScope": "qualified_technician_required"
+                  },
+                  {
+                    "key": "c4",
+                    "id": "wire-feed-improper:4",
+                    "cause": "Feed tensioner is too tight",
+                    "check": "Check whether the tensioner applies more pressure than needed.",
+                    "remedy": "Loosen it so it applies only enough pressure to prevent continued spinning after the trigger is released.",
+                    "repairScope": "operator_permitted"
+                  }
+                ],
+                "provenance": [
+                  {
+                    "tier": 1,
+                    "source": "files/owner-manual.pdf",
+                    "page": 42,
+                    "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "atMs": 14017.051,
+            "event": {
+              "type": "artifact",
+              "artifact": {
+                "type": "source_visual",
+                "imageUrl": "/api/source-assets?kind=source_image&source=product-inside.webp&view=detail",
+                "provenance": {
+                  "tier": 1,
+                  "source": "product-inside.webp",
+                  "sourceHash": "1513e0ae01be1f565835c90633b6ec79225c3f89197785b1eeda5aa91b233325"
+                },
+                "caption": "Reviewed source image"
+              }
+            }
+          },
+          {
+            "atMs": 14017.0665,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 6,
+                "outputTokens": 554,
+                "cacheReadTokens": 21688
+              },
+              "costUsd": 0.034022250000000004
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:diagnose_problem",
+            "passed": true,
+            "detail": "called: diagnose_problem, get_source_page"
+          },
+          {
+            "name": "evidence:{\"recordId\":\"wire-feed-improper\",\"status\":\"documented\",\"tool\":\"diagnose_problem\"}",
+            "passed": true,
+            "detail": "observed: [{\"found\":true,\"recordId\":\"wire-feed-improper\",\"status\":\"documented\",\"tool\":\"diagnose_problem\"},{\"found\":true,\"status\":\"reviewed_image\",\"tool\":\"get_source_page\"}]"
+          },
+          {
+            "name": "artifact:troubleshooting_flow",
+            "passed": true,
+            "detail": "emitted: troubleshooting_flow, source_visual"
+          },
+          {
+            "name": "artifact-required:wire-feed-improper",
+            "passed": true,
+            "detail": "wire-feed-improper"
+          },
+          {
+            "name": "artifact-required:feed-roller",
+            "passed": true,
+            "detail": "feed-roller"
+          },
+          {
+            "name": "artifact-required:tensioner",
+            "passed": true,
+            "detail": "tensioner"
+          },
+          {
+            "name": "artifact-required:MIG gun",
+            "passed": true,
+            "detail": "MIG gun"
+          }
+        ],
+        "warnings": [
+          {
+            "name": "tools:additional",
+            "detail": "additional: get_source_page"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flow-51",
+      "category": "troubleshooting_flow",
+      "question": "My TIG arc is unstable. Walk me through the checks.",
+      "expectedTools": [
+        "diagnose_problem"
+      ],
+      "expectedEvidence": [
+        {
+          "tool": "diagnose_problem",
+          "status": "documented",
+          "recordId": "tig-stick-arc-unstable"
+        }
+      ],
+      "expectedArtifacts": [
+        "troubleshooting_flow"
+      ],
+      "requiredArtifactPatterns": [
+        "tig-stick-arc-unstable",
+        "cable connections are tight",
+        "current setting",
+        "shielding-gas supply"
+      ],
+      "run": {
+        "answer": "",
+        "tools": [
+          "diagnose_problem"
+        ],
+        "toolCalls": [
+          {
+            "name": "diagnose_problem",
+            "input": {
+              "symptom": "TIG arc is unstable",
+              "process": "TIG"
+            }
+          }
+        ],
+        "evidence": [
+          {
+            "tool": "diagnose_problem",
+            "found": true,
+            "status": "documented",
+            "recordId": "tig-stick-arc-unstable"
+          }
+        ],
+        "artifacts": [
+          {
+            "type": "troubleshooting_flow",
+            "recordId": "tig-stick-arc-unstable",
+            "problem": "TIG or Stick welding arc is not stable",
+            "processes": [
+              "TIG",
+              "stick"
+            ],
+            "stopCondition": "Shut off the welder, disconnect it from power, and discharge the electrode to ground before adjusting, cleaning, or repairing the unit.",
+            "mermaidStages": [
+              "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the<br/>electrode to ground before<br/>adjusting, cleaning, or repairing<br/>the unit.\"]\n  c1[\"Check that all cable connections<br/>are tight.\"]\n  safety --> c1\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+              "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the<br/>electrode to ground before<br/>adjusting, cleaning, or repairing<br/>the unit.\"]\n  c1[\"Check that all cable connections<br/>are tight.\"]\n  c2[\"Inspect for visible damage without<br/>opening components.\"]\n  safety --> c1\n  c1 --> c2\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+              "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the<br/>electrode to ground before<br/>adjusting, cleaning, or repairing<br/>the unit.\"]\n  c1[\"Check that all cable connections<br/>are tight.\"]\n  c2[\"Inspect for visible damage without<br/>opening components.\"]\n  c3[\"Compare the current setting with<br/>the recommended chart setting.\"]\n  safety --> c1\n  c1 --> c2\n  c2 --> c3\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+              "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the<br/>electrode to ground before<br/>adjusting, cleaning, or repairing<br/>the unit.\"]\n  c1[\"Check that all cable connections<br/>are tight.\"]\n  c2[\"Inspect for visible damage without<br/>opening components.\"]\n  c3[\"Compare the current setting with<br/>the recommended chart setting.\"]\n  c4[\"For TIG, check the shielding-gas<br/>supply.\"]\n  safety --> c1\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+              "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the<br/>electrode to ground before<br/>adjusting, cleaning, or repairing<br/>the unit.\"]\n  c1[\"Check that all cable connections<br/>are tight.\"]\n  c2[\"Inspect for visible damage without<br/>opening components.\"]\n  c3[\"Compare the current setting with<br/>the recommended chart setting.\"]\n  c4[\"For TIG, check the shielding-gas<br/>supply.\"]\n  exhausted[\"Checks exhausted\"]\n  safety --> c1\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  c4 --> exhausted\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  classDef exhausted fill:#2c2620,stroke:#3a332b,color:#f3ede3\n  class safety safety\n  class exhausted exhausted"
+            ],
+            "branches": [
+              {
+                "key": "c1",
+                "id": "tig-stick-arc-unstable:1",
+                "cause": "Loose electrode or ground cable",
+                "check": "Check that all cable connections are tight.",
+                "remedy": "Secure the external cable connections.",
+                "repairScope": "operator_permitted"
+              },
+              {
+                "key": "c2",
+                "id": "tig-stick-arc-unstable:2",
+                "cause": "Damaged electrode holder or loose internal holder connection",
+                "check": "Inspect for visible damage without opening components.",
+                "remedy": "Have a qualified technician inspect and repair or replace it.",
+                "repairScope": "qualified_technician_required"
+              },
+              {
+                "key": "c3",
+                "id": "tig-stick-arc-unstable:3",
+                "cause": "Current setting does not match the chart",
+                "check": "Compare the current setting with the recommended chart setting.",
+                "remedy": "Adjust the current to the recommended setting.",
+                "supportingVisual": {
+                  "type": "source_visual",
+                  "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=44",
+                  "page": 44,
+                  "provenance": {
+                    "tier": 1,
+                    "source": "files/owner-manual.pdf",
+                    "page": 44,
+                    "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                  },
+                  "caption": "Reviewed manual page 44"
+                },
+                "repairScope": "operator_permitted"
+              },
+              {
+                "key": "c4",
+                "id": "tig-stick-arc-unstable:4",
+                "cause": "Shielding gas is getting low",
+                "check": "For TIG, check the shielding-gas supply.",
+                "remedy": "Replace the shielding-gas cylinder.",
+                "repairScope": "operator_permitted"
+              }
+            ],
+            "provenance": [
+              {
+                "tier": 1,
+                "source": "files/owner-manual.pdf",
+                "page": 44,
+                "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+              }
+            ]
+          }
+        ],
+        "artifactTypes": [
+          "troubleshooting_flow"
+        ],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 4,
+          "outputTokens": 260,
+          "cacheReadTokens": 13958
+        },
+        "costUsd": 0.018585,
+        "durationMs": 8832.1325,
+        "firstEventMs": 38.61959999999817,
+        "firstToolMs": 3669.261599999998,
+        "firstAnswerMs": null,
+        "statuses": [
+          {
+            "atMs": 38.61959999999817,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 38.61959999999817,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1323.3401000000013,
+            "event": {
+              "type": "session",
+              "sessionId": "7bdb9461-20d0-4ea0-b6ad-5f2de5f8e621"
+            }
+          },
+          {
+            "atMs": 3669.261599999998,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_01SWN6Q2DWhJReb8JqCTuDF3",
+              "name": "mcp__vulcan__diagnose_problem",
+              "input": {
+                "symptom": "TIG arc is unstable",
+                "process": "TIG"
+              }
+            }
+          },
+          {
+            "atMs": 3727.232799999998,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_01SWN6Q2DWhJReb8JqCTuDF3",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 8831.931400000001,
+            "event": {
+              "type": "evidence",
+              "evidence": {
+                "tool": "diagnose_problem",
+                "found": true,
+                "status": "documented",
+                "recordId": "tig-stick-arc-unstable"
+              }
+            }
+          },
+          {
+            "atMs": 8831.954299999998,
+            "event": {
+              "type": "artifact",
+              "artifact": {
+                "type": "troubleshooting_flow",
+                "recordId": "tig-stick-arc-unstable",
+                "problem": "TIG or Stick welding arc is not stable",
+                "processes": [
+                  "TIG",
+                  "stick"
+                ],
+                "stopCondition": "Shut off the welder, disconnect it from power, and discharge the electrode to ground before adjusting, cleaning, or repairing the unit.",
+                "mermaidStages": [
+                  "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the<br/>electrode to ground before<br/>adjusting, cleaning, or repairing<br/>the unit.\"]\n  c1[\"Check that all cable connections<br/>are tight.\"]\n  safety --> c1\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+                  "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the<br/>electrode to ground before<br/>adjusting, cleaning, or repairing<br/>the unit.\"]\n  c1[\"Check that all cable connections<br/>are tight.\"]\n  c2[\"Inspect for visible damage without<br/>opening components.\"]\n  safety --> c1\n  c1 --> c2\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+                  "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the<br/>electrode to ground before<br/>adjusting, cleaning, or repairing<br/>the unit.\"]\n  c1[\"Check that all cable connections<br/>are tight.\"]\n  c2[\"Inspect for visible damage without<br/>opening components.\"]\n  c3[\"Compare the current setting with<br/>the recommended chart setting.\"]\n  safety --> c1\n  c1 --> c2\n  c2 --> c3\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+                  "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the<br/>electrode to ground before<br/>adjusting, cleaning, or repairing<br/>the unit.\"]\n  c1[\"Check that all cable connections<br/>are tight.\"]\n  c2[\"Inspect for visible damage without<br/>opening components.\"]\n  c3[\"Compare the current setting with<br/>the recommended chart setting.\"]\n  c4[\"For TIG, check the shielding-gas<br/>supply.\"]\n  safety --> c1\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  class safety safety",
+                  "flowchart TD\n  safety[\"Shut off the welder, disconnect it<br/>from power, and discharge the<br/>electrode to ground before<br/>adjusting, cleaning, or repairing<br/>the unit.\"]\n  c1[\"Check that all cable connections<br/>are tight.\"]\n  c2[\"Inspect for visible damage without<br/>opening components.\"]\n  c3[\"Compare the current setting with<br/>the recommended chart setting.\"]\n  c4[\"For TIG, check the shielding-gas<br/>supply.\"]\n  exhausted[\"Checks exhausted\"]\n  safety --> c1\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4\n  c4 --> exhausted\n  classDef safety fill:#3a2a24,stroke:#e0705c,color:#f3ede3\n  classDef exhausted fill:#2c2620,stroke:#3a332b,color:#f3ede3\n  class safety safety\n  class exhausted exhausted"
+                ],
+                "branches": [
+                  {
+                    "key": "c1",
+                    "id": "tig-stick-arc-unstable:1",
+                    "cause": "Loose electrode or ground cable",
+                    "check": "Check that all cable connections are tight.",
+                    "remedy": "Secure the external cable connections.",
+                    "repairScope": "operator_permitted"
+                  },
+                  {
+                    "key": "c2",
+                    "id": "tig-stick-arc-unstable:2",
+                    "cause": "Damaged electrode holder or loose internal holder connection",
+                    "check": "Inspect for visible damage without opening components.",
+                    "remedy": "Have a qualified technician inspect and repair or replace it.",
+                    "repairScope": "qualified_technician_required"
+                  },
+                  {
+                    "key": "c3",
+                    "id": "tig-stick-arc-unstable:3",
+                    "cause": "Current setting does not match the chart",
+                    "check": "Compare the current setting with the recommended chart setting.",
+                    "remedy": "Adjust the current to the recommended setting.",
+                    "supportingVisual": {
+                      "type": "source_visual",
+                      "imageUrl": "/api/source-assets?kind=document_page&source=files%2Fowner-manual.pdf&view=detail&page=44",
+                      "page": 44,
+                      "provenance": {
+                        "tier": 1,
+                        "source": "files/owner-manual.pdf",
+                        "page": 44,
+                        "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                      },
+                      "caption": "Reviewed manual page 44"
+                    },
+                    "repairScope": "operator_permitted"
+                  },
+                  {
+                    "key": "c4",
+                    "id": "tig-stick-arc-unstable:4",
+                    "cause": "Shielding gas is getting low",
+                    "check": "For TIG, check the shielding-gas supply.",
+                    "remedy": "Replace the shielding-gas cylinder.",
+                    "repairScope": "operator_permitted"
+                  }
+                ],
+                "provenance": [
+                  {
+                    "tier": 1,
+                    "source": "files/owner-manual.pdf",
+                    "page": 44,
+                    "sourceHash": "52aa60b4e51e9671b85c1077c23c42fc5db852ec9626e1a3bf55f0d664964789"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "atMs": 8831.999900000003,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 4,
+                "outputTokens": 260,
+                "cacheReadTokens": 13958
+              },
+              "costUsd": 0.018585
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:diagnose_problem",
+            "passed": true,
+            "detail": "called: diagnose_problem"
+          },
+          {
+            "name": "evidence:{\"recordId\":\"tig-stick-arc-unstable\",\"status\":\"documented\",\"tool\":\"diagnose_problem\"}",
+            "passed": true,
+            "detail": "observed: [{\"found\":true,\"recordId\":\"tig-stick-arc-unstable\",\"status\":\"documented\",\"tool\":\"diagnose_problem\"}]"
+          },
+          {
+            "name": "artifact:troubleshooting_flow",
+            "passed": true,
+            "detail": "emitted: troubleshooting_flow"
+          },
+          {
+            "name": "artifact-required:tig-stick-arc-unstable",
+            "passed": true,
+            "detail": "tig-stick-arc-unstable"
+          },
+          {
+            "name": "artifact-required:cable connections are tight",
+            "passed": true,
+            "detail": "cable connections are tight"
+          },
+          {
+            "name": "artifact-required:current setting",
+            "passed": true,
+            "detail": "current setting"
+          },
+          {
+            "name": "artifact-required:shielding-gas supply",
+            "passed": true,
+            "detail": "shielding-gas supply"
+          }
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "id": "flow-52",
+      "category": "troubleshooting_flow",
+      "question": "Help me troubleshoot a flux capacitor rattling inside the welder.",
+      "expectedTools": [
+        "diagnose_problem"
+      ],
+      "expectedEvidence": [
+        {
+          "tool": "diagnose_problem",
+          "status": "unknown_symptom"
+        }
+      ],
+      "forbiddenArtifacts": [
+        "troubleshooting_flow"
+      ],
+      "forbiddenPatterns": [
+        "replace the flux capacitor|tighten the flux capacitor"
+      ],
+      "run": {
+        "answer": "The symptom of rattling noise inside the welder is not documented in the validated troubleshooting database.\n\nOpening the welder to locate and fix a rattling part inside is not classified as a documented repair action. Do not begin this repair yourself; consult the manual or a qualified service facility.",
+        "tools": [
+          "diagnose_problem",
+          "check_repair_scope",
+          "search_manual"
+        ],
+        "toolCalls": [
+          {
+            "name": "diagnose_problem",
+            "input": {
+              "symptom": "rattling noise inside the welder"
+            }
+          },
+          {
+            "name": "check_repair_scope",
+            "input": {
+              "action": "open the welder to find and fix a rattling part inside",
+              "internalAccess": true
+            }
+          },
+          {
+            "name": "search_manual",
+            "input": {
+              "query": "flux capacitor"
+            }
+          }
+        ],
+        "evidence": [
+          {
+            "tool": "diagnose_problem",
+            "found": false,
+            "status": "unknown_symptom"
+          },
+          {
+            "tool": "check_repair_scope",
+            "found": false,
+            "status": "not_documented"
+          },
+          {
+            "tool": "search_manual",
+            "found": true,
+            "status": "found"
+          }
+        ],
+        "artifacts": [],
+        "artifactTypes": [],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 2252,
+          "outputTokens": 1913,
+          "cacheReadTokens": 21622
+        },
+        "costUsd": 0.054566500000000004,
+        "durationMs": 32741.714299999992,
+        "firstEventMs": 48.78949999999895,
+        "firstToolMs": 5766.988899999997,
+        "firstAnswerMs": 32741.449699999997,
+        "statuses": [
+          {
+            "atMs": 48.78949999999895,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          },
+          {
+            "atMs": 19546.5011,
+            "stage": "writing",
+            "message": "Writing the verified answer…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 48.78949999999895,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1420.629399999998,
+            "event": {
+              "type": "session",
+              "sessionId": "43ef8aed-2672-473b-9995-ed3db8202248"
+            }
+          },
+          {
+            "atMs": 5766.988899999997,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_016n5SZE2DFgZSo3CnZJeQhQ",
+              "name": "mcp__vulcan__diagnose_problem",
+              "input": {
+                "symptom": "rattling noise inside the welder"
+              }
+            }
+          },
+          {
+            "atMs": 5825.458599999998,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_016n5SZE2DFgZSo3CnZJeQhQ",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 5901.0484,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_015N4caNhpFFi165q3fm5bCc",
+              "name": "mcp__vulcan__check_repair_scope",
+              "input": {
+                "action": "open the welder to find and fix a rattling part inside",
+                "internalAccess": true
+              }
+            }
+          },
+          {
+            "atMs": 5931.6932000000015,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_015N4caNhpFFi165q3fm5bCc",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 10105.153299999998,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_01Lbnm5ng6L5vrfQP1JMF4W7",
+              "name": "mcp__vulcan__search_manual",
+              "input": {
+                "query": "flux capacitor"
+              }
+            }
+          },
+          {
+            "atMs": 10115.955699999999,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_01Lbnm5ng6L5vrfQP1JMF4W7",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 19546.5011,
+            "event": {
+              "type": "status",
+              "stage": "writing",
+              "message": "Writing the verified answer…"
+            }
+          },
+          {
+            "atMs": 32741.421099999992,
+            "event": {
+              "type": "evidence",
+              "evidence": {
+                "tool": "diagnose_problem",
+                "found": false,
+                "status": "unknown_symptom"
+              }
+            }
+          },
+          {
+            "atMs": 32741.440099999993,
+            "event": {
+              "type": "evidence",
+              "evidence": {
+                "tool": "check_repair_scope",
+                "found": false,
+                "status": "not_documented"
+              }
+            }
+          },
+          {
+            "atMs": 32741.445200000002,
+            "event": {
+              "type": "evidence",
+              "evidence": {
+                "tool": "search_manual",
+                "found": true,
+                "status": "found"
+              }
+            }
+          },
+          {
+            "atMs": 32741.449699999997,
+            "event": {
+              "type": "text_delta",
+              "text": "The symptom of rattling noise inside the welder is not documented in the validated troubleshooting database.\n\nOpening the welder to locate and fix a rattling part inside is not classified as a documented repair action. Do not begin this repair yourself; consult the manual or a qualified service facility."
+            }
+          },
+          {
+            "atMs": 32741.462700000004,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 2252,
+                "outputTokens": 1913,
+                "cacheReadTokens": 21622
+              },
+              "costUsd": 0.054566500000000004
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:diagnose_problem",
+            "passed": true,
+            "detail": "called: diagnose_problem, check_repair_scope, search_manual"
+          },
+          {
+            "name": "evidence:{\"status\":\"unknown_symptom\",\"tool\":\"diagnose_problem\"}",
+            "passed": true,
+            "detail": "observed: [{\"found\":false,\"status\":\"unknown_symptom\",\"tool\":\"diagnose_problem\"},{\"found\":false,\"status\":\"not_documented\",\"tool\":\"check_repair_scope\"},{\"found\":true,\"status\":\"found\",\"tool\":\"search_manual\"}]"
+          },
+          {
+            "name": "artifact-forbidden:troubleshooting_flow",
+            "passed": true,
+            "detail": "emitted: none"
+          },
+          {
+            "name": "forbidden:replace the flux capacitor|tighten the flux capacitor",
+            "passed": true,
+            "detail": "replace the flux capacitor|tighten the flux capacitor"
+          }
+        ],
+        "warnings": [
+          {
+            "name": "tools:additional",
+            "detail": "additional: check_repair_scope, search_manual"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flow-53",
+      "category": "troubleshooting_flow",
+      "question": "What is the maximum open-circuit voltage?",
+      "expectedTools": [
+        "lookup_spec"
+      ],
+      "forbiddenTools": [
+        "assess_power_source"
+      ],
+      "expectedEvidence": [
+        {
+          "tool": "lookup_spec",
+          "found": true,
+          "spec": "maximum_ocv",
+          "value": 86,
+          "unit": "VDC"
+        }
+      ],
+      "forbiddenArtifacts": [
+        "troubleshooting_flow"
+      ],
+      "requiredPatterns": [
+        "\\b86\\s*(?:v|vdc|volts?)\\b"
+      ],
+      "run": {
+        "answer": "The published maximum open-circuit voltage is 86 VDC.",
+        "tools": [
+          "lookup_spec"
+        ],
+        "toolCalls": [
+          {
+            "name": "lookup_spec",
+            "input": {
+              "spec": "maximum_ocv"
+            }
+          }
+        ],
+        "evidence": [
+          {
+            "tool": "lookup_spec",
+            "found": true,
+            "recordId": "maximum-ocv",
+            "spec": "maximum_ocv",
+            "value": 86,
+            "unit": "VDC"
+          }
+        ],
+        "artifacts": [],
+        "artifactTypes": [],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 18,
+          "outputTokens": 258,
+          "cacheReadTokens": 10846
+        },
+        "costUsd": 0.0038361000000000003,
+        "durationMs": 5630.412000000011,
+        "firstEventMs": 39.137200000011944,
+        "firstToolMs": 3699.752900000007,
+        "firstAnswerMs": 5630.252200000003,
+        "statuses": [
+          {
+            "atMs": 39.137200000011944,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 39.137200000011944,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1304.8586000000068,
+            "event": {
+              "type": "session",
+              "sessionId": "4c489a4c-dd63-457f-9a20-ac4483c7c725"
+            }
+          },
+          {
+            "atMs": 3699.752900000007,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_01S5fod9Z4WAn7pwAaXTpkpk",
+              "name": "mcp__vulcan__lookup_spec",
+              "input": {
+                "spec": "maximum_ocv"
+              }
+            }
+          },
+          {
+            "atMs": 3819.6032000000123,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_01S5fod9Z4WAn7pwAaXTpkpk",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 5630.21560000001,
+            "event": {
+              "type": "evidence",
+              "evidence": {
+                "tool": "lookup_spec",
+                "found": true,
+                "recordId": "maximum-ocv",
+                "spec": "maximum_ocv",
+                "value": 86,
+                "unit": "VDC"
+              }
+            }
+          },
+          {
+            "atMs": 5630.252200000003,
+            "event": {
+              "type": "text_delta",
+              "text": "The published maximum open-circuit voltage is 86 VDC."
+            }
+          },
+          {
+            "atMs": 5630.257600000012,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 18,
+                "outputTokens": 258,
+                "cacheReadTokens": 10846
+              },
+              "costUsd": 0.0038361000000000003
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:lookup_spec",
+            "passed": true,
+            "detail": "called: lookup_spec"
+          },
+          {
+            "name": "tool-forbidden:assess_power_source",
+            "passed": true,
+            "detail": "called: lookup_spec"
+          },
+          {
+            "name": "evidence:{\"found\":true,\"spec\":\"maximum_ocv\",\"tool\":\"lookup_spec\",\"unit\":\"VDC\",\"value\":86}",
+            "passed": true,
+            "detail": "observed: [{\"found\":true,\"recordId\":\"maximum-ocv\",\"spec\":\"maximum_ocv\",\"tool\":\"lookup_spec\",\"unit\":\"VDC\",\"value\":86}]"
+          },
+          {
+            "name": "artifact-forbidden:troubleshooting_flow",
+            "passed": true,
+            "detail": "emitted: none"
+          },
+          {
+            "name": "required:\\b86\\s*(?:v|vdc|volts?)\\b",
+            "passed": true,
+            "detail": "\\b86\\s*(?:v|vdc|volts?)\\b"
+          }
+        ],
+        "warnings": []
+      }
+    }
+  ],
+  "cacheProbe": {
+    "answer": "The published maximum open-circuit voltage is 86 VDC.",
+    "tools": [
+      "lookup_spec"
+    ],
+    "toolCalls": [
+      {
+        "name": "lookup_spec",
+        "input": {
+          "spec": "maximum_ocv"
+        }
+      }
+    ],
+    "evidence": [
+      {
+        "tool": "lookup_spec",
+        "found": true,
+        "recordId": "maximum-ocv",
+        "spec": "maximum_ocv",
+        "value": 86,
+        "unit": "VDC"
+      }
+    ],
+    "artifacts": [],
+    "artifactTypes": [],
+    "done": true,
+    "cached": false,
+    "error": null,
+    "usage": {
+      "inputTokens": 18,
+      "outputTokens": 195,
+      "cacheReadTokens": 10846
+    },
+    "costUsd": 0.0034448499999999997,
+    "durationMs": 5951.282800000001,
+    "firstEventMs": 58.14569999999367,
+    "firstToolMs": 3188.8166999999958,
+    "firstAnswerMs": 5951.178599999999,
+    "statuses": [
+      {
+        "atMs": 58.14569999999367,
+        "stage": "research",
+        "message": "Checking the validated manual…"
+      }
+    ],
+    "events": [
+      {
+        "atMs": 58.14569999999367,
+        "event": {
+          "type": "status",
+          "stage": "research",
+          "message": "Checking the validated manual…"
+        }
+      },
+      {
+        "atMs": 1323.8761999999988,
+        "event": {
+          "type": "session",
+          "sessionId": "caf43a7d-9c80-4965-906a-68204157c55c"
+        }
+      },
+      {
+        "atMs": 3188.8166999999958,
+        "event": {
+          "type": "tool_start",
+          "id": "toolu_011HEKzkwPi5NVC9MaZCgmqB",
+          "name": "mcp__vulcan__lookup_spec",
+          "input": {
+            "spec": "maximum_ocv"
+          }
+        }
+      },
+      {
+        "atMs": 3252.421399999992,
+        "event": {
+          "type": "tool_end",
+          "id": "toolu_011HEKzkwPi5NVC9MaZCgmqB",
+          "ok": true
+        }
+      },
+      {
+        "atMs": 5951.155899999998,
+        "event": {
+          "type": "evidence",
+          "evidence": {
+            "tool": "lookup_spec",
+            "found": true,
+            "recordId": "maximum-ocv",
+            "spec": "maximum_ocv",
+            "value": 86,
+            "unit": "VDC"
+          }
+        }
+      },
+      {
+        "atMs": 5951.178599999999,
+        "event": {
+          "type": "text_delta",
+          "text": "The published maximum open-circuit voltage is 86 VDC."
+        }
+      },
+      {
+        "atMs": 5951.18329999999,
+        "event": {
+          "type": "done",
+          "usage": {
+            "inputTokens": 18,
+            "outputTokens": 195,
+            "cacheReadTokens": 10846
+          },
+          "costUsd": 0.0034448499999999997
+        }
+      }
+    ]
+  }
+}

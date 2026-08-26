@@ -36,12 +36,77 @@ function shortToolName(name) {
   return name.replace(/^mcp__[^_]+__/, "");
 }
 
+function stableJson(value) {
+  if (Array.isArray(value)) return `[${value.map(stableJson).join(",")}]`;
+  if (value && typeof value === "object") {
+    return `{${Object.entries(value)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([key, child]) => `${JSON.stringify(key)}:${stableJson(child)}`)
+      .join(",")}}`;
+  }
+  return JSON.stringify(value) ?? "undefined";
+}
+
+function partiallyMatches(expected, actual) {
+  if (expected && typeof expected === "object" && !Array.isArray(expected)) {
+    return (
+      actual &&
+      typeof actual === "object" &&
+      !Array.isArray(actual) &&
+      Object.entries(expected).every(([key, value]) => partiallyMatches(value, actual[key]))
+    );
+  }
+  return stableJson(expected) === stableJson(actual);
+}
+
 function score(question, run) {
   const checks = [];
+  const warnings = [];
   const add = (name, passed, detail) => checks.push({ name, passed, detail });
   add("completed", run.done && !run.error, run.error || (run.done ? "done" : "missing done event"));
   for (const tool of question.expectedTools ?? []) {
     add(`tool:${tool}`, run.tools.includes(tool), `called: ${run.tools.join(", ") || "none"}`);
+  }
+  for (const tool of question.forbiddenTools ?? []) {
+    add(
+      `tool-forbidden:${tool}`,
+      !run.tools.includes(tool),
+      `called: ${run.tools.join(", ") || "none"}`,
+    );
+  }
+  const additionalTools = [
+    ...new Set(run.tools.filter((tool) => !(question.expectedTools ?? []).includes(tool))),
+  ];
+  if (additionalTools.length > 0) {
+    warnings.push({
+      name: "tools:additional",
+      detail: `additional: ${additionalTools.join(", ")}`,
+    });
+  }
+  for (const expected of question.expectedEvidence ?? []) {
+    add(
+      `evidence:${stableJson(expected)}`,
+      run.evidence.some((actual) => partiallyMatches(expected, actual)),
+      `observed: ${stableJson(run.evidence)}`,
+    );
+  }
+  for (const artifact of question.expectedArtifacts ?? []) {
+    add(
+      `artifact:${artifact}`,
+      run.artifactTypes.includes(artifact),
+      `emitted: ${run.artifactTypes.join(", ") || "none"}`,
+    );
+  }
+  for (const artifact of question.forbiddenArtifacts ?? []) {
+    add(
+      `artifact-forbidden:${artifact}`,
+      !run.artifactTypes.includes(artifact),
+      `emitted: ${run.artifactTypes.join(", ") || "none"}`,
+    );
+  }
+  const artifactPayload = JSON.stringify(run.artifacts);
+  for (const pattern of question.requiredArtifactPatterns ?? []) {
+    add(`artifact-required:${pattern}`, patternMatches(pattern, artifactPayload), pattern);
   }
   for (const pattern of question.requiredPatterns ?? []) {
     add(`required:${pattern}`, patternMatches(pattern, run.answer), pattern);
@@ -59,7 +124,7 @@ function score(question, run) {
       run.answer.slice(0, 100),
     );
   }
-  return { passed: checks.every((check) => check.passed), checks };
+  return { passed: checks.every((check) => check.passed), checks, warnings };
 }
 
 async function readEvents(response, startedAt) {
@@ -98,9 +163,23 @@ async function ask(question) {
     .filter(({ event }) => event.type === "text_delta")
     .map(({ event }) => event.text)
     .join("");
-  const tools = stampedEvents
+  const allToolCalls = stampedEvents
     .filter(({ event }) => event.type === "tool_start")
-    .map(({ event }) => shortToolName(event.name));
+    .map(({ event }) => ({ name: shortToolName(event.name), input: event.input }));
+  const seenToolCalls = new Set();
+  const toolCalls = allToolCalls.filter((call) => {
+    const key = `${call.name}:${stableJson(call.input)}`;
+    if (seenToolCalls.has(key)) return false;
+    seenToolCalls.add(key);
+    return true;
+  });
+  const tools = toolCalls.map((call) => call.name);
+  const evidence = stampedEvents
+    .filter(({ event }) => event.type === "evidence")
+    .map(({ event }) => event.evidence);
+  const artifacts = stampedEvents
+    .filter(({ event }) => event.type === "artifact")
+    .map(({ event }) => event.artifact);
   const terminal = stampedEvents.findLast(({ event }) => event.type === "done")?.event;
   const error = stampedEvents.findLast(({ event }) => event.type === "error")?.event?.message;
   const firstEventMs = stampedEvents[0]?.atMs ?? null;
@@ -112,6 +191,10 @@ async function ask(question) {
   return {
     answer,
     tools,
+    toolCalls,
+    evidence,
+    artifacts,
+    artifactTypes: artifacts.map((artifact) => artifact.type),
     done: Boolean(terminal),
     cached: terminal?.cached === true,
     error: error ?? null,
@@ -146,6 +229,12 @@ function summarize(results, cacheProbe, startedAt, finishedAt) {
       return [category, { passed: rows.filter((row) => row.score.passed).length, total: rows.length }];
     }),
   );
+  const namedChecks = results.flatMap((result) => result.score.checks);
+  const toolChecks = namedChecks.filter(
+    (check) => check.name.startsWith("tool:") || check.name.startsWith("tool-forbidden:"),
+  );
+  const artifactChecks = namedChecks.filter((check) => check.name.startsWith("artifact:" ) || check.name.startsWith("artifact-forbidden:"));
+  const toolWarnings = results.flatMap((result) => result.score.warnings);
   return {
     startedAt,
     finishedAt,
@@ -154,6 +243,15 @@ function summarize(results, cacheProbe, startedAt, finishedAt) {
     passed: results.filter((result) => result.score.passed).length,
     failed: results.filter((result) => !result.score.passed).length,
     byCategory,
+    toolRouting: {
+      passed: toolChecks.filter((check) => check.passed).length,
+      total: toolChecks.length,
+    },
+    toolEfficiencyWarnings: toolWarnings.length,
+    artifactRouting: {
+      passed: artifactChecks.filter((check) => check.passed).length,
+      total: artifactChecks.length,
+    },
     latencyMs: {
       mean: round(durations.reduce((sum, value) => sum + value, 0) / Math.max(durations.length, 1)),
       p50: round(percentile(durations, 0.5)),
@@ -183,13 +281,16 @@ function markdown(payload) {
   const lines = [
     "# Agent benchmark",
     "",
-    `- Run: ${summary.startedAt} → ${summary.finishedAt}`,
+    `- Run: ${summary.startedAt} -> ${summary.finishedAt}`,
     `- Accuracy: ${summary.passed}/${summary.questionCount} (${((summary.passed / summary.questionCount) * 100).toFixed(1)}%)`,
     `- Completed: ${summary.completed}/${summary.questionCount}`,
     `- Latency: p50 ${(summary.latencyMs.p50 / 1_000).toFixed(2)} s; p95 ${(summary.latencyMs.p95 / 1_000).toFixed(2)} s`,
     `- First answer: p50 ${(summary.latencyMs.firstAnswerP50 / 1_000).toFixed(2)} s; p95 ${(summary.latencyMs.firstAnswerP95 / 1_000).toFixed(2)} s`,
     `- Total API cost: $${summary.totalCostUsd.toFixed(4)}`,
     `- Cache probe: ${summary.cacheProbe.cached ? "hit" : "miss"} in ${(summary.cacheProbe.durationMs / 1_000).toFixed(3)} s`,
+    `- Tool routing: ${summary.toolRouting.passed}/${summary.toolRouting.total}`,
+    `- Additional-tool warnings: ${summary.toolEfficiencyWarnings}`,
+    `- Artifact routing: ${summary.artifactRouting.passed}/${summary.artifactRouting.total}`,
     "",
     "## Categories",
     "",
@@ -197,11 +298,11 @@ function markdown(payload) {
     "",
     "## Results",
     "",
-    "| ID | Result | Latency | Cost | Tools |",
-    "|---|---:|---:|---:|---|",
+    "| ID | Result | Latency | Cost | Tools | Artifacts |",
+    "|---|---:|---:|---:|---|---|",
     ...results.map(
       (result) =>
-        `| ${result.id} | ${result.score.passed ? "PASS" : "FAIL"} | ${(result.run.durationMs / 1_000).toFixed(2)} s | $${result.run.costUsd.toFixed(4)} | ${result.run.tools.join(", ") || "none"} |`,
+        `| ${result.id} | ${result.score.passed ? "PASS" : "FAIL"} | ${(result.run.durationMs / 1_000).toFixed(2)} s | $${result.run.costUsd.toFixed(4)} | ${result.run.tools.join(", ") || "none"} | ${result.run.artifactTypes.join(", ") || "none"} |`,
     ),
     "",
     "## Failed checks",
@@ -213,6 +314,16 @@ function markdown(payload) {
       lines.push(`- ${check.name}: ${check.detail}`);
     }
     lines.push("", "Answer:", "", result.run.answer || `ERROR: ${result.run.error}`, "");
+  }
+  const warningRows = results.filter((row) => row.score.warnings.length > 0);
+  if (warningRows.length > 0) {
+    lines.push("## Tool-efficiency warnings", "");
+    for (const result of warningRows) {
+      for (const warning of result.score.warnings) {
+        lines.push(`- ${result.id}: ${warning.detail}`);
+      }
+    }
+    lines.push("");
   }
   return `${lines.join("\n")}\n`;
 }
@@ -228,6 +339,10 @@ for (const [index, question] of questions.entries()) {
     run = {
       answer: "",
       tools: [],
+      toolCalls: [],
+      evidence: [],
+      artifacts: [],
+      artifactTypes: [],
       done: false,
       cached: false,
       error: error instanceof Error ? error.message : String(error),

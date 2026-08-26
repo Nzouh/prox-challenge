@@ -307,7 +307,7 @@
     "stage": "power_controls",
     "steps": [
       {
-        "instruction": "With adequate ventilation and no gas leak, open the cylinder valve fully and set flow to the value on the Settings Chart.",
+        "instruction": "With adequate ventilation and no gas leak, open the cylinder valve fully and set shielding-gas flow to 20–30 SCFH.",
         "order": 6,
         "state": "required"
       }
@@ -424,7 +424,7 @@
     "stage": "power_controls",
     "steps": [
       {
-        "instruction": "Ensure adequate ventilation, open the argon-cylinder valve fully, and set gas flow from the inside-door Settings Chart.",
+        "instruction": "Ensure adequate ventilation, open the argon-cylinder valve fully, and set argon flow to 10–25 SCFH.",
         "order": 1,
         "state": "required"
       },

@@ -75,3 +75,25 @@ thickness, and cleanliness context.
 45. The machine is powered off and unplugged. Am I allowed to replace the MIG contact tip?
 46. Show me the reviewed manual page for the inside controls and wire-feed parts.
 47. Can I rewind the transformer myself if the machine stops working?
+
+## Troubleshooting-flow routing and artifacts
+
+48. My weld has porosity. What should I check?
+49. Wire feeds from my MIG gun, but the arc will not ignite. What should I check?
+50. The wire-feed motor runs, but the wire does not feed properly. Help me check it.
+51. My TIG arc is unstable. Walk me through the checks.
+52. Help me troubleshoot a flux capacitor rattling inside the welder.
+53. What is the maximum open-circuit voltage?
+
+Questions 48–51 must call `diagnose_problem` and emit a grounded
+`troubleshooting_flow`. Question 52 must call the diagnostic tool but emit no flow for an
+unknown symptom. Question 53 guards against false-positive flowchart routing.
+
+## Evaluation contract
+
+The evaluator treats `expectedTools` as required evidence capabilities and
+`forbiddenTools` as correctness or safety violations. Other tools are reported as
+efficiency warnings rather than automatic failures. Free-form prose remains flexible:
+`expectedEvidence` checks normalized fields such as `status`, `recordId`, `spec`, `value`,
+and `unit` from the validated event stream. Regex answer checks are reserved for wording
+that is itself user-visible and materially important.

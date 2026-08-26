@@ -1,7 +1,17 @@
 import { query, type SDKResultMessage } from "@anthropic-ai/claude-agent-sdk";
 import { z } from "zod";
-import { artifactSchema, shouldOfferArtifacts, type Artifact } from "./artifacts";
+import {
+  agentEmittableArtifactSchema,
+  shouldOfferArtifacts,
+  type Artifact,
+} from "./artifacts";
 import type { AgentEvent, AgentUsage } from "./events";
+import {
+  dedupeEvidence,
+  stableJson,
+  summarizeEvidence,
+  toolCallKey,
+} from "./evidence-summary";
 import { artifactMatchesLookup, type FoundSpecResult } from "./grounding";
 import type { AgentInput } from "./input";
 import { manualSearchQuerySchema, searchManual } from "./manual-search";
@@ -27,12 +37,14 @@ import {
   type SpecQuery,
   type SpecResult,
 } from "./specs";
-import { getSetup, setupQuerySchema } from "./setups";
+import { buildPolarityMapArtifact } from "./polarity-map";
+import { buildSetupChecklistArtifact, getSetup, setupQuerySchema } from "./setups";
 import { diagnoseProblem, diagnosisQuerySchema } from "./diagnosis";
+import { buildTroubleshootingFlowArtifact } from "./troubleshooting-flow";
 import { faultIndicatorQuerySchema, lookupFaultIndicator } from "./fault-indicators";
 import { assessPowerSource, powerSourceQuerySchema } from "./power-source";
 import { checkRepairScope, repairScopeQuerySchema } from "./repair-scope";
-import { getSourcePage, sourcePageQuerySchema } from "./source-page";
+import { buildSourceVisualArtifact, getSourcePage, sourcePageQuerySchema } from "./source-page";
 import {
   processRecommendationQuerySchema,
   recommendProcess,
@@ -101,7 +113,9 @@ async function runStructuredStage<T>(args: {
       allowedTools: [],
       settingSources: [],
       persistSession: false,
-      maxTurns: 1,
+      // Structured-output completion can require one model turn plus the SDK's
+      // schema-finalization turn. A limit of 1 intermittently returned max-turns.
+      maxTurns: 2,
       maxBudgetUsd: args.maxBudgetUsd,
       outputFormat: {
         type: "json_schema",
@@ -135,7 +149,8 @@ function writerPrompt(
   checker: CheckerOutput,
   feedback?: string,
 ): string {
-  return `Question:\n${question}\n\nVerified MCP evidence:\n${JSON.stringify(evidence, null, 2)}\n\nApproved checker plan:\n${JSON.stringify(checker, null, 2)}\n\nWrite the final answer as short paragraphs. Each paragraph must list only the smallest exact set of evidence IDs that supports it. Answer only what was asked; do not offer an unrelated next step or setting. Express every measured quantity with digits so the host can validate it. Do not introduce any number, machine fact, repair step, or safety claim absent from the evidence and approved plan. Do not print citations; the host adds them. ${feedback ? `Previous deterministic-check failure: ${feedback}` : ""}`;
+  const allowedEvidenceIds = evidence.map((item) => item.id);
+  return `Question:\n${question}\n\nVerified MCP evidence:\n${JSON.stringify(evidence, null, 2)}\n\nAllowed evidence IDs:\n${JSON.stringify(allowedEvidenceIds)}\n\nApproved checker plan:\n${JSON.stringify(checker, null, 2)}\n\nWrite the final answer as short paragraphs. Each paragraph must list only the smallest exact set of evidence IDs that supports it, and every ID must come from the allowed evidence IDs above. Answer only what was asked; do not offer an unrelated next step or setting. Express every measured quantity with digits so the host can validate it. Do not introduce any number, machine fact, repair step, or safety claim absent from the evidence and approved plan. Do not print citations; the host adds them. ${feedback ? `Previous deterministic-check failure: ${feedback}` : ""}`;
 }
 
 const CHECKER_SYSTEM_PROMPT = `You are the safety and grounding checker for a welding-support system. You cannot call tools. The approved field approves the safety and grounding of the response plan, not the action requested by the user. A clear refusal is an approved response when evidence supports it. Approve only claims supported by successful MCP evidence. Never weaken a deterministic safety disposition. Unknown context is not safe context. Produce only the required structured output.`;
@@ -184,6 +199,9 @@ export async function* runValidatedAgent(
   let writerFeedback = "";
   let feedback = "";
   let researchSessionId = sessionId;
+  const successfulToolCalls = new Set<string>();
+  const successfulEvidenceByCall = new Map<string, EvidenceRecord[]>();
+  const successfulArtifactsByCall = new Map<string, Artifact[]>();
   const offerArtifacts = shouldOfferArtifacts(input.text);
   const questionRoute = routeQuestion(input.text);
   const fastSpecIntent =
@@ -198,17 +216,24 @@ export async function* runValidatedAgent(
         stage: "research",
         message: attempt === 1 ? "Checking the validated manual…" : "Rechecking the evidence…",
       };
-      const attemptEvidence: EvidenceRecord[] = [];
+      let attemptEvidence: EvidenceRecord[] = [...successfulEvidenceByCall.values()].flat();
       const pendingEvidence = new Map<string, EvidenceRecord[]>();
+      const pendingArtifacts = new Map<string, Artifact[]>();
       const pendingLookups = new Map<string, SpecResult>();
+      const callKeyByToolUseId = new Map<string, string>();
       const verifiedLookups: FoundSpecResult[] = [];
-      const attemptArtifacts: Artifact[] = [];
+      const attemptArtifacts: Artifact[] = [...successfulArtifactsByCall.values()]
+        .flat()
+        .filter(
+          (artifact, index, all) =>
+            all.findIndex((candidate) => stableJson(candidate) === stableJson(artifact)) === index,
+        );
       let attemptFailure: string | null = null;
       let terminalResult: SDKResultMessage | undefined;
       const researchPrompt =
         attempt === 1
           ? input.text
-          : `${input.text}\n\nValidation feedback from the previous attempt: ${feedback}\nCall the missing or corrected MCP tools, and do not rely on memory.`;
+          : `${input.text}\n\nValidation feedback from the previous attempt: ${feedback}\nPreviously successful deterministic calls:\n${JSON.stringify([...successfulToolCalls], null, 2)}\nCall only missing or corrected MCP tools. Do not repeat an identical successful call, and do not rely on memory.`;
       // Exact, fully specified, low-risk lookups need only a fast MCP-routing turn. If
       // that turn fails host validation, the bounded retry automatically uses Opus.
       const useFastResearchModel = fastSpecIntent !== null && attempt === 1;
@@ -222,7 +247,12 @@ export async function* runValidatedAgent(
             : RESEARCH_FALLBACK_MODEL,
           systemPrompt: SYSTEM_PROMPT,
           ...researchSessionOptions(researchSessionId),
-          mcpServers: { [MCP_SERVER_NAME]: offerArtifacts ? vulcanServer : vulcanTextServer },
+          mcpServers: {
+            // Setup, polarity, source, and troubleshooting visuals are derived host-side
+            // from their evidence tools. Claude receives emit_artifact only for an
+            // explicit visual request, avoiding redundant ungrounded artifact calls.
+            [MCP_SERVER_NAME]: offerArtifacts ? vulcanServer : vulcanTextServer,
+          },
           allowedTools: offerArtifacts ? ALLOWED_TOOLS : TEXT_ALLOWED_TOOLS,
           tools: [],
           settingSources: [],
@@ -246,7 +276,15 @@ export async function* runValidatedAgent(
             if (message.error) attemptFailure = `Model request failed: ${message.error}`;
             for (const block of message.message.content) {
               if (block.type !== "tool_use") continue;
+              callKeyByToolUseId.set(block.id, toolCallKey(block.name, block.input));
               yield { type: "tool_start", id: block.id, name: block.name, input: block.input };
+              const addAttemptArtifact = (artifact: Artifact | null | undefined) => {
+                if (!artifact) return;
+                if (!attemptArtifacts.some((candidate) => stableJson(candidate) === stableJson(artifact))) {
+                  attemptArtifacts.push(artifact);
+                }
+                pendingArtifacts.set(block.id, [...(pendingArtifacts.get(block.id) ?? []), artifact]);
+              };
 
               if (block.name === LOOKUP_SPEC_TOOL) {
                 const parsed = specQuerySchema.safeParse(block.input);
@@ -262,22 +300,72 @@ export async function* runValidatedAgent(
               } else if (block.name === GET_SETUP_TOOL) {
                 const parsed = setupQuerySchema.safeParse(block.input);
                 if (parsed.success) {
-                  pendingEvidence.set(block.id, [
-                    { id: `evidence:${block.id}`, tool: "get_setup", result: getSetup(parsed.data) },
-                  ]);
+                  const setupResult = getSetup(parsed.data);
+                  // A phrase like "polarity setup" trips the setup, source-page, and
+                  // structured-spec intents at once, and the validator requires all three.
+                  // The host already holds every input those lookups need, so it runs them
+                  // itself rather than spending research attempts hoping the model calls
+                  // each one. They are the same deterministic functions the MCP tools call.
+                  const setupEvidence: EvidenceRecord[] = [
+                    { id: `evidence:${block.id}`, tool: "get_setup", result: setupResult },
+                  ];
+                  const specIntent = structuredSpecIntent(input.text);
+                  if (
+                    setupResult.found &&
+                    specIntent?.spec === "polarity" &&
+                    specIntent.process === setupResult.process
+                  ) {
+                    setupEvidence.push({
+                      id: `evidence:${block.id}:polarity`,
+                      tool: "lookup_spec",
+                      result: resolveSpecQuery(specIntent),
+                    });
+                  }
+                  pendingEvidence.set(block.id, setupEvidence);
+                  const polarityMap = buildPolarityMapArtifact(setupResult);
+                  addAttemptArtifact(polarityMap);
+                  // A cables-only checklist would repeat the map's own list verbatim, so
+                  // the map supersedes it; wider stages still need the full checklist.
+                  const checklist =
+                    polarityMap && setupResult.found && setupResult.setup === "cables"
+                      ? null
+                      : buildSetupChecklistArtifact(setupResult);
+                  addAttemptArtifact(checklist);
+                  if (setupResult.found && setupResult.visualSource) {
+                    const sourceQuery = {
+                      kind: "document_page" as const,
+                      source: setupResult.visualSource.file,
+                      page: setupResult.visualSource.page,
+                      view: "detail" as const,
+                    };
+                    const sourceResult = getSourcePage(sourceQuery);
+                    const visual = buildSourceVisualArtifact(sourceQuery, sourceResult);
+                    if (visual) {
+                      addAttemptArtifact(visual);
+                      setupEvidence.push({
+                        id: `evidence:${block.id}:source`,
+                        tool: "get_source_page",
+                        result: sourceResult,
+                      });
+                    }
+                  }
                 } else {
                   attemptFailure = `get_setup input failed host validation: ${parsed.error.message}`;
                 }
               } else if (block.name === DIAGNOSE_PROBLEM_TOOL) {
                 const parsed = diagnosisQuerySchema.safeParse(block.input);
                 if (parsed.success) {
+                  const diagnosisResult = diagnoseProblem(parsed.data);
                   pendingEvidence.set(block.id, [
                     {
                       id: `evidence:${block.id}`,
                       tool: "diagnose_problem",
-                      result: diagnoseProblem(parsed.data),
+                      result: diagnosisResult,
                     },
                   ]);
+
+                  const flow = buildTroubleshootingFlowArtifact(diagnosisResult);
+                  addAttemptArtifact(flow);
                 } else {
                   attemptFailure = `diagnose_problem input failed host validation: ${parsed.error.message}`;
                 }
@@ -366,24 +454,27 @@ export async function* runValidatedAgent(
               } else if (block.name === GET_SOURCE_PAGE_TOOL) {
                 const parsed = sourcePageQuerySchema.safeParse(block.input);
                 if (parsed.success) {
+                  const sourceResult = getSourcePage(parsed.data);
                   pendingEvidence.set(block.id, [
                     {
                       id: `evidence:${block.id}`,
                       tool: "get_source_page",
-                      result: getSourcePage(parsed.data),
+                      result: sourceResult,
                     },
                   ]);
+                  const visual = buildSourceVisualArtifact(parsed.data, sourceResult);
+                  addAttemptArtifact(visual);
                 } else {
                   attemptFailure = `get_source_page input failed host validation: ${parsed.error.message}`;
                 }
               } else if (block.name === EMIT_ARTIFACT_TOOL) {
-                const parsed = artifactSchema.safeParse(
+                const parsed = agentEmittableArtifactSchema.safeParse(
                   (block.input as { artifact?: unknown } | null)?.artifact,
                 );
                 const grounded =
                   parsed.success &&
                   verifiedLookups.some((lookup) => artifactMatchesLookup(parsed.data, lookup));
-                if (parsed.success && grounded) attemptArtifacts.push(parsed.data);
+                if (parsed.success && grounded) addAttemptArtifact(parsed.data);
                 else {
                   attemptFailure = parsed.success
                     ? "Artifact did not match a successful lookup from this attempt."
@@ -401,6 +492,15 @@ export async function* runValidatedAgent(
               const pending = pendingEvidence.get(block.tool_use_id);
               pendingEvidence.delete(block.tool_use_id);
               if (ok && pending) attemptEvidence.push(...pending);
+              const callKey = callKeyByToolUseId.get(block.tool_use_id);
+              callKeyByToolUseId.delete(block.tool_use_id);
+              const artifactsForCall = pendingArtifacts.get(block.tool_use_id);
+              pendingArtifacts.delete(block.tool_use_id);
+              if (ok && callKey) {
+                successfulToolCalls.add(callKey);
+                if (pending) successfulEvidenceByCall.set(callKey, pending);
+                if (artifactsForCall) successfulArtifactsByCall.set(callKey, artifactsForCall);
+              }
               if (!ok) attemptFailure = "An MCP tool call failed.";
               const lookup = pendingLookups.get(block.tool_use_id);
               pendingLookups.delete(block.tool_use_id);
@@ -419,6 +519,12 @@ export async function* runValidatedAgent(
         addResultUsage(totals, terminalResult);
         attemptFailure = attemptFailure ?? resultError(terminalResult);
       }
+      // SDK tool-use IDs are long and persist in the resumed research transcript.
+      // Structured stages receive short IDs scoped only to this validated attempt.
+      attemptEvidence = dedupeEvidence(attemptEvidence).map((item, index) => ({
+        ...item,
+        id: `e${index + 1}`,
+      }));
       attemptFailure = attemptFailure ?? validateResearchEvidence(input.text, attemptEvidence);
 
       // A persisted fast-route session contains the research model's own final text even
@@ -457,8 +563,26 @@ export async function* runValidatedAgent(
         const exactSpecEvidence = fastSpecIntent
           ? matchingExactSpecEvidence(fastSpecIntent, attemptEvidence)
           : undefined;
+        const hasTroubleshootingFlow = attemptArtifacts.some(
+          (artifact) => artifact.type === "troubleshooting_flow",
+        );
 
-        if (exactSpecEvidence) {
+        if (hasTroubleshootingFlow && !requiresRiskAssessment(input.text)) {
+          // The interactive flow is a deterministic rendering of already validated
+          // diagnosis evidence. A second prose writer would only duplicate it.
+          const diagnosisEvidence = attemptEvidence.find(
+            (item) => item.tool === "diagnose_problem",
+          );
+          attemptChecker = provisionalChecker;
+          attemptWriter = {
+            paragraphs: [
+              {
+                text: "Interactive troubleshooting flow.",
+                evidenceIds: diagnosisEvidence ? [diagnosisEvidence.id] : [],
+              },
+            ],
+          };
+        } else if (exactSpecEvidence) {
           // The MCP result has already been recomputed and matched by the host. Rendering
           // that narrow result directly skips both redundant model verification stages.
           attemptChecker = provisionalChecker;
@@ -558,8 +682,11 @@ export async function* runValidatedAgent(
       return;
     }
 
+    for (const item of evidence) yield { type: "evidence", evidence: summarizeEvidence(item) };
     for (const artifact of artifacts) yield { type: "artifact", artifact };
-    yield { type: "text_delta", text: renderWriterOutput(writerOutput, evidence) };
+    if (!artifacts.some((artifact) => artifact.type === "troubleshooting_flow")) {
+      yield { type: "text_delta", text: renderWriterOutput(writerOutput, evidence, input.text) };
+    }
     yield {
       type: "done",
       usage: {

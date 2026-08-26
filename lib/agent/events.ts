@@ -1,5 +1,28 @@
 import type { Artifact } from "./artifacts";
 
+export type AgentEvidenceValue =
+  | string
+  | number
+  | boolean
+  | null
+  | Array<string | number | boolean | null>;
+
+/**
+ * Public, normalized evidence metadata. This intentionally omits raw tool payloads so
+ * evaluators can assert meaning without coupling themselves to prose or exposing the
+ * complete internal research transcript to the browser.
+ */
+export type AgentEvidenceSummary = {
+  tool: string;
+  found?: boolean;
+  status?: string;
+  recordId?: string;
+  spec?: string;
+  value?: AgentEvidenceValue;
+  unit?: string;
+  process?: string;
+};
+
 /**
  * The wire contract between the route and the browser. One JSON-encoded AgentEvent per
  * SSE frame. Adding a member is safe for the producer and deliberately breaks exhaustive
@@ -13,6 +36,7 @@ export type AgentEvent =
   | { type: "text_delta"; text: string }
   | { type: "tool_start"; id: string; name: string; input: unknown }
   | { type: "tool_end"; id: string; ok: boolean }
+  | { type: "evidence"; evidence: AgentEvidenceSummary }
   | { type: "artifact"; artifact: Artifact }
   | { type: "done"; usage: AgentUsage; costUsd: number; cached?: boolean }
   | { type: "error"; message: string };

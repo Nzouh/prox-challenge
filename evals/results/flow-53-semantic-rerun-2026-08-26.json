@@ -1,0 +1,363 @@
+{
+  "summary": {
+    "startedAt": "2026-08-26T20:29:53.715Z",
+    "finishedAt": "2026-08-26T20:30:18.459Z",
+    "questionCount": 1,
+    "completed": 1,
+    "passed": 1,
+    "failed": 0,
+    "byCategory": {
+      "troubleshooting_flow": {
+        "passed": 1,
+        "total": 1
+      }
+    },
+    "toolRouting": {
+      "passed": 2,
+      "total": 2
+    },
+    "toolEfficiencyWarnings": 0,
+    "artifactRouting": {
+      "passed": 1,
+      "total": 1
+    },
+    "latencyMs": {
+      "mean": 13609.5,
+      "p50": 13609.5,
+      "p95": 13609.5,
+      "firstAnswerP50": 13608.5,
+      "firstAnswerP95": 13608.5
+    },
+    "totalCostUsd": 0.0159,
+    "totalUsage": {
+      "inputTokens": 20,
+      "outputTokens": 516,
+      "cacheReadTokens": 17398
+    },
+    "cacheProbe": {
+      "durationMs": 11106.7,
+      "cached": false,
+      "costUsd": 0.01406335
+    }
+  },
+  "results": [
+    {
+      "id": "flow-53",
+      "category": "troubleshooting_flow",
+      "question": "What is the maximum open-circuit voltage?",
+      "expectedTools": [
+        "lookup_spec"
+      ],
+      "forbiddenTools": [
+        "assess_power_source"
+      ],
+      "expectedEvidence": [
+        {
+          "tool": "lookup_spec",
+          "found": true,
+          "spec": "maximum_ocv",
+          "value": 86,
+          "unit": "VDC"
+        }
+      ],
+      "forbiddenArtifacts": [
+        "troubleshooting_flow"
+      ],
+      "requiredPatterns": [
+        "\\b86\\s*(?:v|vdc|volts?)\\b"
+      ],
+      "run": {
+        "answer": "The published maximum open-circuit voltage is 86 VDC.",
+        "tools": [
+          "lookup_spec"
+        ],
+        "toolCalls": [
+          {
+            "name": "lookup_spec",
+            "input": {
+              "spec": "maximum_ocv"
+            }
+          }
+        ],
+        "evidence": [
+          {
+            "tool": "lookup_spec",
+            "found": true,
+            "recordId": "maximum-ocv",
+            "spec": "maximum_ocv",
+            "value": 86,
+            "unit": "VDC"
+          }
+        ],
+        "artifacts": [],
+        "artifactTypes": [],
+        "done": true,
+        "cached": false,
+        "error": null,
+        "usage": {
+          "inputTokens": 20,
+          "outputTokens": 516,
+          "cacheReadTokens": 17398
+        },
+        "costUsd": 0.0159021,
+        "durationMs": 13609.5095,
+        "firstEventMs": 153.0743,
+        "firstToolMs": 5654.6399,
+        "firstAnswerMs": 13608.4949,
+        "statuses": [
+          {
+            "atMs": 153.0743,
+            "stage": "research",
+            "message": "Checking the validated manual…"
+          },
+          {
+            "atMs": 8155.8432999999995,
+            "stage": "research",
+            "message": "Rechecking the evidence…"
+          }
+        ],
+        "events": [
+          {
+            "atMs": 153.0743,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Checking the validated manual…"
+            }
+          },
+          {
+            "atMs": 1404.5245,
+            "event": {
+              "type": "session",
+              "sessionId": "d13b81db-9a75-4b91-931e-38148fb51e69"
+            }
+          },
+          {
+            "atMs": 5654.6399,
+            "event": {
+              "type": "tool_start",
+              "id": "toolu_01CzqAx8xBXw7sdavXNvoLef",
+              "name": "mcp__vulcan__lookup_spec",
+              "input": {
+                "spec": "maximum_ocv"
+              }
+            }
+          },
+          {
+            "atMs": 5722.9955,
+            "event": {
+              "type": "tool_end",
+              "id": "toolu_01CzqAx8xBXw7sdavXNvoLef",
+              "ok": true
+            }
+          },
+          {
+            "atMs": 8155.8432999999995,
+            "event": {
+              "type": "status",
+              "stage": "research",
+              "message": "Rechecking the evidence…"
+            }
+          },
+          {
+            "atMs": 13608.4514,
+            "event": {
+              "type": "evidence",
+              "evidence": {
+                "tool": "lookup_spec",
+                "found": true,
+                "recordId": "maximum-ocv",
+                "spec": "maximum_ocv",
+                "value": 86,
+                "unit": "VDC"
+              }
+            }
+          },
+          {
+            "atMs": 13608.4949,
+            "event": {
+              "type": "text_delta",
+              "text": "The published maximum open-circuit voltage is 86 VDC."
+            }
+          },
+          {
+            "atMs": 13608.5072,
+            "event": {
+              "type": "done",
+              "usage": {
+                "inputTokens": 20,
+                "outputTokens": 516,
+                "cacheReadTokens": 17398
+              },
+              "costUsd": 0.0159021
+            }
+          }
+        ]
+      },
+      "score": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "completed",
+            "passed": true,
+            "detail": "done"
+          },
+          {
+            "name": "tool:lookup_spec",
+            "passed": true,
+            "detail": "called: lookup_spec"
+          },
+          {
+            "name": "tool-forbidden:assess_power_source",
+            "passed": true,
+            "detail": "called: lookup_spec"
+          },
+          {
+            "name": "evidence:{\"found\":true,\"spec\":\"maximum_ocv\",\"tool\":\"lookup_spec\",\"unit\":\"VDC\",\"value\":86}",
+            "passed": true,
+            "detail": "observed: [{\"found\":true,\"recordId\":\"maximum-ocv\",\"spec\":\"maximum_ocv\",\"tool\":\"lookup_spec\",\"unit\":\"VDC\",\"value\":86}]"
+          },
+          {
+            "name": "artifact-forbidden:troubleshooting_flow",
+            "passed": true,
+            "detail": "emitted: none"
+          },
+          {
+            "name": "required:\\b86\\s*(?:v|vdc|volts?)\\b",
+            "passed": true,
+            "detail": "\\b86\\s*(?:v|vdc|volts?)\\b"
+          }
+        ],
+        "warnings": []
+      }
+    }
+  ],
+  "cacheProbe": {
+    "answer": "The published maximum open-circuit voltage is 86 VDC.",
+    "tools": [
+      "lookup_spec"
+    ],
+    "toolCalls": [
+      {
+        "name": "lookup_spec",
+        "input": {
+          "spec": "maximum_ocv"
+        }
+      }
+    ],
+    "evidence": [
+      {
+        "tool": "lookup_spec",
+        "found": true,
+        "recordId": "maximum-ocv",
+        "spec": "maximum_ocv",
+        "value": 86,
+        "unit": "VDC"
+      }
+    ],
+    "artifacts": [],
+    "artifactTypes": [],
+    "done": true,
+    "cached": false,
+    "error": null,
+    "usage": {
+      "inputTokens": 20,
+      "outputTokens": 319,
+      "cacheReadTokens": 17398
+    },
+    "costUsd": 0.01406335,
+    "durationMs": 11106.6815,
+    "firstEventMs": 53.475899999999456,
+    "firstToolMs": 3687.3405000000002,
+    "firstAnswerMs": 11106.318699999998,
+    "statuses": [
+      {
+        "atMs": 53.475899999999456,
+        "stage": "research",
+        "message": "Checking the validated manual…"
+      },
+      {
+        "atMs": 5910.902,
+        "stage": "research",
+        "message": "Rechecking the evidence…"
+      }
+    ],
+    "events": [
+      {
+        "atMs": 53.475899999999456,
+        "event": {
+          "type": "status",
+          "stage": "research",
+          "message": "Checking the validated manual…"
+        }
+      },
+      {
+        "atMs": 1288.2902999999988,
+        "event": {
+          "type": "session",
+          "sessionId": "38a9befe-2f5d-4275-90f8-72dca9e30921"
+        }
+      },
+      {
+        "atMs": 3687.3405000000002,
+        "event": {
+          "type": "tool_start",
+          "id": "toolu_01XgKJoCdF5sT5Uex8ncx17R",
+          "name": "mcp__vulcan__lookup_spec",
+          "input": {
+            "spec": "maximum_ocv"
+          }
+        }
+      },
+      {
+        "atMs": 3727.2561000000005,
+        "event": {
+          "type": "tool_end",
+          "id": "toolu_01XgKJoCdF5sT5Uex8ncx17R",
+          "ok": true
+        }
+      },
+      {
+        "atMs": 5910.902,
+        "event": {
+          "type": "status",
+          "stage": "research",
+          "message": "Rechecking the evidence…"
+        }
+      },
+      {
+        "atMs": 11106.291199999998,
+        "event": {
+          "type": "evidence",
+          "evidence": {
+            "tool": "lookup_spec",
+            "found": true,
+            "recordId": "maximum-ocv",
+            "spec": "maximum_ocv",
+            "value": 86,
+            "unit": "VDC"
+          }
+        }
+      },
+      {
+        "atMs": 11106.318699999998,
+        "event": {
+          "type": "text_delta",
+          "text": "The published maximum open-circuit voltage is 86 VDC."
+        }
+      },
+      {
+        "atMs": 11106.323899999998,
+        "event": {
+          "type": "done",
+          "usage": {
+            "inputTokens": 20,
+            "outputTokens": 319,
+            "cacheReadTokens": 17398
+          },
+          "costUsd": 0.01406335
+        }
+      }
+    ]
+  }
+}

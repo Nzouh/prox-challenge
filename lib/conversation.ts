@@ -17,7 +17,7 @@ export type Turn = {
   status: string | null;
   stage: AgentStage | null;
   tools: ToolCall[];
-  artifact: Artifact | null;
+  artifacts: Artifact[];
   usage: { usage: AgentUsage; costUsd: number; cached?: boolean } | null;
   error: string | null;
 };

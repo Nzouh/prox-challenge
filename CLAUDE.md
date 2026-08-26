@@ -33,6 +33,10 @@ The key is server-side only — never `NEXT_PUBLIC_*`, never shipped to the brow
 
 ## Docs
 
+Current handoff: the setup-visual slice is done. Sideshow has been removed; Mermaid now
+renders in-app from host-generated source (`lib/agent/troubleshooting-flow.ts`), so no
+external service, second process, or second credential is involved.
+
 - `PLAN.md` — decision log, architecture, build order.
 - *Not yet written:* `knowledge/README.md` (what's extracted), `docs/extraction.md` (page →
   vision → validate pipeline), `docs/tools.md` (tool contracts), `docs/artifacts.md`

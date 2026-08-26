@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { SetupChecklistArtifact, SetupChecklistStep } from "./artifacts";
 import { weldProcessSchema } from "./domain";
 import { provenanceFor, readKnowledgeJson } from "./knowledge";
 
@@ -61,7 +62,7 @@ const operatingSetupRecords = z
   .parse(readKnowledgeJson("setups/operating-setups.json"));
 
 export const setupQueryShape = {
-  process: weldProcessSchema.describe("Welding process: MIG, flux_cored, TIG, or stick."),
+  process: weldProcessSchema.optional().describe("Welding process when known: MIG, flux_cored, TIG, or stick."),
   stage: setupStageSchema
     .optional()
     .default("all")
@@ -73,12 +74,22 @@ export type SetupQuery = z.input<typeof setupQuerySchema>;
 /** Deterministic process setup from the visually reviewed quick-start cable diagrams. */
 export function getSetup(unparsed: SetupQuery) {
   const query = setupQuerySchema.parse(unparsed);
-  const record = setupRecords.find((item) => item.process === query.process);
+  if (!query.process) {
+    return {
+      found: false as const,
+      status: "insufficient_information" as const,
+      requiredFields: ["process"] as const,
+      allowedProcesses: ["MIG", "flux_cored", "TIG", "stick"] as const,
+      note: "Choose a welding process before returning process-specific setup steps.",
+    };
+  }
+  const process = query.process;
+  const record = setupRecords.find((item) => item.process === process);
   if (!record) {
     return {
       found: false as const,
       status: "not_documented" as const,
-      process: query.process,
+      process,
       note: "No visually validated setup record exists for that process.",
     };
   }
@@ -91,7 +102,7 @@ export function getSetup(unparsed: SetupQuery) {
   const operatingSteps = operatingSetupRecords
     .filter(
       (item) =>
-        item.processes.includes(query.process) &&
+        item.processes.includes(process) &&
         (query.stage === "all" || item.stage === query.stage),
     )
     .flatMap((item) =>
@@ -117,6 +128,11 @@ export function getSetup(unparsed: SetupQuery) {
     provenanceFor(record.safety_source),
     ...steps.map((step) => step.provenance),
   ];
+  const visualStep =
+    query.stage === "all" || query.stage === "cables"
+      ? cableSteps[0]
+      : steps.find((step) => step.stage === query.stage);
+  const visualProvenance = visualStep?.provenance;
 
   return {
     found: true as const,
@@ -126,8 +142,37 @@ export function getSetup(unparsed: SetupQuery) {
     process: record.process,
     prerequisites: record.prerequisites,
     steps,
+    visualSource: visualProvenance?.tier === 1 && visualProvenance.page
+      ? { file: visualProvenance.source, page: visualProvenance.page }
+      : null,
     provenance: [...new Map(provenance.map((item) => [JSON.stringify(item), item] as const)).values()],
   };
 }
 
 export type SetupResult = ReturnType<typeof getSetup>;
+
+/**
+ * Deterministic host-side rendering, never model-authored (PLAN.md section 3: our code
+ * generates procedural diagrams from the graph after traversal, so the agent cannot invent
+ * a step or connection). Returns null for a single-step result, where a checklist card adds
+ * nothing over the sentence the writer already produces.
+ */
+export function buildSetupChecklistArtifact(result: SetupResult): SetupChecklistArtifact | null {
+  if (!result.found || result.steps.length < 2) return null;
+  const steps: SetupChecklistStep[] = result.steps.map((step) => ({
+    order: step.order,
+    stage: step.stage,
+    state: step.state,
+    label: "component" in step ? step.component : undefined,
+    condition: "condition" in step ? step.condition : undefined,
+    instruction: step.instruction,
+  }));
+  return {
+    type: "setup_checklist",
+    process: result.process,
+    stage: result.setup,
+    prerequisites: result.prerequisites,
+    steps,
+    provenance: result.provenance,
+  };
+}

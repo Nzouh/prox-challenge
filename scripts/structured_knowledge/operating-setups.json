@@ -115,7 +115,7 @@
     "processes": ["MIG"],
     "stage": "power_controls",
     "steps": [
-      {"order": 6, "state": "required", "instruction": "With adequate ventilation and no gas leak, open the cylinder valve fully and set flow to the value on the Settings Chart."}
+      {"order": 6, "state": "required", "instruction": "With adequate ventilation and no gas leak, open the cylinder valve fully and set shielding-gas flow to 20–30 SCFH."}
     ],
     "source": {"file": "files/owner-manual.pdf", "page": 21}
   },
@@ -165,7 +165,7 @@
     "processes": ["TIG"],
     "stage": "power_controls",
     "steps": [
-      {"order": 1, "state": "required", "instruction": "Ensure adequate ventilation, open the argon-cylinder valve fully, and set gas flow from the inside-door Settings Chart."},
+      {"order": 1, "state": "required", "instruction": "Ensure adequate ventilation, open the argon-cylinder valve fully, and set argon flow to 10–25 SCFH."},
       {"order": 2, "state": "required", "instruction": "With power OFF, plug into a grounded, GFCI-protected 120 VAC 20-amp or 240 VAC outlet with delayed-action protection."},
       {"order": 3, "state": "required", "instruction": "Place the TIG torch on a nonconductive, nonflammable surface away from grounded objects, then turn power ON."},
       {"order": 4, "state": "required", "instruction": "Press Home, select TIG, then set rod diameter, material thickness, and output amperage."},

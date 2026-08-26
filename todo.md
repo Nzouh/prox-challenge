@@ -92,7 +92,9 @@ items checked and add evaluation findings beneath the relevant section.
   self-shielded flux-cored, TIG, and Stick, including optional/disconnected states.
 - [x] Expand `get_setup` with validated workpiece, consumables, power/control, and shutdown
   stages for every supported process.
-- [ ] Add the optional cable-setup artifact renderer.
+- [x] Add the cable-setup artifact renderer: `get_setup` results with more than one step
+  render as a deterministic `setup_checklist` artifact grouped by stage, built host-side
+  from the tool result rather than authored by the model.
 - [x] Add `diagnose_problem` backed by a complete symptom → causes → checks → permitted
   remedies graph with repair-scope metadata.
 - [x] Add `lookup_fault_indicator` without assuming undocumented error-code names; unknown
@@ -117,13 +119,53 @@ items checked and add evaluation findings beneath the relevant section.
 
 ## 5. Visuals and 2.5D experience
 
+### Artifact priorities
+
+- [x] Duty-cycle calculator grounded in `lookup_spec`; polish only after higher-priority gaps.
+- [x] First visual walkthrough slice: setup checklist plus reviewed manual images.
+- [x] Polarity cable map generated from validated `get_setup` connections. Endpoints are
+  derived host-side by exact match over the reviewed instruction sentences
+  (`lib/agent/polarity-map.ts`), cross-checked against the published `polarity` fact, and
+  withheld entirely on an unreadable sentence, a state/endpoint contradiction, or a
+  crossed-terminal disagreement. `emit_artifact` still accepts only `duty_cycle`, so the
+  model cannot author a connection. A cables-only request renders the map instead of the
+  now-redundant setup checklist.
+- [x] Troubleshooting flowchart generated only from `diagnose_problem` graph nodes and edges.
+  It starts with one exact manual check, then appends one new check per click while keeping
+  every revealed check visible. Clicking a box independently reveals its remedy, while a
+  persistent Next check control below the diagram advances the sequence. Generic headings,
+  duplicate prose, and automatic page images are omitted.
+  Unknown and ambiguous symptoms fail closed without a chart.
+  Mermaid source is now serialised host-side (`lib/agent/troubleshooting-flow.ts`) and
+  rendered in-app by the `mermaid` package, so the chart works identically local and
+  hosted. Next check grows the chart sequentially without requiring an expanded box, and
+  the final step ends with Checks exhausted.
+  Vague remedies are enriched through declarative `lookup_spec` / `get_setup` queries stored
+  with the knowledge row; if no exact structured fact resolves, the expansion shows its
+  reviewed manual visual instead of inventing a value.
+- [ ] Settings configurator for process + material + thickness, enabled only after validated
+  voltage and wire-speed records cover the requested combination.
+- [ ] Expand visual walkthroughs with focused manual-image hotspots where spatial guidance
+  materially improves setup or diagnosis.
+
+- [x] Add validated `source_visual` artifacts, a manifest-gated asset route, inline image
+  rendering, and prompt-triggered manual visuals for polarity, wire-feed, front-panel,
+  and weld-diagnosis questions.
+- [x] Removed the Sideshow MCP connection in favour of in-app Mermaid. No second process,
+  no second credential, and no localhost dependency a hosted deployment cannot satisfy;
+  the diagram now passes the same host validation as every other artifact.
+- [x] Broaden routing to first-use, polarity, wire-feed, front-panel, and weld-diagnosis
+  language (`requiresSetup`, broadened `requiresSourcePage`) and enforce it in
+  `validateResearchEvidence`; verified live against the running agent (first-use cable
+  question → `get_setup` → `setup_checklist`; front-panel question → `get_source_page` →
+  `source_visual`, image confirmed served by `/api/source-assets`).
 - [ ] Build outside/inside views from the two real product photographs.
 - [ ] Add responsive 2.5D hotspots with hover/focus states, labels, zoom, and part-scoped
   questions.
 - [ ] Animate the outside ↔ inside transition with purposeful camera/parallax motion.
 - [ ] Preserve source-image fidelity; do not fabricate machine geometry or hidden parts.
 - [ ] Add cable-routing diagrams generated from validated connection data.
-- [ ] Add troubleshooting flows generated from deterministic graph nodes and edges.
+- [x] Add troubleshooting flows generated from deterministic graph nodes and edges.
 - [ ] Add parametric scenes only where spatial understanding matters: gun angle, CTWD,
   joint preparation, and welding position.
 - [ ] Respect reduced-motion preferences and provide keyboard/touch equivalents for every

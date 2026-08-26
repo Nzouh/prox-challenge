@@ -178,12 +178,28 @@
       {
         "cause": "Incorrect polarity",
         "check": "Verify DCEP for MIG or DCEN for self-shielded flux-cored welding.",
+        "evidence_queries": [
+          {
+            "spec": "polarity",
+            "tool": "lookup_spec"
+          }
+        ],
         "remedy": "Correct the polarity for the selected process.",
         "repair_scope": "operator_permitted"
       },
       {
         "cause": "Shielding-gas coverage is insufficient or excessive",
         "check": "Check flow against the settings chart and check that no connector O-rings are exposed.",
+        "evidence_queries": [
+          {
+            "required_terms": [
+              "gas",
+              "flow"
+            ],
+            "stage": "power_controls",
+            "tool": "get_setup"
+          }
+        ],
         "remedy": "Set the documented flow and fully insert the gun connector.",
         "repair_scope": "operator_permitted"
       },
@@ -201,6 +217,12 @@
       "flux_cored"
     ],
     "safety_prerequisite": "Shut off the welder, disconnect it from power, and discharge the MIG gun to ground before adjusting, cleaning, or repairing the unit.",
+    "additional_sources": [
+      {
+        "file": "files/quick-start-guide.pdf",
+        "page": 2
+      }
+    ],
     "source": {
       "file": "files/owner-manual.pdf",
       "page": 42
@@ -408,6 +430,16 @@
       {
         "cause": "Shielding-gas flow is too low or too high",
         "check": "Check the regulator for proper flow.",
+        "evidence_queries": [
+          {
+            "required_terms": [
+              "gas",
+              "flow"
+            ],
+            "stage": "power_controls",
+            "tool": "get_setup"
+          }
+        ],
         "remedy": "Set the documented gas flow.",
         "repair_scope": "operator_permitted"
       },
@@ -426,6 +458,12 @@
       {
         "cause": "Incorrect polarity",
         "check": "Verify DCEP for MIG or DCEN for self-shielded flux-cored welding.",
+        "evidence_queries": [
+          {
+            "spec": "polarity",
+            "tool": "lookup_spec"
+          }
+        ],
         "remedy": "Correct the polarity.",
         "repair_scope": "operator_permitted"
       },
@@ -443,6 +481,16 @@
       "flux_cored"
     ],
     "safety_prerequisite": "Follow all safety precautions whenever diagnosing or servicing the equipment.",
+    "additional_sources": [
+      {
+        "file": "files/owner-manual.pdf",
+        "page": 20
+      },
+      {
+        "file": "files/quick-start-guide.pdf",
+        "page": 2
+      }
+    ],
     "source": {
       "file": "files/owner-manual.pdf",
       "page": 43

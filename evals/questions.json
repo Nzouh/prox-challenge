@@ -371,5 +371,60 @@
     "question": "Can I rewind the transformer myself if the machine stops working?",
     "expectedTools": ["check_repair_scope"],
     "requiredPatterns": ["transformer", "qualified|certified|technician", "not documented|do not|professional"]
+  },
+  {
+    "id": "flow-48",
+    "category": "troubleshooting_flow",
+    "question": "My weld has porosity. What should I check?",
+    "expectedTools": ["diagnose_problem"],
+    "expectedEvidence": [{ "tool": "diagnose_problem", "status": "documented", "recordId": "weld-porosity" }],
+    "expectedArtifacts": ["troubleshooting_flow"],
+    "requiredArtifactPatterns": ["weld-porosity", "Check the gas bottle", "20.30 SCFH", "ground is negative", "wire feed power is positive"]
+  },
+  {
+    "id": "flow-49",
+    "category": "troubleshooting_flow",
+    "question": "Wire feeds from my MIG gun, but the arc will not ignite. What should I check?",
+    "expectedTools": ["diagnose_problem"],
+    "expectedEvidence": [{ "tool": "diagnose_problem", "status": "documented", "recordId": "wire-feeds-no-arc" }],
+    "expectedArtifacts": ["troubleshooting_flow"],
+    "requiredArtifactPatterns": ["wire-feeds-no-arc", "Check clamp contact", "contact-tip size", "worn or dirty"]
+  },
+  {
+    "id": "flow-50",
+    "category": "troubleshooting_flow",
+    "question": "The wire-feed motor runs, but the wire does not feed properly. Help me check it.",
+    "expectedTools": ["diagnose_problem"],
+    "expectedEvidence": [{ "tool": "diagnose_problem", "status": "documented", "recordId": "wire-feed-improper" }],
+    "expectedArtifacts": ["troubleshooting_flow"],
+    "requiredArtifactPatterns": ["wire-feed-improper", "feed-roller", "tensioner", "MIG gun"]
+  },
+  {
+    "id": "flow-51",
+    "category": "troubleshooting_flow",
+    "question": "My TIG arc is unstable. Walk me through the checks.",
+    "expectedTools": ["diagnose_problem"],
+    "expectedEvidence": [{ "tool": "diagnose_problem", "status": "documented", "recordId": "tig-stick-arc-unstable" }],
+    "expectedArtifacts": ["troubleshooting_flow"],
+    "requiredArtifactPatterns": ["tig-stick-arc-unstable", "cable connections are tight", "current setting", "shielding-gas supply"]
+  },
+  {
+    "id": "flow-52",
+    "category": "troubleshooting_flow",
+    "question": "Help me troubleshoot a flux capacitor rattling inside the welder.",
+    "expectedTools": ["diagnose_problem"],
+    "expectedEvidence": [{ "tool": "diagnose_problem", "status": "unknown_symptom" }],
+    "forbiddenArtifacts": ["troubleshooting_flow"],
+    "forbiddenPatterns": ["replace the flux capacitor|tighten the flux capacitor"]
+  },
+  {
+    "id": "flow-53",
+    "category": "troubleshooting_flow",
+    "question": "What is the maximum open-circuit voltage?",
+    "expectedTools": ["lookup_spec"],
+    "forbiddenTools": ["assess_power_source"],
+    "expectedEvidence": [{ "tool": "lookup_spec", "found": true, "spec": "maximum_ocv", "value": 86, "unit": "VDC" }],
+    "forbiddenArtifacts": ["troubleshooting_flow"],
+    "requiredPatterns": ["\\b86\\s*(?:v|vdc|volts?)\\b"]
   }
 ]

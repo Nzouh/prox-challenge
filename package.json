@@ -11,15 +11,18 @@
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.3.239",
+    "mermaid": "^11.17.2",
     "next": "^16.3.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/jsdom": "^30.0.0",
     "@types/node": "^22.13.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "jsdom": "^29.1.1",
     "typescript": "^5.9.0"
   }
 }

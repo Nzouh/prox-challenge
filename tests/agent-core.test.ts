@@ -1,27 +1,53 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type { SDKResultMessage } from "@anthropic-ai/claude-agent-sdk";
-import { dutyCycleArtifactSchema, shouldOfferArtifacts } from "../lib/agent/artifacts";
+import {
+  agentEmittableArtifactSchema,
+  diagramNeed,
+  dutyCycleArtifactSchema,
+  polarityMapArtifactSchema,
+  setupChecklistArtifactSchema,
+  troubleshootingFlowArtifactSchema,
+  shouldOfferArtifacts,
+  sourceVisualArtifactSchema,
+} from "../lib/agent/artifacts";
 import { artifactMatchesLookup } from "../lib/agent/grounding";
 import { resultToEvent } from "../lib/agent/result";
 import { responseCacheKey, VerifiedResponseCache } from "../lib/agent/response-cache";
 import { renderDeterministicSpecAnswer, resolveSpecQuery } from "../lib/agent/specs";
 import { searchManual } from "../lib/agent/manual-search";
 import { assessJobRisk } from "../lib/agent/safety";
-import { getSetup } from "../lib/agent/setups";
+import { buildSetupChecklistArtifact, getSetup, type SetupResult } from "../lib/agent/setups";
+import { buildPolarityMapArtifact } from "../lib/agent/polarity-map";
+import { buildTroubleshootingFlowArtifact } from "../lib/agent/troubleshooting-flow";
 import { diagnoseProblem, diagnosticRecordCount } from "../lib/agent/diagnosis";
 import { lookupFaultIndicator } from "../lib/agent/fault-indicators";
 import { recommendProcess } from "../lib/agent/process-recommendation";
 import { assessPowerSource } from "../lib/agent/power-source";
 import { checkRepairScope } from "../lib/agent/repair-scope";
-import { getSourcePage } from "../lib/agent/source-page";
+import {
+  buildSourceVisualArtifact,
+  getSourcePage,
+  sourcePageQuerySchema,
+  sourceVisualUrl,
+  type SourcePageResult,
+} from "../lib/agent/source-page";
 import { researchSessionOptions } from "../lib/agent/session";
 import {
+  dedupeEvidence,
+  stableJson,
+  summarizeEvidence,
+  toolCallKey,
+} from "../lib/agent/evidence-summary";
+import {
+  asksForSources,
   defaultCheckerOutput,
   requiresFaultIndicatorLookup,
   requiresProcessRecommendation,
   requiresPowerSourceAssessment,
   requiresRepairScopeCheck,
+  requiresDiagnosis,
+  requiresSetup,
   requiresSourcePage,
   requiresRiskAssessment,
   routeQuestion,
@@ -39,6 +65,79 @@ test("routeQuestion uses a cheap deterministic preflight", () => {
   assert.deepEqual(routeQuestion("hello").tools, []);
   assert.equal(routeQuestion("hello").kind, "direct_answer");
   assert.equal(routeQuestion("which process should I use outdoors on rusty steel?").tools[0], "recommend_process");
+});
+
+test("known symptoms route to diagnosis without requiring troubleshooting keywords", () => {
+  const question = "My weld has porosity. What should I check?";
+  assert.equal(requiresDiagnosis(question), true);
+  assert.deepEqual(routeQuestion(question).tools, ["diagnose_problem"]);
+  assert.equal(requiresDiagnosis("What's the duty cycle for MIG welding at 200A on 240V?"), false);
+  assert.equal(requiresDiagnosis("What's the polarity setup for flux-cored?"), false);
+
+  const manualOnly: EvidenceRecord[] = [
+    { id: "manual", tool: "search_manual", result: searchManual({ query: question }) },
+  ];
+  assert.match(validateResearchEvidence(question, manualOnly) ?? "", /diagnose_problem was not called/);
+
+  const diagnostic: EvidenceRecord[] = [
+    { id: "diagnosis", tool: "diagnose_problem", result: diagnoseProblem({ symptom: question }) },
+  ];
+  assert.equal(validateResearchEvidence(question, diagnostic), null);
+});
+
+test("open-circuit specifications do not trigger power-source assessment", () => {
+  const specification = "What is the maximum open-circuit voltage?";
+  assert.equal(requiresPowerSourceAssessment(specification), false);
+  assert.deepEqual(routeQuestion(specification).tools, ["lookup_spec"]);
+
+  for (const question of [
+    "Can I run the welder on a 20A circuit?",
+    "Does this branch circuit have enough capacity?",
+    "Which breaker does this circuit require?",
+  ]) {
+    assert.equal(requiresPowerSourceAssessment(question), true, question);
+  }
+});
+
+test("evidence summaries are semantic and duplicate evidence is collapsed", () => {
+  const unknown: EvidenceRecord = {
+    id: "first",
+    tool: "diagnose_problem",
+    result: diagnoseProblem({ symptom: "the flux capacitor rattles" }),
+  };
+  assert.deepEqual(summarizeEvidence(unknown), {
+    tool: "diagnose_problem",
+    found: false,
+    status: "unknown_symptom",
+  });
+
+  const duplicate = { ...unknown, id: "second" };
+  assert.deepEqual(dedupeEvidence([unknown, duplicate]), [unknown]);
+  assert.equal(stableJson({ process: "MIG", spec: "polarity" }), stableJson({ spec: "polarity", process: "MIG" }));
+  assert.equal(
+    toolCallKey("lookup_spec", { process: "MIG", spec: "polarity" }),
+    toolCallKey("lookup_spec", { spec: "polarity", process: "MIG" }),
+  );
+});
+
+test("get_setup returns structured clarification when context is incomplete", () => {
+  assert.equal(requiresSetup("How do I do the initial setup?"), true);
+  const result = getSetup({ stage: "all" });
+  assert.equal(result.found, false);
+  assert.equal(result.status, "insufficient_information");
+  if (result.status === "insufficient_information") {
+    assert.deepEqual(result.requiredFields, ["process"]);
+  }
+});
+
+test("diagramNeed is a local presentation decision, not an MCP lookup", () => {
+  assert.equal(diagramNeed("Show me a flowchart for TIG startup"), "flowchart");
+  assert.equal(diagramNeed("Draw a sequence diagram for the tool calls"), "sequence");
+  assert.equal(
+    diagramNeed("Walk me through startup: first connect power, then connect gas, finally test the torch"),
+    "flowchart",
+  );
+  assert.equal(diagramNeed("What is the duty cycle at 200 A?"), "none");
 });
 
 const publishedLookup = resolveSpecQuery({
@@ -123,6 +222,20 @@ test("get_setup returns focused operating stages without mixing process instruct
   assert.doesNotMatch(JSON.stringify(fluxComplete.steps), /open the cylinder valve|argon cylinder/i);
 });
 
+test("get_setup uses the manual's exact gas-flow ranges instead of vague chart references", () => {
+  const mig = getSetup({ process: "MIG", stage: "power_controls" });
+  assert.equal(mig.found, true);
+  if (mig.found) {
+    assert.ok(mig.steps.some((step) => /20–30 SCFH/.test(step.instruction)));
+  }
+
+  const tig = getSetup({ process: "TIG", stage: "power_controls" });
+  assert.equal(tig.found, true);
+  if (tig.found) {
+    assert.ok(tig.steps.some((step) => /10–25 SCFH/.test(step.instruction)));
+  }
+});
+
 test("diagnose_problem returns documented checks and technician boundaries", () => {
   const result = diagnoseProblem({ symptom: "The wire forms a bird nest in the feeder", process: "MIG" });
   assert.equal(result.found, true);
@@ -152,6 +265,94 @@ test("diagnose_problem covers every remaining weak-arc troubleshooting row", () 
   const electrode = diagnoseProblem({ symptom: "weak arc strength", process: "stick" });
   assert.equal(electrode.found, true);
   if (electrode.found) assert.equal(electrode.recordId, "tig-stick-weak-arc");
+});
+
+test("troubleshooting_flow is derived verbatim from one documented diagnosis", () => {
+  const diagnosis = diagnoseProblem({ symptom: "wire feeds but no arc", process: "MIG" });
+  const flow = buildTroubleshootingFlowArtifact(diagnosis);
+  assert.ok(flow);
+  const parsed = troubleshootingFlowArtifactSchema.parse(flow);
+  assert.equal(parsed.recordId, "wire-feeds-no-arc");
+  assert.equal(parsed.branches.length, 3);
+  assert.deepEqual(parsed.branches[0], {
+    key: "c1",
+    id: "wire-feeds-no-arc:1",
+    cause: "Improper ground connection",
+    check: "Check clamp contact and clean the workpiece near the clamp and weld.",
+    remedy: "Make a clean, secure workpiece connection.",
+    repairScope: "operator_permitted",
+  });
+  assert.equal(parsed.provenance[0]?.tier, 1);
+  assert.equal(parsed.provenance[0]?.page, 43);
+  assert.equal(parsed.stopCondition, undefined);
+  assert.equal(agentEmittableArtifactSchema.safeParse(parsed).success, false);
+});
+
+test("troubleshooting_flow keeps only actionable shutdown prerequisites", () => {
+  const flow = buildTroubleshootingFlowArtifact(
+    diagnoseProblem({ symptom: "wire stops during welding", process: "MIG" }),
+  );
+  assert.ok(flow?.stopCondition);
+  assert.match(flow.stopCondition, /Shut off the welder/);
+});
+
+test("troubleshooting expansion gives the exact documented regulator range", () => {
+  const flow = buildTroubleshootingFlowArtifact(
+    diagnoseProblem({ symptom: "porosity", process: "MIG" }),
+  );
+  assert.ok(flow);
+  const gasFlow = flow.branches.find((branch) => /regulator/i.test(branch.check));
+  assert.match(gasFlow?.specifics?.map((item) => item.text).join(" ") ?? "", /20–30 SCFH/);
+  assert.equal(gasFlow?.remedy, "Set the documented gas flow.");
+  assert.equal(flow.provenance.some((source) => source.tier === 1 && source.page === 20), true);
+});
+
+test("troubleshooting expansion gives exact polarity terminal mappings", () => {
+  for (const symptom of ["porosity", "mig arc unstable"]) {
+    const flow = buildTroubleshootingFlowArtifact(
+      diagnoseProblem({ symptom, process: "MIG" }),
+    );
+    assert.ok(flow);
+    const polarity = flow.branches.find((branch) => /polarity/i.test(branch.cause));
+    const specifics = polarity?.specifics?.map((item) => item.text).join(" ") ?? "";
+    assert.match(specifics, /MIG.*ground is negative.*wire feed power is positive/i);
+    assert.match(
+      specifics,
+      /flux-cored.*ground is positive.*wire feed power is negative/i,
+    );
+    assert.match(polarity?.remedy ?? "", /^Correct the polarity/);
+    assert.equal(
+      flow.provenance.some(
+        (source) =>
+          source.tier === 1 &&
+          source.source === "files/quick-start-guide.pdf" &&
+          source.page === 2,
+      ),
+      true,
+    );
+  }
+});
+
+test("vague remedies never borrow unrelated specifics and fall back to a reviewed visual", () => {
+  const flow = buildTroubleshootingFlowArtifact(
+    diagnoseProblem({ symptom: "wire feeds but no arc", process: "MIG" }),
+  );
+  assert.ok(flow);
+  const contactTip = flow.branches.find((branch) => /sized contact tip/i.test(branch.cause));
+  assert.equal(contactTip?.specifics, undefined);
+  assert.equal(contactTip?.supportingVisual?.type, "source_visual");
+  assert.doesNotMatch(JSON.stringify(contactTip), /wire-speed|spool capacity|polarity/i);
+});
+
+test("troubleshooting_flow fails closed for unknown and ambiguous symptoms", () => {
+  assert.equal(
+    buildTroubleshootingFlowArtifact(diagnoseProblem({ symptom: "purple sparks everywhere" })),
+    null,
+  );
+  assert.equal(
+    buildTroubleshootingFlowArtifact(diagnoseProblem({ symptom: "welder does not function" })),
+    null,
+  );
 });
 
 test("lookup_fault_indicator rejects invented codes without borrowing a known fix", () => {
@@ -365,10 +566,193 @@ test("get_source_page returns only reviewed manifest assets", () => {
   assert.equal(miss.found, false);
 });
 
+test("source_visual accepts only the validated asset URL contract", () => {
+  const page = getSourcePage({ kind: "document_page", source: "files/owner-manual.pdf", page: 7, view: "detail" });
+  assert.equal(page.found, true);
+  if (!page.found) return;
+  const visual = sourceVisualArtifactSchema.parse({
+    type: "source_visual",
+    imageUrl: sourceVisualUrl({ kind: "document_page", source: "files/owner-manual.pdf", page: 7, view: "detail" }),
+    page: 7,
+    provenance: page.provenance,
+    caption: "Reviewed manual page 7",
+  });
+  assert.match(visual.imageUrl, /source-assets/);
+  assert.throws(() => sourceVisualArtifactSchema.parse({ ...visual, imageUrl: "/knowledge/renders/owner-manual/page-07-detail.png" }));
+  assert.equal(getSourcePage({ kind: "document_page", source: "files/not-in-manifest.pdf", page: 7, view: "detail" }).found, false);
+  assert.equal(getSourcePage({ kind: "document_page", source: "files/owner-manual.pdf", page: 999, view: "detail" }).found, false);
+});
+
+test("source_visual selects the requested render and only for a reviewed manifest asset", () => {
+  const detailQuery = { kind: "document_page" as const, source: "files/owner-manual.pdf", page: 7, view: "detail" as const };
+  const detail = buildSourceVisualArtifact(detailQuery, getSourcePage(detailQuery));
+  assert.ok(detail);
+  assert.match(detail!.imageUrl, /view=detail/);
+  assert.match(detail!.imageUrl, /page=7/);
+  assert.equal(detail!.page, 7);
+  assert.equal(detail!.caption, "Reviewed manual page 7");
+  assert.equal(setupChecklistArtifactSchema.safeParse(detail).success, false);
+  assert.equal(sourceVisualArtifactSchema.parse(detail).type, "source_visual");
+
+  const fullQuery = { kind: "document_page" as const, source: "files/owner-manual.pdf", page: 7, view: "full" as const };
+  const full = buildSourceVisualArtifact(fullQuery, getSourcePage(fullQuery));
+  assert.ok(full);
+  assert.match(full!.imageUrl, /view=full/);
+
+  const image = buildSourceVisualArtifact(
+    { kind: "source_image", source: "product-inside.webp", view: "detail" },
+    getSourcePage({ kind: "source_image", source: "product-inside.webp", view: "detail" }),
+  );
+  assert.ok(image);
+  assert.equal(image!.page, undefined);
+  assert.equal(image!.caption, "Reviewed source image");
+});
+
+test("get_source_page rejects unknown sources, unknown pages, and missing page numbers", () => {
+  assert.equal(getSourcePage({ kind: "document_page", source: "files/not-in-manifest.pdf", page: 1 }).found, false);
+  assert.equal(getSourcePage({ kind: "document_page", source: "files/owner-manual.pdf", page: 999 }).found, false);
+  assert.equal(getSourcePage({ kind: "source_image", source: "not-a-real-image.webp" }).found, false);
+
+  const noPage = getSourcePage({ kind: "document_page", source: "files/owner-manual.pdf" });
+  assert.equal(noPage.found, false);
+  if (noPage.found) return;
+  assert.equal(noPage.status, "page_required");
+
+  assert.throws(() => sourcePageQuerySchema.parse({ kind: "document_page", source: "files/owner-manual.pdf", page: 0 }));
+  assert.throws(() => sourcePageQuerySchema.parse({ kind: "document_page", source: "files/owner-manual.pdf", page: -1 }));
+  assert.throws(() => sourcePageQuerySchema.parse({ kind: "book_page", source: "files/owner-manual.pdf", page: 1 }));
+});
+
+test("an unreviewed or path-less render never becomes a source_visual artifact", () => {
+  const unreviewed: SourcePageResult = {
+    found: true,
+    status: "reviewed_page",
+    kind: "document_page",
+    source: "files/owner-manual.pdf",
+    page: 12,
+    visualReviewed: false,
+    markdownPath: "knowledge/markdown/owner-manual/page-12.md",
+    renderPath: "knowledge/renders/owner-manual/page-12.png",
+    detailRenderPath: null,
+    selectedPath: "knowledge/renders/owner-manual/page-12.png",
+    provenance: { tier: 1, source: "files/owner-manual.pdf", page: 12 },
+  };
+  assert.equal(
+    buildSourceVisualArtifact({ kind: "document_page", source: "files/owner-manual.pdf", page: 12 }, unreviewed),
+    null,
+  );
+
+  const noPath: SourcePageResult = { ...unreviewed, visualReviewed: true, selectedPath: null };
+  assert.equal(
+    buildSourceVisualArtifact({ kind: "document_page", source: "files/owner-manual.pdf", page: 12 }, noPath),
+    null,
+  );
+
+  const notFound = getSourcePage({ kind: "document_page", source: "files/owner-manual.pdf", page: 999 });
+  assert.equal(
+    buildSourceVisualArtifact({ kind: "document_page", source: "files/owner-manual.pdf", page: 999 }, notFound),
+    null,
+  );
+});
+
+test("routing sends first-use, polarity, wire-feed, front-panel, and weld-diagnosis questions to the right lookup", () => {
+  const setupOnlyQuestions = [
+    "How do I set this welder up for the first time?",
+    "I just unboxed it — what do I connect first?",
+    "How do I load the wire spool for MIG?",
+    "How do I hook up the ground clamp and MIG gun?",
+  ];
+  for (const question of setupOnlyQuestions) {
+    assert.equal(requiresSetup(question), true, question);
+    assert.equal(requiresSourcePage(question), false, question);
+    assert.equal(routeQuestion(question).tools.includes("get_setup"), true, question);
+    assert.match(
+      validateResearchEvidence(question, [
+        { id: "manual", tool: "search_manual", result: searchManual({ query: question }) },
+      ]) ?? "",
+      /get_setup/,
+      question,
+    );
+  }
+
+  // "Polarity setup" is deliberately dual-routed: it is both a setup procedure and a
+  // question a reviewed diagram answers, so it must require both kinds of evidence.
+  const dualRouted = "What's the polarity setup for stick welding?";
+  assert.equal(requiresSetup(dualRouted), true);
+  assert.equal(requiresSourcePage(dualRouted), true);
+  assert.match(
+    validateResearchEvidence(dualRouted, [
+      { id: "manual", tool: "search_manual", result: searchManual({ query: dualRouted }) },
+    ]) ?? "",
+    /get_source_page/,
+  );
+  const sourceEvidence: EvidenceRecord = {
+    id: "source",
+    tool: "get_source_page",
+    result: getSourcePage({ kind: "document_page", source: "files/owner-manual.pdf", page: 7 }),
+  };
+  assert.match(validateResearchEvidence(dualRouted, [sourceEvidence]) ?? "", /get_setup/);
+
+  for (const question of [
+    "What's on the front panel?",
+    "Show the front panel controls.",
+    "Can you walk me through weld diagnosis for this porosity?",
+    "Show the wire-feed mechanism diagram.",
+  ]) {
+    assert.equal(requiresSourcePage(question), true, question);
+  }
+
+  const setup = getSetup({ process: "MIG", stage: "cables" });
+  assert.equal(
+    validateResearchEvidence("How do I hook up the ground clamp and MIG gun?", [
+      { id: "setup", tool: "get_setup", result: setup },
+    ]),
+    null,
+  );
+});
+
+test("setup_checklist renders a deterministic multi-step artifact grouped by stage", () => {
+  const setup = getSetup({ process: "MIG", stage: "all" });
+  assert.equal(setup.found, true);
+  const artifact = buildSetupChecklistArtifact(setup);
+  assert.ok(artifact);
+  const parsed = setupChecklistArtifactSchema.parse(artifact);
+  assert.equal(parsed.process, "MIG");
+  assert.equal(parsed.steps.length, setup.found ? setup.steps.length : -1);
+  assert.ok(parsed.steps.some((step) => step.stage === "cables" && step.label === "ground_clamp"));
+  assert.ok(parsed.steps.some((step) => step.stage === "shutdown"));
+  assert.ok(parsed.provenance.length >= 1);
+  assert.equal(dutyCycleArtifactSchema.safeParse(artifact).success, false);
+});
+
+test("get_setup nominates a reviewed manual visual for the requested stage", () => {
+  const complete = getSetup({ process: "MIG", stage: "all" });
+  assert.equal(complete.found, true);
+  if (complete.found) {
+    assert.deepEqual(complete.visualSource, { file: "files/quick-start-guide.pdf", page: 2 });
+  }
+  const consumables = getSetup({ process: "MIG", stage: "consumables" });
+  assert.equal(consumables.found, true);
+  if (consumables.found) {
+    assert.deepEqual(consumables.visualSource, { file: "files/owner-manual.pdf", page: 11 });
+  }
+});
+
+test("setup_checklist is withheld for a single-step result", () => {
+  const single = getSetup({ process: "stick", stage: "consumables" });
+  assert.equal(single.found, true);
+  if (!single.found) return;
+  assert.equal(single.steps.length, 1);
+  assert.equal(buildSetupChecklistArtifact(single), null);
+});
+
 test("new tool intents require their matching evidence", () => {
   assert.equal(requiresPowerSourceAssessment("Can I run it from a battery bank?"), true);
   assert.equal(requiresRepairScopeCheck("Can I replace the internal PCB myself?"), true);
   assert.equal(requiresSourcePage("Show me the manual page for the front controls."), true);
+  assert.equal(requiresSourcePage("Which socket does the TIG torch use? Show the polarity setup."), true);
+  assert.equal(requiresSourcePage("Show the wire-feed mechanism diagram."), true);
+  assert.equal(requiresSourcePage("Show the weld diagnosis examples."), true);
   assert.match(
     validateResearchEvidence("Can I run it from a battery bank?", [
       { id: "manual", tool: "search_manual", result: searchManual({ query: "battery bank" }) },
@@ -645,4 +1029,307 @@ test("verified response cache normalizes keys and expires completed answers", ()
   assert.equal(cache.get("one", 1_100), undefined);
   cache.set("empty", [], 1_000);
   assert.equal(cache.get("empty", 1_001), undefined);
+});
+
+test("sources are appended only when the question asks for them", () => {
+  for (const question of [
+    "What page says the duty cycle is 20%?",
+    "Cite the manual for that",
+    "Where does that number come from?",
+    "Can you give me sources?",
+    "Which section covers TIG polarity?",
+    "According to what, exactly?",
+    "Back that up for me",
+    "Show me the page",
+  ]) {
+    assert.equal(asksForSources(question), true, question);
+  }
+
+  // "Power source" is the machine, not a citation — the commonest false positive here.
+  for (const question of [
+    "What's the duty cycle for MIG at 200A on 240V?",
+    "Is this power source rated for 120 V?",
+    "What's the source of the porosity in my flux-cored welds?",
+    "Which welding source should I use for 1/8 inch mild steel?",
+    "How do I load a 10 lb spool?",
+  ]) {
+    assert.equal(asksForSources(question), false, question);
+  }
+});
+
+/** Rewrite one validated cable step so the fail-closed guards can be exercised against a
+ *  record that is otherwise exactly what getSetup produced. */
+function withCableStep(
+  base: SetupResult,
+  component: string,
+  patch: { instruction?: string; state?: "required" | "optional" | "disconnected" },
+): SetupResult {
+  if (!base.found) throw new Error("expected a documented setup result");
+  return {
+    ...base,
+    steps: base.steps.map((step) =>
+      "component" in step && step.component === component ? { ...step, ...patch } : step,
+    ),
+  };
+}
+
+test("polarity_map derives DCEP/DCEN from validated get_setup connections only", () => {
+  const mig = buildPolarityMapArtifact(getSetup({ process: "MIG", stage: "cables" }));
+  assert.ok(mig);
+  const parsed = polarityMapArtifactSchema.parse(mig);
+  assert.equal(parsed.polarity?.label, "DCEP");
+  assert.equal(parsed.polarity?.electrodeTerminal, "positive");
+  assert.equal(parsed.polarity?.workTerminal, "negative");
+
+  const ground = parsed.connections.find((item) => item.component === "ground_clamp");
+  const electrode = parsed.connections.find((item) => item.component === "wire_feed_power");
+  assert.deepEqual(
+    { endpoint: ground?.endpoint, role: ground?.role },
+    { endpoint: "negative_terminal", role: "work" },
+  );
+  assert.deepEqual(
+    { endpoint: electrode?.endpoint, role: electrode?.role },
+    { endpoint: "positive_terminal", role: "electrode" },
+  );
+  // Instructions are copied verbatim from the manual record, never re-phrased.
+  assert.equal(electrode?.instruction, "Connect wire-feed power to the positive terminal.");
+  assert.equal(dutyCycleArtifactSchema.safeParse(mig).success, false);
+});
+
+test("polarity_map keeps flux-cored on the opposite terminals from MIG", () => {
+  const flux = buildPolarityMapArtifact(getSetup({ process: "flux_cored", stage: "cables" }));
+  assert.ok(flux);
+  assert.equal(flux.polarity?.label, "DCEN");
+  assert.equal(flux.polarity?.electrodeTerminal, "negative");
+  assert.equal(
+    flux.connections.find((item) => item.component === "ground_clamp")?.endpoint,
+    "positive_terminal",
+  );
+});
+
+test("polarity_map preserves optional and deliberately disconnected TIG leads", () => {
+  const tig = buildPolarityMapArtifact(getSetup({ process: "TIG", stage: "cables" }));
+  assert.ok(tig);
+  assert.equal(tig.polarity?.label, "DCEN");
+  assert.equal(
+    tig.connections.find((item) => item.component === "tig_torch")?.role,
+    "electrode",
+  );
+  const pedal = tig.connections.find((item) => item.component === "foot_pedal");
+  assert.deepEqual(
+    { state: pedal?.state, endpoint: pedal?.endpoint, role: pedal?.role },
+    { state: "optional", endpoint: "internal_connection", role: "auxiliary" },
+  );
+  const feed = tig.connections.find((item) => item.component === "wire_feed_power");
+  assert.deepEqual(
+    { state: feed?.state, endpoint: feed?.endpoint },
+    { state: "disconnected", endpoint: "unconnected" },
+  );
+  // A disconnected lead must never be counted as the electrode side of the circuit.
+  assert.equal(
+    buildPolarityMapArtifact(getSetup({ process: "stick", stage: "cables" }))?.polarity?.label,
+    "DCEP",
+  );
+});
+
+test("polarity_map separates tier-1 terminals from the tier-3 polarity name", () => {
+  const stick = buildPolarityMapArtifact(getSetup({ process: "stick", stage: "cables" }));
+  assert.ok(stick);
+  assert.ok(stick.connections.every((item) => item.provenance.tier === 1));
+  assert.equal(stick.polarity?.provenance.tier, 3);
+  assert.match(
+    stick.polarity?.provenance.tier === 3 ? stick.polarity.provenance.basis : "",
+    /positive terminal/,
+  );
+});
+
+test("polarity_map is withheld when an instruction is unreadable or ambiguous", () => {
+  const base = getSetup({ process: "MIG", stage: "cables" });
+  assert.equal(
+    buildPolarityMapArtifact(
+      withCableStep(base, "ground_clamp", { instruction: "Connect the ground clamp to the lug." }),
+    ),
+    null,
+  );
+  assert.equal(
+    buildPolarityMapArtifact(
+      withCableStep(base, "ground_clamp", {
+        instruction: "Connect the ground clamp to the negative terminal inside the welder.",
+      }),
+    ),
+    null,
+  );
+});
+
+test("polarity_map is withheld when a lead state contradicts its endpoint", () => {
+  const tig = getSetup({ process: "TIG", stage: "cables" });
+  assert.equal(
+    buildPolarityMapArtifact(withCableStep(tig, "wire_feed_power", { state: "required" })),
+    null,
+  );
+});
+
+test("polarity_map is withheld when crossed cables contradict the published polarity fact", () => {
+  const crossed = withCableStep(
+    withCableStep(getSetup({ process: "MIG", stage: "cables" }), "ground_clamp", {
+      instruction: "Connect the ground clamp to the positive terminal.",
+    }),
+    "wire_feed_power",
+    { instruction: "Connect wire-feed power to the negative terminal." },
+  );
+  assert.equal(buildPolarityMapArtifact(crossed), null);
+});
+
+test("polarity_map is withheld for results without a cable stage", () => {
+  assert.equal(buildPolarityMapArtifact(getSetup({ process: "MIG", stage: "consumables" })), null);
+  assert.equal(buildPolarityMapArtifact(getSetup({ stage: "cables" })), null);
+});
+
+test("a polarity setup question is satisfiable by the evidence one get_setup call produces", () => {
+  const question = "What's the polarity setup for flux-cored?";
+  // The phrase trips three independent intents at once, so the validator demands all three.
+  assert.equal(requiresSetup(question), true);
+  assert.equal(requiresSourcePage(question), true);
+  const intent = structuredSpecIntent(question);
+  assert.equal(intent?.spec, "polarity");
+  assert.equal(intent?.process, "flux_cored");
+
+  const setup = getSetup({ process: "flux_cored", stage: "cables" });
+  assert.equal(setup.found, true);
+  if (!setup.found || !setup.visualSource) throw new Error("expected a reviewed cable source");
+
+  // get_setup evidence alone is rejected; this is what failed twice in a row before.
+  assert.match(
+    validateResearchEvidence(question, [{ id: "e1", tool: "get_setup", result: setup }]) ?? "",
+    /get_source_page was not called/,
+  );
+
+  // The host derives the other two from the same validated record, without a model turn.
+  const sourceQuery = {
+    kind: "document_page" as const,
+    source: setup.visualSource.file,
+    page: setup.visualSource.page,
+    view: "detail" as const,
+  };
+  const evidence: EvidenceRecord[] = [
+    { id: "e1", tool: "get_setup", result: setup },
+    { id: "e2", tool: "lookup_spec", result: resolveSpecQuery({ spec: "polarity", process: "flux_cored" }) },
+    { id: "e3", tool: "get_source_page", result: getSourcePage(sourceQuery) },
+  ];
+  assert.equal(validateResearchEvidence(question, evidence), null);
+});
+
+test("troubleshooting_flow generates Mermaid from the graph, not from the model", () => {
+  const diagnosis = diagnoseProblem({ symptom: "wire feed motor runs but wire does not feed" });
+  assert.equal(diagnosis.found, true);
+  if (!diagnosis.found) return;
+
+  const flow = buildTroubleshootingFlowArtifact(diagnosis);
+  assert.ok(flow);
+  const parsed = troubleshootingFlowArtifactSchema.parse(flow);
+
+  assert.equal(parsed.problem, diagnosis.problem);
+  assert.equal(parsed.stopCondition, diagnosis.stopCondition);
+  assert.equal(parsed.recordId, diagnosis.recordId);
+  assert.equal(parsed.branches.length, diagnosis.checks.length);
+  // Every branch is copied from the graph verbatim — no summarising, no re-wording.
+  assert.deepEqual(
+    parsed.branches.map((branch) => [branch.cause, branch.check, branch.remedy, branch.repairScope]),
+    diagnosis.checks.map((check) => [check.cause, check.check, check.remedy, check.repair_scope]),
+  );
+
+  assert.equal(parsed.mermaidStages.length, parsed.branches.length + 1);
+  for (const [stageIndex, source] of parsed.mermaidStages.entries()) {
+    assert.match(source, /^flowchart TD\n/);
+    assert.ok(source.split("\n").length <= 30);
+    assert.ok(source.length < 4_000);
+    assert.equal(source.includes("Fixed"), false);
+    assert.equal(source.includes("Not fixed"), false);
+    for (const [branchIndex, branch] of parsed.branches.entries()) {
+      const shouldBeVisible = stageIndex === parsed.branches.length || branchIndex <= stageIndex;
+      assert.equal(
+        new RegExp(`^  ${branch.key}\\[`, "m").test(source),
+        shouldBeVisible,
+        `${branch.key} visibility at stage ${stageIndex}`,
+      );
+      assert.equal(source.includes(branch.remedy), false);
+    }
+    assert.equal(source.includes('exhausted["Checks exhausted"]'), stageIndex === parsed.branches.length);
+  }
+
+  // Without an actionable prerequisite there is no safety node, and the causes hang
+  // directly off the symptom rather than off a dangling edge.
+  const generic = buildTroubleshootingFlowArtifact(
+    diagnoseProblem({ symptom: "wire feeds but no arc", process: "MIG" }),
+  );
+  assert.ok(generic);
+  assert.equal(generic.stopCondition, undefined);
+  assert.equal(generic.mermaidStages.some((source) => source.includes("safety")), false);
+});
+
+test("troubleshooting_flow escapes label text that would break the Mermaid parse", () => {
+  const flow = buildTroubleshootingFlowArtifact(
+    diagnoseProblem({ symptom: "wire feed motor runs but wire does not feed" }),
+  );
+  assert.ok(flow);
+  // Quotes terminate a Mermaid label and newlines terminate the statement; neither may
+  // survive raw, and no line may be left dangling.
+  const sources = flow.mermaidStages;
+  for (const source of sources) {
+    for (const line of source.split("\n")) {
+      assert.equal((line.match(/"/g) ?? []).length % 2, 0, `unbalanced quotes: ${line}`);
+    }
+    assert.equal(source.includes("\r"), false);
+  }
+});
+
+test("troubleshooting_flow is withheld for unknown and ambiguous symptoms", () => {
+  assert.equal(
+    buildTroubleshootingFlowArtifact(diagnoseProblem({ symptom: "the flux capacitor rattles" })),
+    null,
+  );
+  const ambiguous = diagnoseProblem({ symptom: "weld" });
+  assert.equal(ambiguous.found, false);
+  assert.equal(buildTroubleshootingFlowArtifact(ambiguous), null);
+});
+
+test("every generated flow is accepted by the real Mermaid parser", async () => {
+  // Mermaid is ESM-only and this suite compiles to CommonJS, so the import has to survive
+  // TypeScript's downlevelling. jsdom stands in for the browser DOMPurify needs.
+  const { JSDOM } = await new Function("return import('jsdom')")();
+  const dom = new JSDOM("<!doctype html><body></body>", { pretendToBeVisual: true });
+  for (const key of ["window", "document", "Element", "SVGElement", "Node", "DOMParser", "HTMLElement"]) {
+    try {
+      (globalThis as Record<string, unknown>)[key] =
+        key === "window" ? dom.window : dom.window[key];
+    } catch {
+      // navigator and friends are getter-only on newer Node; mermaid does not need them.
+    }
+  }
+
+  const mermaid = (await new Function("return import('mermaid')")()).default;
+  mermaid.initialize({ startOnLoad: false, securityLevel: "strict" });
+
+  const symptoms = [
+    "wire feeds but no arc",
+    "wire stops during welding",
+    "the wire forms a bird nest in the feeder",
+    "lcd display dark",
+    "porosity in the weld",
+    "arc is unstable with tig",
+  ];
+
+  let checked = 0;
+  for (const symptom of symptoms) {
+    const flow = buildTroubleshootingFlowArtifact(diagnoseProblem({ symptom }));
+    assert.ok(flow, `expected a documented flow for "${symptom}"`);
+    // Throws on any syntax our escaping failed to handle — an unescaped quote in a remedy
+    // would take the whole diagram down at render time otherwise.
+    const sources = flow.mermaidStages;
+    for (const source of sources) {
+      await mermaid.parse(source);
+      checked += 1;
+    }
+  }
+  assert.ok(checked > symptoms.length);
 });

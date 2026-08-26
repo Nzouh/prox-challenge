@@ -1,10 +1,10 @@
 import { tool } from "@anthropic-ai/claude-agent-sdk";
-import { artifactSchema } from "../artifacts";
+import { agentEmittableArtifactSchema } from "../artifacts";
 
 export const emitArtifact = tool(
   "emit_artifact",
-  "Render an interactive artifact only when the user explicitly asks for a visual, chart, diagram, or calculator. Never use it for an ordinary single-value specification answer. Copy provenance from the lookup result unchanged.",
-  { artifact: artifactSchema.describe("The artifact to render.") },
+  "Render a grounded duty_cycle calculator when the user requests one. Never use it for an ordinary single-value answer. Do not call this for source images, setup checklists, polarity maps, or troubleshooting flows: their evidence tools render them automatically. Copy duty-cycle provenance from lookup_spec unchanged.",
+  { artifact: agentEmittableArtifactSchema.describe("The duty-cycle artifact to render.") },
   async (args) => {
     // The handler does not deliver the artifact. lib/agent/run.ts watches the assistant
     // message stream for this tool_use block, validates its input, and forwards it to the

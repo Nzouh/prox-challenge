@@ -28,6 +28,7 @@
     "lib/agent/safety.ts",
     "lib/agent/session.ts",
     "lib/agent/setups.ts",
-    "lib/agent/specs.ts"
+    "lib/agent/specs.ts",
+    "lib/agent/troubleshooting-flow.ts"
   ]
 }
