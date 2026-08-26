@@ -1,8 +1,7 @@
 import { query, type SDKResultMessage } from "@anthropic-ai/claude-agent-sdk";
 import { z } from "zod";
 import {
-  agentEmittableArtifactSchema,
-  shouldOfferArtifacts,
+
   type Artifact,
 } from "./artifacts";
 import type { AgentEvent, AgentUsage } from "./events";
@@ -12,7 +11,6 @@ import {
   summarizeEvidence,
   toolCallKey,
 } from "./evidence-summary";
-import { artifactMatchesLookup, type FoundSpecResult } from "./grounding";
 import type { AgentInput } from "./input";
 import { manualSearchQuerySchema, searchManual } from "./manual-search";
 import {
@@ -32,6 +30,7 @@ import {
 } from "./orchestration";
 import { assessJobRisk, jobRiskQuerySchema } from "./safety";
 import {
+  buildDutyCycleArtifact,
   renderDeterministicSpecAnswer,
   resolveSpecQuery,
   type SpecQuery,
@@ -57,7 +56,6 @@ import {
   ASSESS_POWER_SOURCE_TOOL,
   CHECK_REPAIR_SCOPE_TOOL,
   DIAGNOSE_PROBLEM_TOOL,
-  EMIT_ARTIFACT_TOOL,
   GET_SETUP_TOOL,
   GET_SOURCE_PAGE_TOOL,
   LOOKUP_SPEC_TOOL,
@@ -65,9 +63,7 @@ import {
   MCP_SERVER_NAME,
   RECOMMEND_PROCESS_TOOL,
   SEARCH_MANUAL_TOOL,
-  TEXT_ALLOWED_TOOLS,
   vulcanServer,
-  vulcanTextServer,
 } from "./tools";
 import { specQuerySchema } from "./tools/lookup-spec";
 
@@ -199,13 +195,13 @@ export async function* runValidatedAgent(
   let writerFeedback = "";
   let feedback = "";
   let researchSessionId = sessionId;
+  let recoveredFromDeadSession = false;
   const successfulToolCalls = new Set<string>();
   const successfulEvidenceByCall = new Map<string, EvidenceRecord[]>();
   const successfulArtifactsByCall = new Map<string, Artifact[]>();
-  const offerArtifacts = shouldOfferArtifacts(input.text);
   const questionRoute = routeQuestion(input.text);
   const fastSpecIntent =
-    !offerArtifacts && questionRoute.kind === "needs_tool" && !requiresRiskAssessment(input.text)
+    questionRoute.kind === "needs_tool" && !requiresRiskAssessment(input.text)
       ? structuredSpecIntent(input.text)
       : null;
 
@@ -219,9 +215,7 @@ export async function* runValidatedAgent(
       let attemptEvidence: EvidenceRecord[] = [...successfulEvidenceByCall.values()].flat();
       const pendingEvidence = new Map<string, EvidenceRecord[]>();
       const pendingArtifacts = new Map<string, Artifact[]>();
-      const pendingLookups = new Map<string, SpecResult>();
       const callKeyByToolUseId = new Map<string, string>();
-      const verifiedLookups: FoundSpecResult[] = [];
       const attemptArtifacts: Artifact[] = [...successfulArtifactsByCall.values()]
         .flat()
         .filter(
@@ -248,12 +242,12 @@ export async function* runValidatedAgent(
           systemPrompt: SYSTEM_PROMPT,
           ...researchSessionOptions(researchSessionId),
           mcpServers: {
-            // Setup, polarity, source, and troubleshooting visuals are derived host-side
-            // from their evidence tools. Claude receives emit_artifact only for an
-            // explicit visual request, avoiding redundant ungrounded artifact calls.
-            [MCP_SERVER_NAME]: offerArtifacts ? vulcanServer : vulcanTextServer,
+            // Every artifact is derived host-side from its evidence tool, so the tool set
+            // is the same on every request. That keeps one cached prefix rather than one
+            // per visual-request variant (tools render ahead of the system prompt).
+            [MCP_SERVER_NAME]: vulcanServer,
           },
-          allowedTools: offerArtifacts ? ALLOWED_TOOLS : TEXT_ALLOWED_TOOLS,
+          allowedTools: ALLOWED_TOOLS,
           tools: [],
           settingSources: [],
           strictMcpConfig: true,
@@ -265,12 +259,12 @@ export async function* runValidatedAgent(
 
       try {
         for await (const message of stream) {
-          if (!announcedSession && "session_id" in message && message.session_id) {
+          if ("session_id" in message && message.session_id) {
             researchSessionId = message.session_id;
-            announcedSession = true;
-            yield { type: "session", sessionId: message.session_id };
-          } else if ("session_id" in message && message.session_id) {
-            researchSessionId = message.session_id;
+            if (!announcedSession) {
+              announcedSession = true;
+              yield { type: "session", sessionId: message.session_id };
+            }
           }
           if (message.type === "assistant") {
             if (message.error) attemptFailure = `Model request failed: ${message.error}`;
@@ -290,10 +284,10 @@ export async function* runValidatedAgent(
                 const parsed = specQuerySchema.safeParse(block.input);
                 if (parsed.success) {
                   const result = resolveSpecQuery(parsed.data);
-                  pendingLookups.set(block.id, result);
                   pendingEvidence.set(block.id, [
                     { id: `evidence:${block.id}`, tool: "lookup_spec", result },
                   ]);
+                  addAttemptArtifact(buildDutyCycleArtifact(result));
                 } else {
                   attemptFailure = `lookup_spec input failed host validation: ${parsed.error.message}`;
                 }
@@ -467,19 +461,6 @@ export async function* runValidatedAgent(
                 } else {
                   attemptFailure = `get_source_page input failed host validation: ${parsed.error.message}`;
                 }
-              } else if (block.name === EMIT_ARTIFACT_TOOL) {
-                const parsed = agentEmittableArtifactSchema.safeParse(
-                  (block.input as { artifact?: unknown } | null)?.artifact,
-                );
-                const grounded =
-                  parsed.success &&
-                  verifiedLookups.some((lookup) => artifactMatchesLookup(parsed.data, lookup));
-                if (parsed.success && grounded) addAttemptArtifact(parsed.data);
-                else {
-                  attemptFailure = parsed.success
-                    ? "Artifact did not match a successful lookup from this attempt."
-                    : `Artifact failed schema validation: ${parsed.error.message}`;
-                }
               }
             }
           } else if (message.type === "user") {
@@ -502,14 +483,28 @@ export async function* runValidatedAgent(
                 if (artifactsForCall) successfulArtifactsByCall.set(callKey, artifactsForCall);
               }
               if (!ok) attemptFailure = "An MCP tool call failed.";
-              const lookup = pendingLookups.get(block.tool_use_id);
-              pendingLookups.delete(block.tool_use_id);
-              if (ok && lookup?.found && lookup.spec === "duty_cycle") verifiedLookups.push(lookup);
             }
           } else if (message.type === "result") {
             terminalResult = message;
           }
         }
+      } catch (error) {
+        // A resumed session id can outlive the transcript it points at — a worker restart,
+        // or a browser whose stored history outlasted the server's. The SDK throws instead
+        // of returning a result, so this is the only place that failure is visible. Drop
+        // the dead handle and replay the same attempt on a fresh session: the question is
+        // still answerable, only the earlier turns of context are lost.
+        //
+        // The dead id was already announced, so clear that too — otherwise the client
+        // keeps storing a handle that resolves to nothing on every future turn.
+        if (abortController.signal.aborted || !researchSessionId || recoveredFromDeadSession) {
+          throw error;
+        }
+        recoveredFromDeadSession = true;
+        researchSessionId = undefined;
+        announcedSession = false;
+        attempt -= 1;
+        continue;
       } finally {
         stream.close();
       }

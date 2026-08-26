@@ -24,7 +24,7 @@ Fork the repo, run in under two minutes with a single `ANTHROPIC_API_KEY`. Grade
 | ~24k tokens of extractable text across all three PDFs | `pdftotext`: 15,192 words in the manual | The whole corpus fits in context many times over |
 | `selection-chart.pdf` extracts **0 words** | single 1200×1200 JPEG at 72 PPI | Text retrieval literally cannot see it |
 | `quick-start-guide.pdf` extracts 93 words | 2 pages, near-pure image | Same |
-| The duty-cycle table lives in `product-inside.webp` | door placard: MIG/Flux 240VAC = 20% @ 200A | The brief's own first test question is answered by pixels in the repo root |
+| The duty-cycle table lives in `assets/reference-images/product-views/product-inside.webp` | door placard: MIG/Flux 240VAC = 20% @ 200A | The brief's own first test question is answered by supplied product pixels |
 | p.42 troubleshooting columns interleave when parsed | problem name lands mid-causes-column | Tables must be rebuilt by vision, not parsed |
 | Manual pp. 8–9 (Controls) extract 49 and 79 words | labeled panel diagrams | Visual-only content is concentrated, not incidental |
 | Duty cycle appears in three independent places | placard, p.7 specs, selection-chart explainer | Cross-validation is possible and free |
@@ -43,7 +43,7 @@ Fork the repo, run in under two minutes with a single `ANTHROPIC_API_KEY`. Grade
 | Claude Agent SDK (`query()`) | Brief mandates the Agent SDK and a single Anthropic key. Consequence: the SDK owns the request envelope, so the caching design is shaped by what it exposes — see §3 | OpenRouter; raw Messages API |
 | Whole corpus in the cached system prompt | Fits trivially; caches from 512 tokens on Opus 5, reads ~0.1×; no retrieval step means no retrieval errors | Per-query fetching |
 | Build-time extraction, committed to `knowledge/` | Tables need vision to rebuild correctly; committing makes the base auditable and reviewable in a PR | Runtime PDF parsing |
-| Product photos are **primary sources** | `product-inside.webp` holds the duty-cycle table | Treating them as decoration |
+| Product photos are **primary sources** | `assets/reference-images/product-views/product-inside.webp` holds the duty-cycle table | Treating them as decoration |
 | Narrow troubleshooting graph as JSON | Content is already symptom → causes → checks → fixes, with page cross-references as edges; a few hundred nodes | Graph database |
 
 ### Architecture

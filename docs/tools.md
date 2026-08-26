@@ -139,18 +139,21 @@ Return the exact reviewed detail/full render for a PDF page or product image fro
 `knowledge/manifest.json`, including the markdown path, selected asset path, and tier-1
 source hash. Unknown sources and pages fail closed.
 
-## Artifact roadmap
+## Artifacts
 
-`emit_artifact` accepts only allowlisted schemas grounded in successful tool results:
+Every artifact is derived host-side from the evidence its tool returned: `lookup_spec`
+yields the duty-cycle card, `get_setup` the polarity map and setup checklist,
+`diagnose_problem` the troubleshooting flow, `get_source_page` the source visual.
 
-The artifact tool is exposed only when the user explicitly requests a visual, diagram,
-chart, or calculator. A direct single-value lookup renders as normal prose.
+There is no tool the model can call to author one. That is what makes an artifact unable
+to disagree with the prose beside it, and unable to depend on whether the question happened
+to contain a word like "chart" — "calculate the duty cycle" and "chart the duty cycle"
+produce the same card. It also keeps one tool set, and therefore one cached prefix, on
+every request.
+
+Not yet derived:
 
 - specification card;
-- cable-setup diagram;
-- step-by-step setup checklist;
-- duty-cycle visualization;
-- troubleshooting decision tree;
 - process-comparison table;
 - safety stop card;
 - pre-weld hazard checklist;

@@ -2,19 +2,20 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import type { SDKResultMessage } from "@anthropic-ai/claude-agent-sdk";
 import {
-  agentEmittableArtifactSchema,
   diagramNeed,
   dutyCycleArtifactSchema,
   polarityMapArtifactSchema,
   setupChecklistArtifactSchema,
   troubleshootingFlowArtifactSchema,
-  shouldOfferArtifacts,
   sourceVisualArtifactSchema,
 } from "../lib/agent/artifacts";
-import { artifactMatchesLookup } from "../lib/agent/grounding";
 import { resultToEvent } from "../lib/agent/result";
 import { responseCacheKey, VerifiedResponseCache } from "../lib/agent/response-cache";
-import { renderDeterministicSpecAnswer, resolveSpecQuery } from "../lib/agent/specs";
+import {
+  buildDutyCycleArtifact,
+  renderDeterministicSpecAnswer,
+  resolveSpecQuery,
+} from "../lib/agent/specs";
 import { searchManual } from "../lib/agent/manual-search";
 import { assessJobRisk } from "../lib/agent/safety";
 import { buildSetupChecklistArtifact, getSetup, type SetupResult } from "../lib/agent/setups";
@@ -285,7 +286,6 @@ test("troubleshooting_flow is derived verbatim from one documented diagnosis", (
   assert.equal(parsed.provenance[0]?.tier, 1);
   assert.equal(parsed.provenance[0]?.page, 43);
   assert.equal(parsed.stopCondition, undefined);
-  assert.equal(agentEmittableArtifactSchema.safeParse(parsed).success, false);
 });
 
 test("troubleshooting_flow keeps only actionable shutdown prerequisites", () => {
@@ -606,6 +606,20 @@ test("source_visual selects the requested render and only for a reviewed manifes
   assert.ok(image);
   assert.equal(image!.page, undefined);
   assert.equal(image!.caption, "Reviewed source image");
+});
+
+test("source_visual can target a frontend mounted at a public base path", () => {
+  const previous = process.env.ARC_PUBLIC_BASE_PATH;
+  process.env.ARC_PUBLIC_BASE_PATH = "/arc";
+  try {
+    const query = { kind: "document_page" as const, source: "files/owner-manual.pdf", page: 7, view: "detail" as const };
+    const artifact = buildSourceVisualArtifact(query, getSourcePage(query));
+    assert.ok(artifact);
+    assert.match(artifact!.imageUrl, /^\/arc\/api\/source-assets\?/);
+  } finally {
+    if (previous === undefined) delete process.env.ARC_PUBLIC_BASE_PATH;
+    else process.env.ARC_PUBLIC_BASE_PATH = previous;
+  }
 });
 
 test("get_source_page rejects unknown sources, unknown pages, and missing page numbers", () => {
@@ -943,25 +957,24 @@ test("the provisional writer plan preserves deterministic stop dispositions", ()
   assert.equal(validateCheckerOutput(checker, evidence), null);
 });
 
-test("an artifact must exactly match a successful lookup", () => {
+test("a duty-cycle card is derived from the lookup rather than authored", () => {
   assert.equal(publishedLookup.found, true);
   assert.equal(publishedLookup.spec, "duty_cycle");
   if (!publishedLookup.found || publishedLookup.spec !== "duty_cycle") return;
 
-  const grounded = dutyCycleArtifactSchema.parse({
-    type: "duty_cycle",
-    process: publishedLookup.conditions.process,
-    inputVoltage: publishedLookup.conditions.inputVoltage,
-    amperage: publishedLookup.conditions.amperage,
-    dutyCyclePct: publishedLookup.value,
-    periodMinutes: publishedLookup.conditions.periodMinutes,
-    provenance: publishedLookup.provenance,
-  });
-
-  assert.equal(artifactMatchesLookup(grounded, publishedLookup), true);
-  assert.equal(
-    artifactMatchesLookup({ ...grounded, dutyCyclePct: 90 }, publishedLookup),
-    false,
+  const card = buildDutyCycleArtifact(publishedLookup);
+  // Every field is the lookup's own, so the card cannot disagree with the prose beside it.
+  assert.deepEqual(
+    card,
+    dutyCycleArtifactSchema.parse({
+      type: "duty_cycle",
+      process: publishedLookup.conditions.process,
+      inputVoltage: publishedLookup.conditions.inputVoltage,
+      amperage: publishedLookup.conditions.amperage,
+      dutyCyclePct: publishedLookup.value,
+      periodMinutes: publishedLookup.conditions.periodMinutes,
+      provenance: publishedLookup.provenance,
+    }),
   );
 });
 
@@ -980,10 +993,16 @@ test("artifact bounds reject physically invalid duty-cycle values", () => {
   );
 });
 
-test("ordinary specification answers do not offer an artifact tool", () => {
-  assert.equal(shouldOfferArtifacts("What's the duty cycle for MIG at 200A on 240V?"), false);
-  assert.equal(shouldOfferArtifacts("Show that duty cycle as a visual timeline"), true);
-  assert.equal(shouldOfferArtifacts("Draw a duty-cycle chart for me"), true);
+test("only a successful duty-cycle lookup yields a card", () => {
+  // Another published spec is still a valid lookup; it just has no card to render.
+  assert.equal(buildDutyCycleArtifact(resolveSpecQuery({ spec: "maximum_ocv" })), null);
+  // An unpublished operating point must not be drawn as though it were measured.
+  assert.equal(
+    buildDutyCycleArtifact(
+      resolveSpecQuery({ spec: "duty_cycle", process: "MIG", inputVoltage: 240, amperage: 9_999 }),
+    ),
+    null,
+  );
 });
 
 test("SDK success envelopes with is_error=true never become done events", () => {

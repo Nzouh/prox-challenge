@@ -6,6 +6,8 @@ import { InteractiveView } from "./manual/InteractiveView";
 import { Sidebar } from "./Sidebar";
 import { decodeSSE } from "@/lib/sse";
 import type { AgentEvent } from "@/lib/agent/events";
+import { withBasePath } from "@/lib/base-path";
+import { loadConversations, saveConversations } from "@/lib/conversation-store";
 import {
   newConversation,
   titleFrom,
@@ -30,9 +32,25 @@ export function AppShell() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [streaming, setStreaming] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
   const active = conversations.find((c) => c.id === activeId) ?? null;
+
+  // Restored on mount rather than in a state initializer: localStorage does not exist
+  // during the server render, so seeding from it would hydrate against a different tree.
+  useEffect(() => {
+    setConversations(loadConversations());
+    setHydrated(true);
+  }, []);
+
+  // Held until that restore has run, so the first render's empty list cannot overwrite
+  // stored history. Writes are also skipped mid-stream — saving on every token would
+  // serialise the whole transcript per delta, and the turn lands when the stream ends.
+  useEffect(() => {
+    if (!hydrated || streaming) return;
+    saveConversations(conversations);
+  }, [hydrated, streaming, conversations]);
 
   const patch = useCallback((id: string, map: (conversation: Conversation) => Conversation) => {
     setConversations((prev) => prev.map((c) => (c.id === id ? map(c) : c)));
@@ -142,7 +160,7 @@ export function AppShell() {
       abortRef.current = controller;
 
       try {
-        const response = await fetch("/api/chat", {
+        const response = await fetch(withBasePath("/api/chat"), {
           method: "POST",
           headers: { "content-type": "application/json" },
           signal: controller.signal,

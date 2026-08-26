@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { FormEvent, KeyboardEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
-import frontImage from "@/product-front.webp";
+import frontImage from "@/assets/reference-images/product-views/product-front.webp";
 import { ArcMark } from "./ArcMark";
 import arcLogo from "@/public/arc-logo.png";
 import { ArtifactView } from "./artifacts";
@@ -47,7 +47,6 @@ export function Chat({
   onOpenExplorer: () => void;
 }) {
   const [draft, setDraft] = useState("");
-  const [showDevDetails, setShowDevDetails] = useState(false);
   const [greeting, setGreeting] = useState("Welcome");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -104,15 +103,6 @@ export function Chat({
   return (
     <main className="chat">
       <div className="chat-topbar">
-        <button
-          type="button"
-          className="ghost"
-          onClick={() => setShowDevDetails((show) => !show)}
-          aria-pressed={showDevDetails}
-        >
-          {showDevDetails ? "Hide details" : "Developer details"}
-        </button>
-
         <button type="button" className="explorer-card" onClick={onOpenExplorer}>
           <span className="explorer-card-frame">
             <Image src={frontImage} alt="" sizes="196px" priority />
@@ -190,34 +180,6 @@ export function Chat({
                         )}
 
                         {turn.error && <div className="error">{turn.error}</div>}
-
-                        {showDevDetails && (turn.tools.length > 0 || turn.usage) && (
-                          <div className="dev-details">
-                            {turn.tools.length > 0 && (
-                              <div className="trace">
-                                {turn.tools.map((tool) => (
-                                  <div key={tool.id} className={tool.ok ? "ok" : undefined}>
-                                    {tool.ok === undefined ? "→" : "✓"} {shortName(tool.name)}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                            {turn.usage && (
-                              <div className="usage">
-                                {turn.usage.cached ? (
-                                  "Validated cached response"
-                                ) : (
-                                  <>
-                                    {turn.usage.usage.inputTokens.toLocaleString()} in ·{" "}
-                                    {turn.usage.usage.outputTokens.toLocaleString()} out · cache read{" "}
-                                    {turn.usage.usage.cacheReadTokens.toLocaleString()} · $
-                                    {turn.usage.costUsd.toFixed(4)}
-                                  </>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        )}
                       </div>
                     </div>
                   </div>
@@ -264,8 +226,4 @@ export function Chat({
       </div>
     </main>
   );
-}
-
-function shortName(name: string): string {
-  return name.replace(/^mcp__[^_]+__/, "");
 }

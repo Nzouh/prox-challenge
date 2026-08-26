@@ -32,9 +32,9 @@ OUTPUT_DIR = ROOT / "knowledge"
 OVERRIDES_PATH = ROOT / "scripts" / "extraction_overrides.json"
 STRUCTURED_KNOWLEDGE_DIR = ROOT / "scripts" / "structured_knowledge"
 SOURCE_IMAGES = (
-    ROOT / "product.webp",
-    ROOT / "product-front.webp",
-    ROOT / "product-inside.webp",
+    ROOT / "assets" / "reference-images" / "product-views" / "product.webp",
+    ROOT / "assets" / "reference-images" / "product-views" / "product-front.webp",
+    ROOT / "assets" / "reference-images" / "product-views" / "product-inside.webp",
 )
 RENDER_DPI = 220
 OCR_WORD_THRESHOLD = 100

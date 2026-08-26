@@ -3,9 +3,12 @@ import type { AgentStage, AgentUsage } from "@/lib/agent/events";
 
 /**
  * Client-side conversation model. The server keeps the real Agent SDK session; this is
- * only what the sidebar and the transcript need to render. It is deliberately in-memory:
- * a session id that outlived a server restart would point at nothing, so persisting the
- * list would promise continuity the backend cannot honour.
+ * only what the sidebar and the transcript need to render.
+ *
+ * The list is persisted to localStorage by `lib/conversation-store.ts` so a returning
+ * visitor finds their history. The stored `sessionId` is a hint, not a guarantee — it can
+ * outlive the transcript the worker still holds — so a failed resume falls back to a fresh
+ * session server-side instead of failing the turn.
  */
 
 export type ToolCall = { id: string; name: string; ok?: boolean };

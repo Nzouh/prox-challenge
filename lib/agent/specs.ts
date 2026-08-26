@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { DutyCycleArtifact } from "./artifacts";
 import type { WeldProcess, InputVoltage } from "./domain";
 import { inputVoltageSchema, weldProcessSchema } from "./domain";
 import { provenanceFor, structuredFacts, type StructuredFact } from "./knowledge";
@@ -223,5 +224,27 @@ export function resolveSpecQuery(unparsed: SpecQuery): SpecResult {
     conditions: { process: query.process, inputVoltage: query.inputVoltage },
     provenance,
     recordId: fact.id,
+  };
+}
+
+/**
+ * Host-derived duty-cycle card.
+ *
+ * Every field the artifact needs is already carried by a successful duty-cycle lookup, so
+ * the card is a rendering of validated evidence rather than something the model authors.
+ * That removes two failure modes at once: the card can no longer disagree with the number
+ * in the prose, and it no longer depends on the question happening to contain a visual
+ * noun — "calculate the duty cycle" and "chart the duty cycle" now behave identically.
+ */
+export function buildDutyCycleArtifact(result: SpecResult): DutyCycleArtifact | null {
+  if (!result.found || result.spec !== "duty_cycle") return null;
+  return {
+    type: "duty_cycle",
+    process: result.conditions.process,
+    inputVoltage: result.conditions.inputVoltage,
+    amperage: result.conditions.amperage,
+    dutyCyclePct: result.value,
+    periodMinutes: result.conditions.periodMinutes,
+    provenance: result.provenance,
   };
 }

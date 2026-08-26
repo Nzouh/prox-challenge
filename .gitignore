@@ -12,3 +12,4 @@ __pycache__/
 *.py[cod]
 next-env.d.ts
 .DS_Store
+public/arc-logo-check.png

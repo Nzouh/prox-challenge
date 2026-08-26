@@ -1,6 +1,6 @@
 # Source image - product-front.webp
 
-- Source: `product-front.webp`
+- Source: `assets/reference-images/product-views/product-front.webp`
 - Classification: `complex`
 - Extraction paths: `local_ocr, rendered_visual_review`
 - Render: `knowledge/source-images/product-front.png`

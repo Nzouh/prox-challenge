@@ -3,9 +3,9 @@ import { provenanceSchema } from "./provenance";
 import { weldProcessSchema, inputVoltageSchema } from "./domain";
 
 /**
- * The component schema. The agent picks a component and fills its params; we own the
- * rendering, so a malformed artifact cannot reach React — the schema below is what the
- * emit_artifact tool validates against.
+ * The component schema. Every artifact is derived host-side from the evidence its tool
+ * returned, so these types describe what the host may build and what React may render —
+ * the model neither selects a component nor fills its params.
  *
  * Day 5 adds the other five members from PLAN.md section 3: troubleshooting flow, settings
  * configurator, panel hotspot map, 3D geometry scene, cable routing.
@@ -175,18 +175,6 @@ export const artifactSchema = z.discriminatedUnion("type", [
   troubleshootingFlowArtifactSchema,
 ]);
 export type Artifact = z.infer<typeof artifactSchema>;
-
-/** The model may currently author only this narrow artifact type. Setup, source,
- * polarity, and troubleshooting artifacts are derived host-side from validated tools. */
-export const agentEmittableArtifactSchema = dutyCycleArtifactSchema;
-
-const EXPLICIT_VISUAL_REQUEST =
-  /\b(artifact|calculator|chart|flowchart|sequence\s+diagram|diagram|draw|graph|interactive|plot|timeline|visual(?:i[sz](?:e|ation))?)\b/i;
-
-/** Do not turn ordinary factual answers into unsolicited dashboard cards. */
-export function shouldOfferArtifacts(question: string): boolean {
-  return EXPLICIT_VISUAL_REQUEST.test(question);
-}
 
 export type DiagramNeed = "none" | "flowchart" | "sequence";
 

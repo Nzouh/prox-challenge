@@ -138,6 +138,12 @@
     }
   },
   {
+    "additional_sources": [
+      {
+        "file": "files/quick-start-guide.pdf",
+        "page": 2
+      }
+    ],
     "aliases": [
       "mig arc unstable",
       "flux core arc unstable",
@@ -217,12 +223,6 @@
       "flux_cored"
     ],
     "safety_prerequisite": "Shut off the welder, disconnect it from power, and discharge the MIG gun to ground before adjusting, cleaning, or repairing the unit.",
-    "additional_sources": [
-      {
-        "file": "files/quick-start-guide.pdf",
-        "page": 2
-      }
-    ],
     "source": {
       "file": "files/owner-manual.pdf",
       "page": 42
@@ -415,6 +415,16 @@
     }
   },
   {
+    "additional_sources": [
+      {
+        "file": "files/owner-manual.pdf",
+        "page": 20
+      },
+      {
+        "file": "files/quick-start-guide.pdf",
+        "page": 2
+      }
+    ],
     "aliases": [
       "porosity",
       "porous weld",
@@ -481,16 +491,6 @@
       "flux_cored"
     ],
     "safety_prerequisite": "Follow all safety precautions whenever diagnosing or servicing the equipment.",
-    "additional_sources": [
-      {
-        "file": "files/owner-manual.pdf",
-        "page": 20
-      },
-      {
-        "file": "files/quick-start-guide.pdf",
-        "page": 2
-      }
-    ],
     "source": {
       "file": "files/owner-manual.pdf",
       "page": 43

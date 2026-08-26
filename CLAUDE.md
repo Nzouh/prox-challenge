@@ -27,8 +27,9 @@ The key is server-side only — never `NEXT_PUBLIC_*`, never shipped to the brow
 - Every claim carries a provenance tier (1 manual / 2 web / 3 inference); the UI renders the
   tiers visually distinctly. Never blur them.
 - `knowledge/` is build-generated and committed — never hand-edit; fix the extractor and rerun.
-- Interactive output: the agent fills params for components that already exist. Freeform markup
-  renders only inside the sandboxed cross-origin iframe.
+- Interactive output: the host derives every artifact from the evidence its tool returned —
+  the agent neither selects a component nor fills its params, and there is no tool it can
+  call to author one. Freeform markup renders only inside the sandboxed cross-origin iframe.
 - Nothing may break the one-command, two-minute clone-to-running path.
 
 ## Docs

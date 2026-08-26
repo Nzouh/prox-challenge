@@ -1,0 +1,14 @@
+.git
+.next
+.test-dist
+.venv
+node_modules
+.env
+.env.*
+!.env.example
+evals/results
+assets/reference-images/calibration
+assets/reference-images/branding
+assets/reference-images/validation
+files
+*.tsbuildinfo

@@ -39,7 +39,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "knowledge" / "hotspots.json"
 
-FRONT_PHOTO = ROOT / "product-front.webp"
+FRONT_PHOTO = ROOT / "assets" / "reference-images" / "product-views" / "product-front.webp"
 FRONT_DRAWING = ROOT / "knowledge" / "renders" / "owner-manual" / "page-08-detail.png"
 FRONT_PAGE = 8
 SOURCE_FILE = "files/owner-manual.pdf"
@@ -249,7 +249,7 @@ DESCRIPTIONS: dict[str, tuple[str, dict[str, Any]]] = {
     ),
 }
 
-INSIDE_PHOTO = ROOT / "product-inside.webp"
+INSIDE_PHOTO = ROOT / "assets" / "reference-images" / "product-views" / "product-inside.webp"
 INSIDE_DRAWING = ROOT / "knowledge" / "renders" / "owner-manual" / "page-09-detail.png"
 INSIDE_PAGE = 9
 
@@ -531,7 +531,7 @@ def _view(
         raise SystemExit(f"Cannot read {photo_path}")
 
     offset = (0.0, 0.0)
-    image_name = photo_path.name
+    image_name = photo_path.relative_to(ROOT).as_posix()
     crop_record: dict[str, Any] | None = None
     if crop is not None:
         x0, y0, x1, y1 = crop
@@ -594,7 +594,7 @@ def _view(
     }
     if crop_record is not None:
         # The canvas is a crop of a corpus source image, not a new photograph.
-        view["source_image"] = photo_path.name
+        view["source_image"] = photo_path.relative_to(ROOT).as_posix()
         view["crop"] = crop_record
     return view
 

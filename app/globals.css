@@ -279,30 +279,13 @@ input, textarea, button { font: inherit; }
   position: relative;
 }
 
-/* Only the ghost button stays in flow, so this band is one button tall. The explorer card
-   used to sit here too, which made the whole row as tall as the card and cost the thread
-   ~180px of height on every screenful. */
+/* Nothing in this band is in flow — the explorer card is absolutely positioned — so it
+   collapses to its own top padding. That is deliberate: laying the card out in flow made
+   the row as tall as the card and cost the thread ~180px on every screenful. */
 .chat-topbar {
   flex: none;
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
   padding: 18px 26px 0;
 }
-
-.ghost {
-  background: none;
-  border: 1px solid var(--line-2);
-  border-radius: 999px;
-  color: var(--muted);
-  font-size: 12px;
-  padding: 6px 14px;
-  cursor: pointer;
-  transition: border-color 0.16s ease, color 0.16s ease;
-}
-
-.ghost:hover { border-color: var(--accent); color: var(--accent-soft); }
-.ghost[aria-pressed="true"] { color: var(--accent-bright); border-color: var(--line-3); }
 
 /* Floats in the chat's top-right corner (.chat is the positioned ancestor) so it occupies
    only its own box. It is translucent and blurred because content passes under it. */
@@ -507,20 +490,6 @@ input, textarea, button { font: inherit; }
   padding: 10px 14px;
   font-size: 13.5px;
 }
-
-.dev-details {
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--panel-3);
-  padding: 10px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.trace { font-family: var(--mono); font-size: 11.5px; color: var(--muted-2); }
-.trace .ok { color: var(--sage); }
-.usage { font-family: var(--mono); font-size: 11px; color: var(--faint); }
 
 /* Composer */
 

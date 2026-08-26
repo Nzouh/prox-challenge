@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import frontImage from "@/product-front.webp";
-import insideImage from "@/product-inside.webp";
+import frontImage from "@/assets/reference-images/product-views/product-front.webp";
+import insideImage from "@/assets/reference-images/product-views/product-inside.webp";
 import hotspotData from "@/knowledge/hotspots.json";
 import type { Provenance } from "@/lib/agent/provenance";
 

@@ -1404,7 +1404,7 @@
     {
       "geometry_method": "homography from page 8, validated against a held-out point",
       "held_out_error_px": 5.78,
-      "image": "product-front.webp",
+      "image": "assets/reference-images/product-views/product-front.webp",
       "part_count": 12,
       "source": {
         "file": "files/owner-manual.pdf",
@@ -1414,7 +1414,7 @@
     },
     {
       "geometry_method": "measured directly in the photograph; page-9 projection rejected",
-      "image": "product-inside.webp",
+      "image": "assets/reference-images/product-views/product-inside.webp",
       "part_count": 10,
       "source": {
         "file": "files/owner-manual.pdf",
@@ -1433,7 +1433,7 @@
       "ocr_text": "knowledge/ocr/source-images/product.txt",
       "render": "knowledge/source-images/product.png",
       "sha256": "c80366105834175156dfbc5d425fba6e4f3cc448910f958a03c372f74485d752",
-      "source": "product.webp",
+      "source": "assets/reference-images/product-views/product.webp",
       "visual_reviewed": true,
       "width": 1200
     },
@@ -1446,7 +1446,7 @@
       "ocr_text": "knowledge/ocr/source-images/product-front.txt",
       "render": "knowledge/source-images/product-front.png",
       "sha256": "ec5631ac96f3f43202bad0e31e26cbd54b885ff925ef9fcf5201c195c15fec9f",
-      "source": "product-front.webp",
+      "source": "assets/reference-images/product-views/product-front.webp",
       "visual_reviewed": true,
       "width": 1200
     },
@@ -1459,7 +1459,7 @@
       "ocr_text": "knowledge/ocr/source-images/product-inside.txt",
       "render": "knowledge/source-images/product-inside.png",
       "sha256": "1513e0ae01be1f565835c90633b6ec79225c3f89197785b1eeda5aa91b233325",
-      "source": "product-inside.webp",
+      "source": "assets/reference-images/product-views/product-inside.webp",
       "visual_reviewed": true,
       "width": 1200
     }

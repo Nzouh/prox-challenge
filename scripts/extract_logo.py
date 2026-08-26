@@ -15,7 +15,7 @@ no guessing, and the mark's sharp pixels are left alone because the amplitude is
 import numpy as np
 from PIL import Image
 
-SRC = "Gemini_Generated_Image_bkf81kbkf81kbkf8.jpg"
+SRC = "assets/reference-images/branding/arc-logo-source.jpg"
 img = np.asarray(Image.open(SRC).convert("RGB")).astype(np.float64)
 h, w, _ = img.shape
 

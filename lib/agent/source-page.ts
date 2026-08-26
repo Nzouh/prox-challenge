@@ -1,11 +1,12 @@
 import { z } from "zod";
 import type { SourceVisualArtifact } from "./artifacts";
 import { knowledgeManifest, provenanceFor } from "./knowledge";
+import { withBasePath } from "../base-path";
 
 export const sourcePageKindSchema = z.enum(["document_page", "source_image"]);
 export const sourcePageQueryShape = {
   kind: sourcePageKindSchema.describe("document_page for a PDF page, or source_image for a product photograph."),
-  source: z.string().trim().min(1).max(160).describe("Exact source path such as files/owner-manual.pdf or product-inside.webp."),
+  source: z.string().trim().min(1).max(160).describe("A manifest source path such as files/owner-manual.pdf or assets/reference-images/product-views/product-inside.webp."),
   page: z.number().int().positive().optional().describe("PDF page number; omit for source_image."),
   view: z.enum(["detail", "full"]).default("detail").describe("Prefer the reviewed detail render; full returns the full-page render when available."),
 };
@@ -71,7 +72,14 @@ export type SourcePageResult = ReturnType<typeof getSourcePage>;
 export function sourceVisualUrl(query: SourcePageQuery): string {
   const params = new URLSearchParams({ kind: query.kind, source: query.source, view: query.view ?? "detail" });
   if (query.page !== undefined) params.set("page", String(query.page));
-  return `/api/source-assets?${params.toString()}`;
+  const workerPublicBasePath = process.env.ARC_PUBLIC_BASE_PATH?.trim().replace(/\/$/, "");
+  if (workerPublicBasePath && !/^\/[a-zA-Z0-9_-]+(?:\/[a-zA-Z0-9_-]+)*$/.test(workerPublicBasePath)) {
+    throw new Error("ARC_PUBLIC_BASE_PATH must be empty or an absolute path such as /arc.");
+  }
+  const assetPath = workerPublicBasePath
+    ? `${workerPublicBasePath}/api/source-assets`
+    : withBasePath("/api/source-assets");
+  return `${assetPath}?${params.toString()}`;
 }
 
 /** Only a found, visually reviewed result with a real render path becomes a visible artifact. */

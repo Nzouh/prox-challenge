@@ -1,7 +1,7 @@
 {
   "views": {
     "front": {
-      "image": "product-front.webp",
+      "image": "assets/reference-images/product-views/product-front.webp",
       "parts": [
         {
           "center": {
@@ -378,7 +378,7 @@
       }
     },
     "inside": {
-      "image": "product-inside.webp",
+      "image": "assets/reference-images/product-views/product-inside.webp",
       "parts": [
         {
           "center": {
