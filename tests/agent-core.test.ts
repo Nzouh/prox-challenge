@@ -698,6 +698,15 @@ test("routing sends first-use, polarity, wire-feed, front-panel, and weld-diagno
     validateResearchEvidence(dualRouted, [
       { id: "manual", tool: "search_manual", result: searchManual({ query: dualRouted }) },
     ]) ?? "",
+    /get_setup/,
+  );
+  const dualSetupEvidence: EvidenceRecord = {
+    id: "setup",
+    tool: "get_setup",
+    result: getSetup({ process: "stick", stage: "cables" }),
+  };
+  assert.match(
+    validateResearchEvidence(dualRouted, [dualSetupEvidence]) ?? "",
     /get_source_page/,
   );
   const sourceEvidence: EvidenceRecord = {
@@ -1204,16 +1213,26 @@ test("polarity_map is withheld for results without a cable stage", () => {
   assert.equal(buildPolarityMapArtifact(getSetup({ stage: "cables" })), null);
 });
 
-test("a polarity setup question is satisfiable by the evidence one get_setup call produces", () => {
-  const question = "What's the polarity setup for flux-cored?";
+test("a TIG polarity setup retry prioritizes the get_setup call that produces all required evidence", () => {
+  const question = "What polarity setup do I need for TIG welding?";
   // The phrase trips three independent intents at once, so the validator demands all three.
   assert.equal(requiresSetup(question), true);
   assert.equal(requiresSourcePage(question), true);
   const intent = structuredSpecIntent(question);
   assert.equal(intent?.spec, "polarity");
-  assert.equal(intent?.process, "flux_cored");
+  assert.equal(intent?.process, "TIG");
 
-  const setup = getSetup({ process: "flux_cored", stage: "cables" });
+  // This is the evidence produced by the fast first attempt in production. The bounded
+  // retry must request get_setup next, because its host handler also derives the source
+  // page and corroborating polarity fact.
+  assert.match(
+    validateResearchEvidence(question, [
+      { id: "e1", tool: "lookup_spec", result: resolveSpecQuery({ spec: "polarity", process: "TIG" }) },
+    ]) ?? "",
+    /get_setup was not called/,
+  );
+
+  const setup = getSetup({ process: "TIG", stage: "cables" });
   assert.equal(setup.found, true);
   if (!setup.found || !setup.visualSource) throw new Error("expected a reviewed cable source");
 
@@ -1232,7 +1251,7 @@ test("a polarity setup question is satisfiable by the evidence one get_setup cal
   };
   const evidence: EvidenceRecord[] = [
     { id: "e1", tool: "get_setup", result: setup },
-    { id: "e2", tool: "lookup_spec", result: resolveSpecQuery({ spec: "polarity", process: "flux_cored" }) },
+    { id: "e2", tool: "lookup_spec", result: resolveSpecQuery({ spec: "polarity", process: "TIG" }) },
     { id: "e3", tool: "get_source_page", result: getSourcePage(sourceQuery) },
   ];
   assert.equal(validateResearchEvidence(question, evidence), null);

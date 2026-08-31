@@ -287,14 +287,18 @@ export function validateResearchEvidence(question: string, evidence: readonly Ev
   ) {
     return "The question asks about repair or modification scope but check_repair_scope was not called.";
   }
+  // Check setup before its dependent source visual. A successful get_setup call lets the
+  // host derive both the reviewed source-page evidence and the exact polarity lookup from
+  // the same validated cable record. Asking a retry for get_source_page first wastes the
+  // final research attempt on evidence that cannot satisfy the setup requirement.
+  if (requiresSetup(question) && !evidence.some((item) => item.tool === "get_setup")) {
+    return "The question asks about first-use, cable connections, or polarity setup but get_setup was not called.";
+  }
   if (
     requiresSourcePage(question) &&
     !evidence.some((item) => item.tool === "get_source_page")
   ) {
     return "The question asks to view a source page or image but get_source_page was not called.";
-  }
-  if (requiresSetup(question) && !evidence.some((item) => item.tool === "get_setup")) {
-    return "The question asks about first-use, cable connections, or polarity setup but get_setup was not called.";
   }
   if (
     requiresDiagnosis(question) &&
